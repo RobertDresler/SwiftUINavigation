@@ -4,17 +4,19 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftUINavigation",
+    name: "ModuleA",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "SwiftUINavigation",
-            targets: ["SwiftUINavigation"]
-        )
+            name: "ModuleA",
+            targets: ["ModuleA"]
+        ),
     ],
+    dependencies: [.package(path: "../../Navigation/ExamplesNavigation")],
     targets: [
         .target(
-            name: "SwiftUINavigation"
+            name: "ModuleA",
+            dependencies: [.product(name: "ExamplesNavigation", package: "ExamplesNavigation")]
         )
     ]
 )
