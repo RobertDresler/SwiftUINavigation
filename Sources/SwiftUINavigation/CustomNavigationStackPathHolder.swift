@@ -8,28 +8,26 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
         case removeAll
         case alert(AlertConfig)
         case presentSheet(Destination)
-        case dismissSheet
+        case dismiss
         case setRoot(Destination)
     }
 
+    @Published var root: Destination
     @Published var path = NavigationPath()
     @Published var alertConfig: AlertConfig?
     @Published var presentedSheetDestination: Destination?
 
-    private var parentPathHolder: CustomNavigationStackPathHolder<Destination>?
     private var _openURL: ((URL) -> Void)?
-    private var _setRoot: ((Destination) -> Void)?
 
-    public func setParentPathHolder(parentPathHolder: CustomNavigationStackPathHolder<Destination>?) {
-        self.parentPathHolder = parentPathHolder
+    private weak var parent: CustomNavigationStackPathHolder<Destination>?
+
+    init(root: Destination, parent: CustomNavigationStackPathHolder<Destination>?) {
+        self.root = root
+        self.parent = parent
     }
 
     public func setOpenURL(_ openURL: @escaping (URL) -> Void) {
         self._openURL = openURL
-    }
-
-    public func setSetRoot(_ setRoot: @escaping (Destination) -> Void) {
-        self._setRoot = setRoot
     }
 
     public func append(_ value: Destination) {
@@ -40,12 +38,12 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
         presentedSheetDestination = value
     }
 
-    public func dismissSheet() {
-        presentedSheetDestination = nil
-    }
-
-    public func dismissSelfAsSheet() {
-        parentPathHolder?.dismissSheet()
+    public func dismiss() {
+        if presentedSheetDestination != nil {
+            presentedSheetDestination = nil
+        } else {
+            parent?.dismiss()
+        }
     }
 
     public func removeLast(_ count: Int = 1) {
@@ -65,7 +63,7 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
     }
 
     public func setRoot(_ root: Destination) {
-        _setRoot?(root)
+        self.root = root
     }
 
     public func executeCommand(_ command: Command) {
@@ -80,8 +78,8 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
             alertConfig = config
         case .presentSheet(let destination):
             presentSheet(destination)
-        case .dismissSheet:
-            dismissSheet()
+        case .dismiss:
+            dismiss()
         case .setRoot(let destination):
             setRoot(destination)
         }

@@ -6,20 +6,30 @@ public struct CustomNavigationStack<
 >: View {
 
     @Environment(\.openURL) private var openURL
-    @StateObject private var pathHolder = CustomNavigationStackPathHolder<Destination>()
-    @State private var root: Destination
+    @ObservedObject private var pathHolder: CustomNavigationStackPathHolder<Destination>
     @ViewBuilder private var resolvedDestination: (Destination) -> DestinationView
-    private let parentPathHolder: CustomNavigationStackPathHolder<Destination>?
+
+    // MARK: Init
 
     public init(
-        parentPathHolder: CustomNavigationStackPathHolder<Destination>? = nil,
         root: Destination,
         @ViewBuilder resolvedDestination: @escaping (Destination) -> DestinationView
     ) {
-        self.parentPathHolder = parentPathHolder
-        self.root = root
+        self.init(
+            pathHolder: CustomNavigationStackPathHolder(root: root, parent: nil),
+            resolvedDestination: resolvedDestination
+        )
+    }
+
+    fileprivate init(
+        pathHolder: CustomNavigationStackPathHolder<Destination>,
+        @ViewBuilder resolvedDestination: @escaping (Destination) -> DestinationView
+    ) {
+        self.pathHolder = pathHolder
         self.resolvedDestination = resolvedDestination
     }
+
+    // MARK: Getters
 
     public var body: some View {
         NavigationStack(path: $pathHolder.path) {
@@ -27,14 +37,12 @@ public struct CustomNavigationStack<
         }
             .environmentObject(pathHolder)
             .onAppear {
-                pathHolder.setParentPathHolder(parentPathHolder: parentPathHolder)
                 pathHolder.setOpenURL({ openURL($0) })
-                pathHolder.setSetRoot({ root = $0 })
             }
     }
 
     private var navigationStackResolvedRoot: some View {
-        resolvedDestination(root)
+        resolvedDestination(pathHolder.root)
             .connectingNavigationDestinationLogic(resolvedDestination: resolvedDestination)
             .connectingSheetLogic(pathHolder: pathHolder, resolvedDestination: resolvedDestination)
             .connectingAlertLogic(pathHolder: pathHolder)
@@ -68,8 +76,10 @@ fileprivate extension View {
             content: {
                 if let presentedSheetDestination = pathHolder.presentedSheetDestination {
                     CustomNavigationStack<Destination, DestinationView>(
-                        parentPathHolder: pathHolder,
-                        root: presentedSheetDestination,
+                        pathHolder: CustomNavigationStackPathHolder(
+                            root: presentedSheetDestination,
+                            parent: pathHolder
+                        ),
                         resolvedDestination: resolvedDestination
                     )
                 }

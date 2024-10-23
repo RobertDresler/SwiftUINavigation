@@ -26,7 +26,7 @@ struct ModuleBView: View {
     // MARK: Actions
 
     private func dismiss() {
-        executeNavigationCommand(.dismissSheet)
+        executeNavigationCommand(.dismiss)
     }
 
 }
