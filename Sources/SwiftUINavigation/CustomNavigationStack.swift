@@ -7,7 +7,7 @@ public struct CustomNavigationStack<
 
     @Environment(\.openURL) private var openURL
     @StateObject private var pathHolder = CustomNavigationStackPathHolder<Destination>()
-    private var root: Destination
+    @State private var root: Destination
     @ViewBuilder private var resolvedDestination: (Destination) -> DestinationView
     private let parentPathHolder: CustomNavigationStackPathHolder<Destination>?
 
@@ -29,6 +29,7 @@ public struct CustomNavigationStack<
             .onAppear {
                 pathHolder.setParentPathHolder(parentPathHolder: parentPathHolder)
                 pathHolder.setOpenURL({ openURL($0) })
+                pathHolder.setSetRoot({ root = $0 })
             }
     }
 

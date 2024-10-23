@@ -11,6 +11,7 @@ struct ModuleAView: View {
         VStack {
             pushModuleBButton
             presentModuleBButton
+            setModuleBRootButton
             showAlertButton
         }.navigationTitle("Module A")
     }
@@ -21,6 +22,10 @@ struct ModuleAView: View {
 
     private var presentModuleBButton: some View {
         Button("Present Module B", action: { presentModuleB() })
+    }
+
+    private var setModuleBRootButton: some View {
+        Button("Set Module B Root", action: { setModuleBRoot() })
     }
 
     private var showAlertButton: some View {
@@ -41,6 +46,14 @@ struct ModuleAView: View {
         executeNavigationCommand(
             .presentSheet(
                 ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Test present")))
+            )
+        )
+    }
+
+    private func setModuleBRoot() {
+        executeNavigationCommand(
+            .setRoot(
+                ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Test Set Root")))
             )
         )
     }

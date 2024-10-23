@@ -9,6 +9,7 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
         case alert(AlertConfig)
         case presentSheet(Destination)
         case dismissSheet
+        case setRoot(Destination)
     }
 
     @Published var path = NavigationPath()
@@ -17,6 +18,7 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
 
     private var parentPathHolder: CustomNavigationStackPathHolder<Destination>?
     private var _openURL: ((URL) -> Void)?
+    private var _setRoot: ((Destination) -> Void)?
 
     public func setParentPathHolder(parentPathHolder: CustomNavigationStackPathHolder<Destination>?) {
         self.parentPathHolder = parentPathHolder
@@ -24,6 +26,10 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
 
     public func setOpenURL(_ openURL: @escaping (URL) -> Void) {
         self._openURL = openURL
+    }
+
+    public func setSetRoot(_ setRoot: @escaping (Destination) -> Void) {
+        self._setRoot = setRoot
     }
 
     public func append(_ value: Destination) {
@@ -58,6 +64,10 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
         _openURL?(url)
     }
 
+    public func setRoot(_ root: Destination) {
+        _setRoot?(root)
+    }
+
     public func executeCommand(_ command: Command) {
         switch command {
         case .append(let destination):
@@ -72,6 +82,8 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
             presentSheet(destination)
         case .dismissSheet:
             dismissSheet()
+        case .setRoot(let destination):
+            setRoot(destination)
         }
     }
 
