@@ -3,7 +3,7 @@ import SwiftUI
 public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLink>: ObservableObject {
 
     public enum Command {
-        case append(Destination)
+        case append(AppendDestination<Destination>)
         case removeLast(count: Int = 1)
         case removeAll
         case alert(AlertConfig)
@@ -30,7 +30,7 @@ public final class CustomNavigationStackPathHolder<Destination: NavigationDeepLi
         self._openURL = openURL
     }
 
-    public func append(_ value: Destination) {
+    public func append(_ value: AppendDestination<Destination>) {
         self.path.append(value)
     }
 

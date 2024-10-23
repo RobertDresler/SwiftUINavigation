@@ -4,20 +4,24 @@ import SwiftUINavigation
 
 struct ModuleAView: View {
 
+    @Environment(\.wrappedCustomNavigationStackNamespace) private var wrappedCustomNavigationStackNamespace
     var inputData: ModuleAInputData
     var executeNavigationCommand: (CustomNavigationStackPathHolder<ExamplesNavigationDeepLink>.Command) -> Void
 
     var body: some View {
-        VStack {
+        VStack(spacing: 64) {
+            VStack {
+                pushModuleAButton
+                presentModuleBButton
+                setModuleBRootButton
+                showAlertButton
+            }
             pushModuleBButton
-            presentModuleBButton
-            setModuleBRootButton
-            showAlertButton
         }.navigationTitle("Module A")
     }
 
-    private var pushModuleBButton: some View {
-        Button("Push Module B", action: { pushModuleB() })
+    private var pushModuleAButton: some View {
+        Button("Push Module A", action: { pushModuleA() })
     }
 
     private var presentModuleBButton: some View {
@@ -32,14 +36,48 @@ struct ModuleAView: View {
         Button("Show alert", action: { showAlert() })
     }
 
+    private var pushModuleBButton: some View {
+        Group {
+            if #available(iOS 18.0, *), let wrappedCustomNavigationStackNamespace {
+                Button(action: { pushModuleB() }) {
+                    Text("Push Module B")
+                        .padding(64)
+                        .background(Material.regular)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                }.matchedTransitionSource(id: pushModuleBSourceID, in: wrappedCustomNavigationStackNamespace)
+            } else {
+                EmptyView()
+            }
+        }
+    }
+
+
     // MARK: Actions
+
+    private func pushModuleA() {
+        executeNavigationCommand(
+            .append(
+                AppendDestination(
+                    destination: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())),
+                    transition: nil
+                )
+            )
+        )
+    }
 
     private func pushModuleB() {
         executeNavigationCommand(
             .append(
-                ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Test push")))
+                AppendDestination(
+                    destination: ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Pushed"))),
+                    transition: .zoom(sourceID: pushModuleBSourceID)
+                )
             )
         )
+    }
+
+    private var pushModuleBSourceID: String {
+        "pushModuleBSourceID"
     }
 
     private func presentModuleB() {

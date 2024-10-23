@@ -6,6 +6,7 @@ public struct CustomNavigationStack<
 >: View {
 
     @Environment(\.openURL) private var openURL
+    @Namespace private var namespace
     @ObservedObject private var pathHolder: CustomNavigationStackPathHolder<Destination>
     @ViewBuilder private var resolvedDestination: (Destination) -> DestinationView
 
@@ -36,6 +37,7 @@ public struct CustomNavigationStack<
             navigationStackResolvedRoot
         }
             .environmentObject(pathHolder)
+            .wrappedCustomNavigationStackNamespace(namespace)
             .onAppear {
                 pathHolder.setOpenURL({ openURL($0) })
             }
@@ -43,7 +45,7 @@ public struct CustomNavigationStack<
 
     private var navigationStackResolvedRoot: some View {
         resolvedDestination(pathHolder.root)
-            .connectingNavigationDestinationLogic(resolvedDestination: resolvedDestination)
+            .connectingNavigationDestinationLogic(resolvedDestination: resolvedDestination, namespace: namespace)
             .connectingSheetLogic(pathHolder: pathHolder, resolvedDestination: resolvedDestination)
             .connectingAlertLogic(pathHolder: pathHolder)
     }
@@ -54,10 +56,30 @@ public struct CustomNavigationStack<
 
 fileprivate extension View {
     func connectingNavigationDestinationLogic<Destination: NavigationDeepLink, DestinationView: View>(
-        resolvedDestination: @escaping (Destination) -> DestinationView
+        resolvedDestination: @escaping (Destination) -> DestinationView,
+        namespace: Namespace.ID
     ) -> some View {
-        navigationDestination(for: Destination.self) { data in
-            resolvedDestination(data)
+        navigationDestination(for: AppendDestination<Destination>.self) { data in
+            resolvedDestination(data.destination)
+                .destinationWithNavigationTransition(transition: data.transition, namespace: namespace)
+        }
+    }
+
+    func destinationWithNavigationTransition<Destination: NavigationDeepLink>(
+        transition: AppendDestination<Destination>.Transition?,
+        namespace: Namespace.ID
+    ) -> some View {
+        Group {
+            if #available(iOS 18.0, *) {
+                switch transition {
+                case .zoom(let sourceID):
+                    navigationTransition(.zoom(sourceID: sourceID, in: namespace))
+                case nil:
+                    self
+                }
+            } else {
+                self
+            }
         }
     }
 
@@ -125,10 +147,10 @@ struct CustomNavigationStackPreviewRootView: View {
     var body: some View {
         VStack {
             Button("to text1") {
-                pathHolder.append(.text1)
+                pathHolder.append(AppendDestination(destination: .text1, transition: nil))
             }
             Button("to text2") {
-                pathHolder.append(.text2)
+                pathHolder.append(AppendDestination(destination: .text2, transition: nil))
             }
         }
     }
