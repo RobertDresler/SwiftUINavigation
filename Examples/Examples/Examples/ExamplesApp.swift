@@ -10,16 +10,20 @@ import SwiftData
 import SwiftUINavigation
 import ExamplesNavigation
 import ExamplesNavigationResolving
+import UserRepository
 
 @main
 struct ExamplesApp: App {
 
+    private let userRepository = UserRepository()
+
     var body: some Scene {
         WindowGroup {
             SwiftUINavigationWindow(
-                root: ExamplesNavigationDeepLink(destination: .app(AppInputData())),
-                resolver: ExamplesNavigationDeepLinkResolver()
-            )
+                //rootDeepLink: ExamplesNavigationDeepLink(destination: .app(AppInputData())),
+                resolver: ExamplesNavigationDeepLinkResolver(),
+                switchedDeepLinkResolver: MainAppSwitchedDeepLinkResolver(userRepository: userRepository)
+            ).environmentObject(userRepository)
         }
     }
 

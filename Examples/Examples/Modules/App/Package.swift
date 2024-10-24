@@ -12,11 +12,17 @@ let package = Package(
             targets: ["App"]
         ),
     ],
-    dependencies: [.package(path: "../../Navigation/ExamplesNavigation")],
+    dependencies: [
+        .package(path: "../../Navigation/ExamplesNavigation"),
+        .package(path: "../../Services/UserRepository")
+    ],
     targets: [
         .target(
             name: "App",
-            dependencies: [.product(name: "ExamplesNavigation", package: "ExamplesNavigation")]
+            dependencies: [
+                .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
+                .product(name: "UserRepository", package: "UserRepository")
+            ]
         )
     ]
 )

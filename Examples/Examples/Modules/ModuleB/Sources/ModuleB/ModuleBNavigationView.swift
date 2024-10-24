@@ -12,7 +12,7 @@ import ExamplesNavigation
 
 public struct ModuleBNavigationView: View {
 
-    @EnvironmentObject private var pathHolder: CustomNavigationStackPathHolder<ExamplesNavigationDeepLink>
+    @EnvironmentObject private var node: SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>
     private let inputData: ModuleBInputData
 
     public init(inputData: ModuleBInputData) {
@@ -22,7 +22,9 @@ public struct ModuleBNavigationView: View {
     public var body: some View {
         ModuleBView(
             inputData: inputData,
-            executeNavigationCommand: { pathHolder.executeCommand($0) }
-        )
+            executeNavigationCommand: { node.executeCommand($0) }
+        ).onAppear {
+            let node = node
+        }
     }
 }

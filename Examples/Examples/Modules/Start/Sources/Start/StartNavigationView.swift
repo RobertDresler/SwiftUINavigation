@@ -2,25 +2,21 @@ import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
 
-public struct ModuleANavigationView: View {
+public struct StartNavigationView: View {
 
     @EnvironmentObject private var node: SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>
-    private let inputData: ModuleAInputData
+    private let inputData: StartInputData
 
-    public init(inputData: ModuleAInputData) {
+    public init(inputData: StartInputData) {
         self.inputData = inputData
     }
 
     public var body: some View {
-        ModuleAView(
+        StartView(
             inputData: inputData,
             executeNavigationCommand: { node.executeCommand($0) }
         ).onAppear {
             let node = node
-            Task {
-                try? await Task.sleep(for: .seconds(5))
-                let node = node
-            }
         }
     }
 }

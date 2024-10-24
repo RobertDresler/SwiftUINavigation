@@ -10,6 +10,7 @@
 		D04318D32CC8D85E0077101C /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D04318D22CC8D85E0077101C /* SwiftUINavigation */; };
 		D04319512CC8EB380077101C /* ExamplesNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D04319502CC8EB380077101C /* ExamplesNavigation */; };
 		D04319702CC8F8E10077101C /* ExamplesNavigationResolving in Frameworks */ = {isa = PBXBuildFile; productRef = D043196F2CC8F8E10077101C /* ExamplesNavigationResolving */; };
+		D0746C752CCA68BD00D26F9F /* UserRepository in Frameworks */ = {isa = PBXBuildFile; productRef = D0746C742CCA68BD00D26F9F /* UserRepository */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,8 +24,10 @@
 				Modules/App,
 				Modules/ModuleA,
 				Modules/ModuleB,
+				Modules/Start,
 				Navigation/ExamplesNavigation,
 				Navigation/ExamplesNavigationResolving,
+				Services/UserRepository,
 			);
 			target = D04318B12CC8D7430077101C /* Examples */;
 		};
@@ -47,6 +50,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D04319512CC8EB380077101C /* ExamplesNavigation in Frameworks */,
+				D0746C752CCA68BD00D26F9F /* UserRepository in Frameworks */,
 				D04319702CC8F8E10077101C /* ExamplesNavigationResolving in Frameworks */,
 				D04318D32CC8D85E0077101C /* SwiftUINavigation in Frameworks */,
 			);
@@ -94,6 +98,7 @@
 				D04318D22CC8D85E0077101C /* SwiftUINavigation */,
 				D04319502CC8EB380077101C /* ExamplesNavigation */,
 				D043196F2CC8F8E10077101C /* ExamplesNavigationResolving */,
+				D0746C742CCA68BD00D26F9F /* UserRepository */,
 			);
 			productName = Examples;
 			productReference = D04318B22CC8D7430077101C /* Examples.app */;
@@ -127,6 +132,7 @@
 				D04318D12CC8D85E0077101C /* XCLocalSwiftPackageReference "../../SwiftUINavigation" */,
 				D043194F2CC8EB380077101C /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigation" */,
 				D043196E2CC8F8E10077101C /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigationResolving" */,
+				D0746C732CCA68BD00D26F9F /* XCLocalSwiftPackageReference "Examples/Services/UserRepository" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D04318B32CC8D7430077101C /* Products */;
@@ -374,6 +380,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Examples/Navigation/ExamplesNavigationResolving;
 		};
+		D0746C732CCA68BD00D26F9F /* XCLocalSwiftPackageReference "Examples/Services/UserRepository" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Examples/Services/UserRepository;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -388,6 +398,10 @@
 		D043196F2CC8F8E10077101C /* ExamplesNavigationResolving */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ExamplesNavigationResolving;
+		};
+		D0746C742CCA68BD00D26F9F /* UserRepository */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UserRepository;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

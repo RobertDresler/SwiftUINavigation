@@ -6,7 +6,7 @@ struct ModuleAView: View {
 
     @Environment(\.wrappedCustomNavigationStackNamespace) private var wrappedCustomNavigationStackNamespace
     var inputData: ModuleAInputData
-    var executeNavigationCommand: (CustomNavigationStackPathHolder<ExamplesNavigationDeepLink>.Command) -> Void
+    var executeNavigationCommand: (SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>.Command) -> Void
 
     var body: some View {
         VStack(spacing: 64) {
@@ -57,7 +57,7 @@ struct ModuleAView: View {
     private func pushModuleA() {
         executeNavigationCommand(
             .append(
-                AppendDestination(
+                AppendDeepLink(
                     destination: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())),
                     transition: nil
                 )
@@ -68,7 +68,7 @@ struct ModuleAView: View {
     private func pushModuleB() {
         executeNavigationCommand(
             .append(
-                AppendDestination(
+                AppendDeepLink(
                     destination: ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Pushed"))),
                     transition: .zoom(sourceID: pushModuleBSourceID)
                 )
@@ -91,7 +91,8 @@ struct ModuleAView: View {
     private func setModuleBRoot() {
         executeNavigationCommand(
             .setRoot(
-                ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Test Set Root")))
+                ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Test Set Root"))),
+                clear: true
             )
         )
     }

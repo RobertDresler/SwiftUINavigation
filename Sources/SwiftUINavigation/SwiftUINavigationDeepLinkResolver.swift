@@ -4,6 +4,6 @@ import SwiftUI
 public protocol SwiftUINavigationDeepLinkResolver: ObservableObject {
     associatedtype DeepLink: NavigationDeepLink
     associatedtype ContentView: View
-    func resolve(_ deepLink: DeepLink) -> ContentView
+    func resolve(_ deepLink: DeepLink) -> ContentView // TODO: -RD- implement , messageCallback: @escaping (SwiftUINavigationMessage) -> Void
 
 }

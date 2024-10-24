@@ -1,45 +1,38 @@
 import SwiftUI
 
-public struct SwiftUINavigationStack<
-    Destination: NavigationDeepLink,
+struct SwiftUINavigationStack<
     Resolver: SwiftUINavigationDeepLinkResolver
->: View where Resolver.DeepLink == Destination {
+>: View {
 
     @Environment(\.openURL) private var openURL
     @EnvironmentObject private var resolver: Resolver
     @Namespace private var namespace
-    @ObservedObject private var pathHolder: CustomNavigationStackPathHolder<Destination>
+    @ObservedObject private var node: SwiftUINavigationGraphNode<Resolver.DeepLink>
 
     // MARK: Init
 
-    public init(root: Destination) {
-        self.init(
-            pathHolder: CustomNavigationStackPathHolder(root: root, parent: nil)
-        )
-    }
-
-    fileprivate init(pathHolder: CustomNavigationStackPathHolder<Destination>) {
-        self.pathHolder = pathHolder
+    init(node: SwiftUINavigationGraphNode<Resolver.DeepLink>) {
+        self.node = node
     }
 
     // MARK: Getters
 
-    public var body: some View {
-        NavigationStack(path: $pathHolder.path) {
+    var body: some View {
+        NavigationStack(path: $node.path) {
             navigationStackResolvedRoot
         }
-            .environmentObject(pathHolder)
+            .environmentObject(node)
             .wrappedCustomNavigationStackNamespace(namespace)
             .onAppear {
-                pathHolder.setOpenURL({ openURL($0) })
+                node.setOpenURL({ openURL($0) })
             }
     }
 
     private var navigationStackResolvedRoot: some View {
-        resolver.resolve(pathHolder.root)
+        resolver.resolve(node.wrappedDeepLink!)
             .connectingNavigationDestinationLogic(resolver: resolver, namespace: namespace)
-            .connectingSheetLogic(pathHolder: pathHolder, destinationType: Destination.self, resolverType: Resolver.self)
-            .connectingAlertLogic(pathHolder: pathHolder)
+            .connectingSheetLogic(pathHolder: node, resolverType: Resolver.self)
+            .connectingAlertLogic(pathHolder: node)
     }
 
 }
@@ -47,21 +40,18 @@ public struct SwiftUINavigationStack<
 // MARK: View+
 
 fileprivate extension View {
-    func connectingNavigationDestinationLogic<
-        Destination: NavigationDeepLink,
-        Resolver: SwiftUINavigationDeepLinkResolver
-    >(
+    func connectingNavigationDestinationLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
         resolver: Resolver,
         namespace: Namespace.ID
-    ) -> some View where Resolver.DeepLink == Destination {
-        navigationDestination(for: AppendDestination<Destination>.self) { data in
+    ) -> some View {
+        navigationDestination(for: AppendDeepLink<Resolver.DeepLink>.self) { data in
             resolver.resolve(data.destination)
                 .destinationWithNavigationTransition(transition: data.transition, namespace: namespace)
         }
     }
 
     func destinationWithNavigationTransition<Destination: NavigationDeepLink>(
-        transition: AppendDestination<Destination>.Transition?,
+        transition: AppendDeepLink<Destination>.Transition?,
         namespace: Namespace.ID
     ) -> some View {
         Group {
@@ -78,37 +68,28 @@ fileprivate extension View {
         }
     }
 
-    func connectingSheetLogic<
-        Destination: NavigationDeepLink,
-        Resolver: SwiftUINavigationDeepLinkResolver
-    >(
-        pathHolder: CustomNavigationStackPathHolder<Destination>,
-        destinationType: Destination.Type,
+    func connectingSheetLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
+        pathHolder: SwiftUINavigationGraphNode<Resolver.DeepLink>,
         resolverType: Resolver.Type
-    ) -> some View where Resolver.DeepLink == Destination {
+    ) -> some View {
         sheet(
             isPresented: Binding(
-                get: { pathHolder.presentedSheetDestination != nil },
+                get: { pathHolder.presentedSheetNode != nil },
                 set: { isPresented in
                     guard !isPresented else { return }
-                    pathHolder.presentedSheetDestination = nil
+                    pathHolder.presentedSheetNode = nil
                 }
             ),
             content: {
-                if let presentedSheetDestination = pathHolder.presentedSheetDestination {
-                    SwiftUINavigationStack<Destination, Resolver>(
-                        pathHolder: CustomNavigationStackPathHolder(
-                            root: presentedSheetDestination,
-                            parent: pathHolder
-                        )
-                    )
+                if let presentedSheetNode = pathHolder.presentedSheetNode {
+                    SwiftUINavigationStack<Resolver>(node: presentedSheetNode)
                 }
             }
         )
     }
 
     func connectingAlertLogic<Destination: NavigationDeepLink>(
-        pathHolder: CustomNavigationStackPathHolder<Destination>
+        pathHolder: SwiftUINavigationGraphNode<Destination>
     ) -> some View {
         alert(
             Text(pathHolder.alertConfig?.title ?? ""),
@@ -140,15 +121,15 @@ enum CustomNavigationStackPreviewDeepLink: NavigationDeepLink {
 
 struct CustomNavigationStackPreviewRootView: View {
 
-    @EnvironmentObject private var pathHolder: CustomNavigationStackPathHolder<CustomNavigationStackPreviewDeepLink>
+    @EnvironmentObject private var pathHolder: SwiftUINavigationGraphNode<CustomNavigationStackPreviewDeepLink>
 
     var body: some View {
         VStack {
             Button("to text1") {
-                pathHolder.append(AppendDestination(destination: .text1, transition: nil))
+                pathHolder.append(AppendDeepLink(destination: .text1, transition: nil))
             }
             Button("to text2") {
-                pathHolder.append(AppendDestination(destination: .text2, transition: nil))
+                pathHolder.append(AppendDeepLink(destination: .text2, transition: nil))
             }
         }
     }
@@ -157,7 +138,7 @@ struct CustomNavigationStackPreviewRootView: View {
 
 struct CustomNavigationStackPreviewDestinationView: View {
 
-    @EnvironmentObject private var pathHolder: CustomNavigationStackPathHolder<CustomNavigationStackPreviewDeepLink>
+    @EnvironmentObject private var pathHolder: SwiftUINavigationGraphNode<CustomNavigationStackPreviewDeepLink>
 
     var text: String
 
@@ -187,9 +168,10 @@ final class CustomNavigationResolver: SwiftUINavigationDeepLinkResolver {
 
 }
 
-#Preview {
+/*#Preview {
     SwiftUINavigationWindow(
         root: CustomNavigationStackPreviewDeepLink.text1,
         resolver: CustomNavigationResolver()
     )
 }
+*/

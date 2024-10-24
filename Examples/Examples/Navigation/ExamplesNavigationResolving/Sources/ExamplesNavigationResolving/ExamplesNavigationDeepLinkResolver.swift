@@ -4,14 +4,23 @@ import ExamplesNavigation
 import ModuleA
 import ModuleB
 import App
+import Start
 
 public final class ExamplesNavigationDeepLinkResolver: SwiftUINavigationDeepLinkResolver {
+
+    public init() {}
 
     public func resolve(_ deepLink: ExamplesNavigationDeepLink) -> some View {
         Group {
             switch deepLink.destination {
-            case .app(let inputData):
-                AppNavigationView<ExamplesNavigationDeepLinkResolver>(inputData: inputData)
+            case .notLogged(let deepLink):
+                SwiftUINavigationStateNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+            case .logged(let deepLink):
+                SwiftUINavigationStackNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+           // case .app(let inputData):
+           //     AppNavigationView<ExamplesNavigationDeepLinkResolver>(inputData: inputData)
+            case .start(let inputData):
+                StartNavigationView(inputData: inputData)
             case .moduleA(let inputData):
                 ModuleANavigationView(inputData: inputData)
             case .moduleB(let inputData):

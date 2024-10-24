@@ -1,10 +1,12 @@
-import SwiftUI
+/*import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
+import UserRepository
 
 public struct AppNavigationView<Resolver: SwiftUINavigationDeepLinkResolver>: View where Resolver.DeepLink == ExamplesNavigationDeepLink {
 
-    @State private var isLogged = false
+    @EnvironmentObject private var node: SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>
+    @EnvironmentObject private var userRepository: UserRepository
 
     private let inputData: AppInputData
 
@@ -13,27 +15,21 @@ public struct AppNavigationView<Resolver: SwiftUINavigationDeepLinkResolver>: Vi
     }
 
     public var body: some View {
-        Group {
-            if isLogged {
-                loggedView
-            } else {
-                notLoggedView
+        siwtchx
+        SwiftUINavigationSwitchedNode<Resolver>(parentNode: node, defaultDeepLink: <#T##ExamplesNavigationDeepLink#>)
+            .onAppear {
+                Task {
+                    try? await Task.sleep(for: .seconds(10))
+                    let node = node
+                }
             }
-        }
     }
 
-    private var loggedView: some View {
-        SwiftUINavigationStack<ExamplesNavigationDeepLink, Resolver>(
-            root: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData()))
-        )
+    private func setSwitchedNode(isUserLogged: Bool) {
+        let deepLink = isUserLogged
+            ? ExamplesNavigationDeepLink(destination: .logged(ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData()))))
+            : ExamplesNavigationDeepLink(destination: .notLogged(ExamplesNavigationDeepLink(destination: .start(StartInputData()))))
+        node.executeCommand(.switchNode(deepLink))
     }
 
-    private var notLoggedView: some View {
-        VStack {
-            Text("User not logged")
-            Button("Login", action: { isLogged = true })
-        }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-
-}
+}*/

@@ -2,8 +2,11 @@ import SwiftUINavigation
 
 public struct ExamplesNavigationDeepLink: NavigationDeepLink {
 
-    public enum Destination: Hashable {
-        case app(AppInputData)
+    public indirect enum Destination: Hashable {
+        case notLogged(ExamplesNavigationDeepLink)
+        case logged(ExamplesNavigationDeepLink)
+      //  case app(AppInputData)
+        case start(StartInputData)
         case moduleA(ModuleAInputData)
         case moduleB(ModuleBInputData)
     }
