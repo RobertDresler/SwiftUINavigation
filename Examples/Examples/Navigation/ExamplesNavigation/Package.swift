@@ -12,9 +12,11 @@ let package = Package(
             targets: ["ExamplesNavigation"]
         )
     ],
+    dependencies: [.package(path: "../../SwiftUINavigation")],
     targets: [
         .target(
-            name: "ExamplesNavigation"
+            name: "ExamplesNavigation",
+            dependencies: [.product(name: "SwiftUINavigation", package: "SwiftUINavigation")]
         )
 
     ]

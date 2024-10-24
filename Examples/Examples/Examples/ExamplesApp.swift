@@ -7,13 +7,19 @@
 
 import SwiftUI
 import SwiftData
+import SwiftUINavigation
+import ExamplesNavigation
+import ExamplesNavigationResolving
 
 @main
 struct ExamplesApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppNavigationView()
+            SwiftUINavigationWindow(
+                root: ExamplesNavigationDeepLink(destination: .app(AppInputData())),
+                resolver: ExamplesNavigationDeepLinkResolver()
+            )
         }
     }
 

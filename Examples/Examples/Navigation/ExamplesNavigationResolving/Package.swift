@@ -15,7 +15,8 @@ let package = Package(
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../Modules/ModuleA"),
-        .package(path: "../../Modules/ModuleB")
+        .package(path: "../../Modules/ModuleB"),
+        .package(path: "../../Modules/App")
     ],
     targets: [
         .target(
@@ -23,7 +24,8 @@ let package = Package(
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "ModuleA", package: "ModuleA"),
-                .product(name: "ModuleB", package: "ModuleB")
+                .product(name: "ModuleB", package: "ModuleB"),
+                .product(name: "App", package: "App")
             ]
         )
     ]

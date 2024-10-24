@@ -20,6 +20,7 @@
 		D04319402CC8E9A10077101C /* Exceptions for "Examples" folder in "Examples" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Modules/App,
 				Modules/ModuleA,
 				Modules/ModuleB,
 				Navigation/ExamplesNavigation,
