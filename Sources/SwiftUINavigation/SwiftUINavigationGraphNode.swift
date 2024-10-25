@@ -171,7 +171,7 @@ private extension SwiftUINavigationGraphNode {
     func presentSheetOnExactNode(_ value: DeepLink) {
         presentedSheetNode = SwiftUINavigationGraphNode(
             type: .stackRoot,
-            wrappedDeepLink: value,
+            wrappedDeepLink: nil,
             parent: self,
             stackNodes: [StackDeepLink(destination: value)]
         )
