@@ -8,7 +8,7 @@ struct StartView: View {
     @EnvironmentObject private var userRepository: UserRepository
 
     var inputData: StartInputData
-    var executeNavigationCommand: (SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>.Command) -> Void
+    var executeNavigationCommand: (SwiftUINavigationNode<ExamplesNavigationDeepLink>.Command) -> Void
 
     var body: some View {
         VStack {

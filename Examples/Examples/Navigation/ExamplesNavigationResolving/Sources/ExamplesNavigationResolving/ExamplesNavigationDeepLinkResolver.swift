@@ -14,11 +14,11 @@ public final class ExamplesNavigationDeepLinkResolver: SwiftUINavigationDeepLink
         Group {
             switch deepLink.destination {
             case .root(let deepLink):
-                SwiftUINavigationSwitchedNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+                SwiftUINavigationSwitchedNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
             case .notLogged(let deepLink):
-                SwiftUINavigationStandaloneNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+                SwiftUINavigationStandaloneNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
             case .logged(let deepLink):
-                SwiftUINavigationStackNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+                SwiftUINavigationStackNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
             case .app(let inputData):
                 AppNavigationView<ExamplesNavigationDeepLinkResolver>(inputData: inputData)
             case .start(let inputData):

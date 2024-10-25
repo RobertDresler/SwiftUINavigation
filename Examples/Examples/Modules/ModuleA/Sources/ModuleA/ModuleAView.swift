@@ -6,7 +6,7 @@ struct ModuleAView: View {
 
     @Environment(\.wrappedCustomNavigationStackNamespace) private var wrappedCustomNavigationStackNamespace
     var inputData: ModuleAInputData
-    var executeNavigationCommand: (SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>.Command) -> Void
+    var executeNavigationCommand: (SwiftUINavigationNode<ExamplesNavigationDeepLink>.Command) -> Void
 
     var body: some View {
         VStack(spacing: 64) {

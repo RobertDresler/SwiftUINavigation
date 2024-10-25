@@ -16,7 +16,7 @@ public struct SwiftUINavigationWindow<Resolver: SwiftUINavigationDeepLinkResolve
     }
 
     public var body: some View {
-        SwiftUINavigationWindowRootNode<Resolver>(deepLink: rootDeepLink)
+        SwiftUINavigationWindowRootNodeView<Resolver>(deepLink: rootDeepLink)
             .environmentObject(resolver)
     }
 

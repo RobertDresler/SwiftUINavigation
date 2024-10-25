@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct SwiftUINavigationSwitchedNodeResolvedView<Resolver: SwiftUINavigationDeepLinkResolver>: View {
 
-    @EnvironmentObject private var node: SwiftUINavigationGraphNode<Resolver.DeepLink>
+    @EnvironmentObject private var node: SwiftUINavigationNode<Resolver.DeepLink>
     @EnvironmentObject private var resolver: Resolver
     private let deepLink: Resolver.DeepLink
 

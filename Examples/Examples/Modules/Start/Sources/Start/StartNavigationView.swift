@@ -4,7 +4,7 @@ import ExamplesNavigation
 
 public struct StartNavigationView: View {
 
-    @EnvironmentObject private var node: SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>
+    @EnvironmentObject private var node: SwiftUINavigationNode<ExamplesNavigationDeepLink>
     private let inputData: StartInputData
 
     public init(inputData: StartInputData) {

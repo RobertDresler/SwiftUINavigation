@@ -5,7 +5,7 @@ import ExamplesNavigation
 struct ModuleBView: View {
 
     var inputData: ModuleBInputData
-    var executeNavigationCommand: (SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>.Command) -> Void
+    var executeNavigationCommand: (SwiftUINavigationNode<ExamplesNavigationDeepLink>.Command) -> Void
 
     var body: some View {
         VStack {

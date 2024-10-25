@@ -5,7 +5,7 @@ import UserRepository
 
 public struct AppNavigationView<Resolver: SwiftUINavigationDeepLinkResolver>: View where Resolver.DeepLink == ExamplesNavigationDeepLink {
 
-    @EnvironmentObject private var node: SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>
+    @EnvironmentObject private var node: SwiftUINavigationNode<ExamplesNavigationDeepLink>
     @EnvironmentObject private var userRepository: UserRepository
     @State private var deepLink = ExamplesNavigationDeepLink(destination: .notLogged(ExamplesNavigationDeepLink(destination: .start(StartInputData()))))
 

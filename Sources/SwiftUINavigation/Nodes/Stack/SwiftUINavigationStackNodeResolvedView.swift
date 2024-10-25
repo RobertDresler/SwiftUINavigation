@@ -1,17 +1,17 @@
 import SwiftUI
 
-struct SwiftUINavigationStack<
+struct SwiftUINavigationStackNodeResolvedView<
     Resolver: SwiftUINavigationDeepLinkResolver
 >: View {
 
     @Environment(\.openURL) private var openURL
     @EnvironmentObject private var resolver: Resolver
     @Namespace private var namespace
-    @ObservedObject private var node: SwiftUINavigationGraphNode<Resolver.DeepLink>
+    @ObservedObject private var node: SwiftUINavigationNode<Resolver.DeepLink>
 
     // MARK: Init
 
-    init(node: SwiftUINavigationGraphNode<Resolver.DeepLink>) {
+    init(node: SwiftUINavigationNode<Resolver.DeepLink>) {
         self.node = node
     }
 
@@ -58,12 +58,12 @@ struct SwiftUINavigationStack<
         }
     }
 
-    private func node(for deepLinkInstanceID: String) -> SwiftUINavigationGraphNode<Resolver.DeepLink>? {
+    private func node(for deepLinkInstanceID: String) -> SwiftUINavigationNode<Resolver.DeepLink>? {
         guard let stackNodes else { return nil }
         return stackNodes.first(where: { $0.destination.wrappedDeepLink?.instanceID == deepLinkInstanceID })?.destination
     }
 
-    private var stackNodes: [SwiftUINavigationGraphNode<Resolver.DeepLink>.NodeStackDeepLink]? {
+    private var stackNodes: [SwiftUINavigationNode<Resolver.DeepLink>.NodeStackDeepLink]? {
         node.stackNodes
     }
 }
@@ -73,7 +73,7 @@ struct SwiftUINavigationStack<
 fileprivate extension View {
     func connectingNavigationDestinationLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
         resolver: Resolver,
-        nodeForDeepLinkInstanceID: @escaping (String) -> SwiftUINavigationGraphNode<Resolver.DeepLink>?,
+        nodeForDeepLinkInstanceID: @escaping (String) -> SwiftUINavigationNode<Resolver.DeepLink>?,
         namespace: Namespace.ID
     ) -> some View {
         navigationDestination(for: StackDeepLink<Resolver.DeepLink>.self) { data in
@@ -88,7 +88,7 @@ fileprivate extension View {
 
     func resolvedStackNode<Resolver: SwiftUINavigationDeepLinkResolver>(
         resolver: Resolver,
-        node: SwiftUINavigationGraphNode<Resolver.DeepLink>
+        node: SwiftUINavigationNode<Resolver.DeepLink>
     ) -> some View {
         Group {
             if let deepLink = node.wrappedDeepLink {
@@ -117,7 +117,7 @@ fileprivate extension View {
     }
 
     func connectingSheetLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
-        pathHolder: SwiftUINavigationGraphNode<Resolver.DeepLink>,
+        pathHolder: SwiftUINavigationNode<Resolver.DeepLink>,
         resolverType: Resolver.Type
     ) -> some View {
         sheet(
@@ -132,14 +132,14 @@ fileprivate extension View {
             ),
             content: {
                 if let presentedSheetNode = pathHolder.presentedSheetNode {
-                    SwiftUINavigationStack<Resolver>(node: presentedSheetNode)
+                    SwiftUINavigationStackNodeResolvedView<Resolver>(node: presentedSheetNode)
                 }
             }
         )
     }
 
     func connectingAlertLogic<Destination: NavigationDeepLink>(
-        pathHolder: SwiftUINavigationGraphNode<Destination>
+        pathHolder: SwiftUINavigationNode<Destination>
     ) -> some View {
         alert(
             Text(pathHolder.alertConfig?.title ?? ""),
@@ -180,7 +180,7 @@ enum CustomNavigationStackPreviewDeepLink: NavigationDeepLink {
 
 struct CustomNavigationStackPreviewRootView: View {
 
-    @EnvironmentObject private var pathHolder: SwiftUINavigationGraphNode<CustomNavigationStackPreviewDeepLink>
+    @EnvironmentObject private var pathHolder: SwiftUINavigationNode<CustomNavigationStackPreviewDeepLink>
 
     var body: some View {
         VStack {
@@ -197,7 +197,7 @@ struct CustomNavigationStackPreviewRootView: View {
 
 struct CustomNavigationStackPreviewDestinationView: View {
 
-    @EnvironmentObject private var pathHolder: SwiftUINavigationGraphNode<CustomNavigationStackPreviewDeepLink>
+    @EnvironmentObject private var pathHolder: SwiftUINavigationNode<CustomNavigationStackPreviewDeepLink>
 
     var text: String
 

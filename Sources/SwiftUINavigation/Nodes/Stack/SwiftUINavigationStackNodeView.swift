@@ -1,8 +1,8 @@
 import SwiftUI
 
-public struct SwiftUINavigationStackNode<Resolver: SwiftUINavigationDeepLinkResolver>: View {
+public struct SwiftUINavigationStackNodeView<Resolver: SwiftUINavigationDeepLinkResolver>: View {
 
-    @EnvironmentObject private var parentNode: SwiftUINavigationGraphNode<Resolver.DeepLink>
+    @EnvironmentObject private var parentNode: SwiftUINavigationNode<Resolver.DeepLink>
     private var deepLink: Resolver.DeepLink
 
     public init(deepLink: Resolver.DeepLink) {
@@ -10,8 +10,8 @@ public struct SwiftUINavigationStackNode<Resolver: SwiftUINavigationDeepLinkReso
     }
 
     public var body: some View {
-        SwiftUINavigationStack<Resolver>(
-            node: SwiftUINavigationGraphNode(
+        SwiftUINavigationStackNodeResolvedView<Resolver>(
+            node: SwiftUINavigationNode(
                 type: .stackRoot,
                 wrappedDeepLink: nil,
                 parent: parentNode,

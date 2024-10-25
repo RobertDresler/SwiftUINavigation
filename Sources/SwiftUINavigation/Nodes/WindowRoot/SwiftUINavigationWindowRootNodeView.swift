@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct SwiftUINavigationWindowRootNode<Resolver: SwiftUINavigationDeepLinkResolver>: View {
+public struct SwiftUINavigationWindowRootNodeView<Resolver: SwiftUINavigationDeepLinkResolver>: View {
 
     @EnvironmentObject private var resolver: Resolver
     private var deepLink: Resolver.DeepLink
@@ -11,7 +11,7 @@ public struct SwiftUINavigationWindowRootNode<Resolver: SwiftUINavigationDeepLin
 
     public var body: some View {
         resolver.resolve(deepLink)
-            .environmentObject(SwiftUINavigationGraphNode(type: .root, wrappedDeepLink: deepLink, parent: nil))
+            .environmentObject(SwiftUINavigationNode(type: .windowRoot, wrappedDeepLink: deepLink, parent: nil))
     }
 
 }

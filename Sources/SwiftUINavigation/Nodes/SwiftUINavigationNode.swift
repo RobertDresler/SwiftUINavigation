@@ -1,9 +1,9 @@
 import SwiftUI
 
-public final class SwiftUINavigationGraphNode<DeepLink: NavigationDeepLink>: ObservableObject {
+public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: ObservableObject {
 
     enum NodeType {
-        case root
+        case windowRoot
         case standalone
         case stackRoot
         case stack
@@ -24,7 +24,7 @@ public final class SwiftUINavigationGraphNode<DeepLink: NavigationDeepLink>: Obs
 
     struct NodeStackDeepLink {
 
-        let destination: SwiftUINavigationGraphNode<DeepLink>
+        let destination: SwiftUINavigationNode<DeepLink>
         let transition: StackDeepLink<DeepLink>.Transition?
 
         var toStackDeepLink: StackDeepLink<DeepLink>? {
@@ -38,22 +38,22 @@ public final class SwiftUINavigationGraphNode<DeepLink: NavigationDeepLink>: Obs
     @Published var stackNodes: [NodeStackDeepLink]?
     // TODO: -RD- separate alert since it's not modal
     @Published var alertConfig: AlertConfig?
-    @Published public var presentedSheetNode: SwiftUINavigationGraphNode<DeepLink>?
+    @Published public var presentedSheetNode: SwiftUINavigationNode<DeepLink>?
     @Published public var switchedNodeDeepLink: DeepLink?
-    public var directChildNodeReference: SwiftUINavigationGraphNode<DeepLink>?
+    public var directChildNodeReference: SwiftUINavigationNode<DeepLink>?
 
     private var _openURL: ((URL) -> Void)?
 
-    public weak var parent: SwiftUINavigationGraphNode<DeepLink>?
+    public weak var parent: SwiftUINavigationNode<DeepLink>?
     private let type: NodeType
-    private var root: SwiftUINavigationGraphNode<DeepLink> {
+    private var root: SwiftUINavigationNode<DeepLink> {
         parent?.root ?? self
     }
 
     init(
         type: NodeType,
         wrappedDeepLink: DeepLink?,
-        parent: SwiftUINavigationGraphNode<DeepLink>?,
+        parent: SwiftUINavigationNode<DeepLink>?,
         stackNodes: [StackDeepLink<DeepLink>]? = nil
     ) {
         self.type = type
@@ -63,7 +63,7 @@ public final class SwiftUINavigationGraphNode<DeepLink: NavigationDeepLink>: Obs
         if let stackNodes {
             mapStackNodes { _ in stackNodes }
         }
-        if [.root, .switchedNode].contains(parent?.type) {
+        if [.windowRoot, .switchedNode].contains(parent?.type) {
             parent?.directChildNodeReference = self
         }
     }
@@ -128,7 +128,7 @@ public final class SwiftUINavigationGraphNode<DeepLink: NavigationDeepLink>: Obs
             stackNodes.compactMap { $0.toStackDeepLink }
         ).map { deepLink in
             NodeStackDeepLink(
-                destination: SwiftUINavigationGraphNode(type: .stack, wrappedDeepLink: deepLink.destination, parent: self),
+                destination: SwiftUINavigationNode(type: .stack, wrappedDeepLink: deepLink.destination, parent: self),
                 transition: deepLink.transition
             )
         }
@@ -167,24 +167,24 @@ public final class SwiftUINavigationGraphNode<DeepLink: NavigationDeepLink>: Obs
 
 // MARK: Private Methods
 
-private extension SwiftUINavigationGraphNode {
+private extension SwiftUINavigationNode {
     func presentSheetOnExactNode(_ value: DeepLink) {
-        presentedSheetNode = SwiftUINavigationGraphNode(
+        presentedSheetNode = SwiftUINavigationNode(
             type: .stackRoot,
             wrappedDeepLink: nil,
             parent: self,
             stackNodes: [StackDeepLink(destination: value)]
         )
     }
-    var nearestNodeWhichCanPresent: SwiftUINavigationGraphNode<DeepLink>? {
+    var nearestNodeWhichCanPresent: SwiftUINavigationNode<DeepLink>? {
         nearestNodeWhichCanPresentFromParent?.topPresented
     }
 
-    var topPresented: SwiftUINavigationGraphNode<DeepLink> {
+    var topPresented: SwiftUINavigationNode<DeepLink> {
         presentedSheetNode?.topPresented ?? self
     }
 
-    var nearestNodeWhichCanPresentFromParent: SwiftUINavigationGraphNode<DeepLink>? {
+    var nearestNodeWhichCanPresentFromParent: SwiftUINavigationNode<DeepLink>? {
         if canPresentIfWouldnt {
             self
         } else {
@@ -196,7 +196,7 @@ private extension SwiftUINavigationGraphNode {
         type != .stack
     }
 
-    var children: [SwiftUINavigationGraphNode<DeepLink>] {
+    var children: [SwiftUINavigationNode<DeepLink>] {
         (
             [directChildNodeReference]
             + [presentedSheetNode]

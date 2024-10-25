@@ -12,7 +12,7 @@ import ExamplesNavigation
 
 public struct ModuleBNavigationView: View {
 
-    @EnvironmentObject private var node: SwiftUINavigationGraphNode<ExamplesNavigationDeepLink>
+    @EnvironmentObject private var node: SwiftUINavigationNode<ExamplesNavigationDeepLink>
     private let inputData: ModuleBInputData
 
     public init(inputData: ModuleBInputData) {
