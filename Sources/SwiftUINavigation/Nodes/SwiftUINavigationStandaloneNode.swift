@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct SwiftUINavigationSwitchedNode<Resolver: SwiftUINavigationDeepLinkResolver>: View {
+public struct SwiftUINavigationStandaloneNode<Resolver: SwiftUINavigationDeepLinkResolver>: View {
 
     @EnvironmentObject private var resolver: Resolver
     @EnvironmentObject private var parentNode: SwiftUINavigationGraphNode<Resolver.DeepLink>

@@ -1,29 +1,22 @@
 import SwiftUI
 
-public struct SwiftUINavigationWindow<
-    Resolver: SwiftUINavigationDeepLinkResolver,
-    SwitchedDeepLinkResolver: SwiftUINavigationSwitchedDeepLinkResolver<Resolver.DeepLink>
->: View {
+public struct SwiftUINavigationWindow<Resolver: SwiftUINavigationDeepLinkResolver>: View {
 
     private let resolver: Resolver
-    private let switchedDeepLinkResolver: SwitchedDeepLinkResolver
-    private let rootNode = SwiftUINavigationGraphNode<Resolver.DeepLink>(wrappedDeepLink: nil, parent: nil)
+    private let rootDeepLink: Resolver.DeepLink
 
     // MARK: Init
 
     public init(
         resolver: Resolver,
-        switchedDeepLinkResolver: SwitchedDeepLinkResolver
+        rootDeepLink: Resolver.DeepLink
     ) {
         self.resolver = resolver
-        self.switchedDeepLinkResolver = switchedDeepLinkResolver
+        self.rootDeepLink = rootDeepLink
     }
 
     public var body: some View {
-        SwiftUINavigationSwitchedNode<Resolver, SwitchedDeepLinkResolver>(
-            switchedDeepLinkResolver: switchedDeepLinkResolver
-        )
-            .environmentObject(rootNode)
+        SwiftUINavigationWindowRootNode<Resolver>(deepLink: rootDeepLink)
             .environmentObject(resolver)
     }
 
