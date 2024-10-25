@@ -11,6 +11,7 @@ struct ModuleBView: View {
         VStack {
             text
             dismissButton
+            pushModuleAButton
         }
             .navigationTitle("Module B")
     }
@@ -23,10 +24,25 @@ struct ModuleBView: View {
         Button("Dismiss", action: { dismiss() })
     }
 
+    private var pushModuleAButton: some View {
+        Button("Push Module A", action: { pushModuleA() })
+    }
+
     // MARK: Actions
 
     private func dismiss() {
         executeNavigationCommand(.dismiss)
+    }
+
+    private func pushModuleA() {
+        executeNavigationCommand(
+            .append(
+                StackDeepLink(
+                    destination: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())),
+                    transition: nil
+                )
+            )
+        )
     }
 
 }

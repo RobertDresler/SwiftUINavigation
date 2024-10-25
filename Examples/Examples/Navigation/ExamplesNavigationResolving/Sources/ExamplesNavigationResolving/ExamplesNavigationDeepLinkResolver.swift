@@ -16,7 +16,7 @@ public final class ExamplesNavigationDeepLinkResolver: SwiftUINavigationDeepLink
             case .root(let deepLink):
                 SwiftUINavigationSwitchedNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
             case .notLogged(let deepLink):
-                SwiftUINavigationStateNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+                SwiftUINavigationStandaloneNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
             case .logged(let deepLink):
                 SwiftUINavigationStackNode<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
             case .app(let inputData):

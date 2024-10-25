@@ -57,7 +57,7 @@ struct ModuleAView: View {
     private func pushModuleA() {
         executeNavigationCommand(
             .append(
-                AppendDeepLink(
+                StackDeepLink(
                     destination: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())),
                     transition: nil
                 )
@@ -68,7 +68,7 @@ struct ModuleAView: View {
     private func pushModuleB() {
         executeNavigationCommand(
             .append(
-                AppendDeepLink(
+                StackDeepLink(
                     destination: ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Pushed"))),
                     transition: .zoom(sourceID: pushModuleBSourceID)
                 )

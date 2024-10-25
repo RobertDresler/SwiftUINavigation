@@ -18,12 +18,7 @@ public struct AppNavigationView<Resolver: SwiftUINavigationDeepLinkResolver>: Vi
     public var body: some View {
         SwiftUINavigationSwitchedNodeResolvedView<Resolver>(deepLink: deepLink)
             .onReceive(userRepository.$isUserLogged) { setDeepLink(isUserLogged: $0) }
-            .onAppear {
-                Task {
-                    try? await Task.sleep(for: .seconds(10))
-                    let node = node
-                }
-            }
+            .onShake { node.printDebugGraph() }
     }
 
     private func setDeepLink(isUserLogged: Bool) {

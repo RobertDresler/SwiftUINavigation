@@ -12,7 +12,7 @@ public struct SwiftUINavigationSwitchedNode<Resolver: SwiftUINavigationDeepLinkR
 
     public var body: some View {
         resolver.resolve(deepLink)
-            .environmentObject(SwiftUINavigationGraphNode(wrappedDeepLink: deepLink, parent: parentNode))
+            .environmentObject(SwiftUINavigationGraphNode(type: .switchedNode, wrappedDeepLink: deepLink, parent: parentNode))
     }
 
 }

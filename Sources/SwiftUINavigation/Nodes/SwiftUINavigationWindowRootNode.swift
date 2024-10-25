@@ -11,7 +11,7 @@ public struct SwiftUINavigationWindowRootNode<Resolver: SwiftUINavigationDeepLin
 
     public var body: some View {
         resolver.resolve(deepLink)
-            .environmentObject(SwiftUINavigationGraphNode(wrappedDeepLink: deepLink, parent: nil))
+            .environmentObject(SwiftUINavigationGraphNode(type: .root, wrappedDeepLink: deepLink, parent: nil))
     }
 
 }

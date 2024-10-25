@@ -12,7 +12,7 @@ public struct SwiftUINavigationSwitchedNodeResolvedView<Resolver: SwiftUINavigat
 
     public var body: some View {
         Group {
-            if let deepLink = node.switchedNode?.wrappedDeepLink {
+            if let deepLink = node.switchedNodeDeepLink {
                 resolver.resolve(deepLink)
             } else {
                 Color.clear

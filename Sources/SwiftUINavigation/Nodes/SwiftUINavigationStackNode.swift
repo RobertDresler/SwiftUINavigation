@@ -12,8 +12,10 @@ public struct SwiftUINavigationStackNode<Resolver: SwiftUINavigationDeepLinkReso
     public var body: some View {
         SwiftUINavigationStack<Resolver>(
             node: SwiftUINavigationGraphNode(
-                wrappedDeepLink: deepLink,
-                parent: parentNode
+                type: .stackRoot,
+                wrappedDeepLink: nil,
+                parent: parentNode,
+                stackNodes: [StackDeepLink(destination: deepLink)]
             )
         )
     }

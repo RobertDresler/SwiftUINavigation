@@ -1,4 +1,4 @@
-public struct AppendDeepLink<Destination: Hashable>: Hashable {
+public struct StackDeepLink<Destination: Hashable>: Hashable {
 
     public enum Transition: Hashable {
         case zoom(sourceID: String)

@@ -18,9 +18,11 @@ struct SwiftUINavigationStack<
     // MARK: Getters
 
     var body: some View {
-        NavigationStack(path: $node.path) {
+        NavigationStack(path: path) {
             navigationStackResolvedRoot
         }
+            .connectingSheetLogic(pathHolder: node, resolverType: Resolver.self)
+            .connectingAlertLogic(pathHolder: node)
             .environmentObject(node)
             .wrappedCustomNavigationStackNamespace(namespace)
             .onAppear {
@@ -28,13 +30,42 @@ struct SwiftUINavigationStack<
             }
     }
 
-    private var navigationStackResolvedRoot: some View {
-        resolver.resolve(node.wrappedDeepLink!)
-            .connectingNavigationDestinationLogic(resolver: resolver, namespace: namespace)
-            .connectingSheetLogic(pathHolder: node, resolverType: Resolver.self)
-            .connectingAlertLogic(pathHolder: node)
+    private var path: Binding<NavigationPath> {
+        Binding(
+            get: {
+                guard var stackNodes = stackNodes, !stackNodes.isEmpty else { return NavigationPath() }
+                stackNodes.removeFirst() /// Because first is root
+                return NavigationPath(stackNodes.compactMap { $0.toStackDeepLink })
+            },
+            set: { newPath in
+                node.mapStackNodes { nodes in
+                    Array(nodes.prefix(newPath.count + 1))
+                }
+            }
+        )
     }
 
+    private var navigationStackResolvedRoot: some View {
+        Group {
+            if let rootNode = node.stackNodes?.first?.destination {
+                resolvedStackNode(resolver: resolver, node: rootNode)
+                    .connectingNavigationDestinationLogic(
+                        resolver: resolver,
+                        nodeForDeepLinkInstanceID: { node(for: $0) },
+                        namespace: namespace
+                    )
+            }
+        }
+    }
+
+    private func node(for deepLinkInstanceID: String) -> SwiftUINavigationGraphNode<Resolver.DeepLink>? {
+        guard let stackNodes else { return nil }
+        return stackNodes.first(where: { $0.destination.wrappedDeepLink?.instanceID == deepLinkInstanceID })?.destination
+    }
+
+    private var stackNodes: [SwiftUINavigationGraphNode<Resolver.DeepLink>.NodeStackDeepLink]? {
+        node.stackNodes
+    }
 }
 
 // MARK: View+
@@ -42,16 +73,33 @@ struct SwiftUINavigationStack<
 fileprivate extension View {
     func connectingNavigationDestinationLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
         resolver: Resolver,
+        nodeForDeepLinkInstanceID: @escaping (String) -> SwiftUINavigationGraphNode<Resolver.DeepLink>?,
         namespace: Namespace.ID
     ) -> some View {
-        navigationDestination(for: AppendDeepLink<Resolver.DeepLink>.self) { data in
-            resolver.resolve(data.destination)
-                .destinationWithNavigationTransition(transition: data.transition, namespace: namespace)
+        navigationDestination(for: StackDeepLink<Resolver.DeepLink>.self) { data in
+            Group {
+                if let node = nodeForDeepLinkInstanceID(data.destination.instanceID) {
+                    resolvedStackNode(resolver: resolver, node: node)
+                        .destinationWithNavigationTransition(transition: data.transition, namespace: namespace)
+                }
+            }
+        }
+    }
+
+    func resolvedStackNode<Resolver: SwiftUINavigationDeepLinkResolver>(
+        resolver: Resolver,
+        node: SwiftUINavigationGraphNode<Resolver.DeepLink>
+    ) -> some View {
+        Group {
+            if let deepLink = node.wrappedDeepLink {
+                resolver.resolve(deepLink)
+                    .environmentObject(node)
+            }
         }
     }
 
     func destinationWithNavigationTransition<Destination: NavigationDeepLink>(
-        transition: AppendDeepLink<Destination>.Transition?,
+        transition: StackDeepLink<Destination>.Transition?,
         namespace: Namespace.ID
     ) -> some View {
         Group {
@@ -74,7 +122,9 @@ fileprivate extension View {
     ) -> some View {
         sheet(
             isPresented: Binding(
-                get: { pathHolder.presentedSheetNode != nil },
+                get: {
+                    pathHolder.presentedSheetNode != nil
+                },
                 set: { isPresented in
                     guard !isPresented else { return }
                     pathHolder.presentedSheetNode = nil
@@ -117,6 +167,15 @@ fileprivate extension View {
 enum CustomNavigationStackPreviewDeepLink: NavigationDeepLink {
     case text1
     case text2
+
+    var instanceID: String {
+        switch self {
+        case .text1:
+            "text1"
+        case .text2:
+            "text2"
+        }
+    }
 }
 
 struct CustomNavigationStackPreviewRootView: View {
@@ -126,10 +185,10 @@ struct CustomNavigationStackPreviewRootView: View {
     var body: some View {
         VStack {
             Button("to text1") {
-                pathHolder.append(AppendDeepLink(destination: .text1, transition: nil))
+                pathHolder.append(StackDeepLink(destination: .text1, transition: nil))
             }
             Button("to text2") {
-                pathHolder.append(AppendDeepLink(destination: .text2, transition: nil))
+                pathHolder.append(StackDeepLink(destination: .text2, transition: nil))
             }
         }
     }
