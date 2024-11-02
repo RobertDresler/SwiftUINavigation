@@ -1,12 +1,17 @@
 import SwiftUI
+import Combine
 
 public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: ObservableObject {
 
-    enum NodeType {
+    public enum Value {
+        case deepLink(DeepLink)
+        case stackRoot
+    }
+
+    public enum NodeType {
         case windowRoot
         case standalone
         case stackRoot
-        case stack
         case switchedNode
     }
 
@@ -19,7 +24,7 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
         case presentSheet(DeepLink)
         case dismiss
         case setRoot(DeepLink, clear: Bool)
-        case switchNode(DeepLink)
+        case switchNode(SwiftUINavigationNode<DeepLink>)
     }
 
     struct NodeStackDeepLink {
@@ -28,43 +33,65 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
         let transition: StackDeepLink<DeepLink>.Transition?
 
         var toStackDeepLink: StackDeepLink<DeepLink>? {
-            guard let deepLink = destination.wrappedDeepLink else { return nil }
+            guard case .deepLink(let deepLink) = destination.value else { return nil }
             return StackDeepLink(destination: deepLink, transition: transition)
         }
 
     }
 
-    @Published public var wrappedDeepLink: DeepLink?
+    @Published public var value: Value
     @Published var stackNodes: [NodeStackDeepLink]?
+    @Published var tabsNodes: [SwiftUINavigationNode<DeepLink>]?
     // TODO: -RD- separate alert since it's not modal
     @Published var alertConfig: AlertConfig?
     @Published public var presentedSheetNode: SwiftUINavigationNode<DeepLink>?
-    @Published public var switchedNodeDeepLink: DeepLink?
+    @Published public var switchedNode: SwiftUINavigationNode<DeepLink>?
     public var directChildNodeReference: SwiftUINavigationNode<DeepLink>?
-
+    private var cancellables = Set<AnyCancellable>()
     private var _openURL: ((URL) -> Void)?
 
     public weak var parent: SwiftUINavigationNode<DeepLink>?
-    private let type: NodeType
+    let type: NodeType
     private var root: SwiftUINavigationNode<DeepLink> {
         parent?.root ?? self
     }
 
-    init(
+    public init(
         type: NodeType,
-        wrappedDeepLink: DeepLink?,
+        value: Value,
         parent: SwiftUINavigationNode<DeepLink>?,
         stackNodes: [StackDeepLink<DeepLink>]? = nil
     ) {
         self.type = type
-        self.wrappedDeepLink = wrappedDeepLink
+        self.value = value
         self.parent = parent
         self.stackNodes = stackNodes == nil ? nil : []
+        switch value {
+        case .deepLink(let deepLink):
+            print("Init of node with deepLink instance ID: \(deepLink.instanceID)")
+        case .stackRoot:
+            print("Init of stackRoot node")
+        }
         if let stackNodes {
             mapStackNodes { _ in stackNodes }
         }
         if [.windowRoot, .switchedNode].contains(parent?.type) {
             parent?.directChildNodeReference = self
+        }
+
+        NotificationCenter.default.publisher(for: Notification.Name(rawValue: "deviceDidShakeNotification"))
+            .sink { [weak self] _ in
+                self?.printDebugGraphFromExactNode()
+            }
+            .store(in: &cancellables)
+    }
+
+    deinit {
+        switch value {
+        case .deepLink(let deepLink):
+            print("Deinit of node with deepLink instance ID: \(deepLink.instanceID)")
+        case .stackRoot:
+            print("Deinit of stackRoot node")
         }
     }
 
@@ -128,14 +155,14 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
             stackNodes.compactMap { $0.toStackDeepLink }
         ).map { deepLink in
             NodeStackDeepLink(
-                destination: SwiftUINavigationNode(type: .stack, wrappedDeepLink: deepLink.destination, parent: self),
+                destination: SwiftUINavigationNode(type: .standalone, value: .deepLink(deepLink.destination), parent: self),
                 transition: deepLink.transition
             )
         }
     }
 
-    func switchNode(_ deepLink: DeepLink) {
-        switchedNodeDeepLink = deepLink
+    func switchNode(_ node: SwiftUINavigationNode<DeepLink>) {
+        switchedNode = node
     }
 
     public func printDebugGraph() {
@@ -158,8 +185,8 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
             dismiss()
         case let .setRoot(deepLink, clear):
             setRoot(deepLink, clear: clear)
-        case .switchNode(let deepLink):
-            switchNode(deepLink)
+        case .switchNode(let node):
+            switchNode(node)
         }
     }
 
@@ -171,7 +198,7 @@ private extension SwiftUINavigationNode {
     func presentSheetOnExactNode(_ value: DeepLink) {
         presentedSheetNode = SwiftUINavigationNode(
             type: .stackRoot,
-            wrappedDeepLink: nil,
+            value: .stackRoot,
             parent: self,
             stackNodes: [StackDeepLink(destination: value)]
         )
@@ -193,7 +220,7 @@ private extension SwiftUINavigationNode {
     }
 
     var canPresentIfWouldnt: Bool {
-        type != .stack
+        parent?.type != .stackRoot
     }
 
     var children: [SwiftUINavigationNode<DeepLink>] {
@@ -216,11 +243,48 @@ private extension SwiftUINavigationNode {
     }
 
     var debugGraphNameForPrint: String {
-        if let debugName = wrappedDeepLink?.debugName {
-            "\(type) - \(debugName)"
-        } else {
+        switch value {
+        case .deepLink(let deepLink):
+            "\(type) - \(deepLink.debugName)"
+        case .stackRoot:
             "\(type)"
         }
+    }
+}
 
+import SwiftUI
+
+/// Thanks to https://www.hackingwithswift.com/quick-start/swiftui/how-to-detect-shake-gestures
+// The notification we'll send when a shake gesture happens.
+extension UIDevice {
+    static let deviceDidShakeNotification = Notification.Name(rawValue: "deviceDidShakeNotification")
+}
+
+//  Override the default behavior of shake gestures to send our notification instead.
+extension UIWindow {
+     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            NotificationCenter.default.post(name: UIDevice.deviceDidShakeNotification, object: nil)
+        }
+     }
+}
+
+// A view modifier that detects shaking and calls a function of our choosing.
+struct DeviceShakeViewModifier: ViewModifier {
+    let action: () -> Void
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear()
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.deviceDidShakeNotification)) { _ in
+                action()
+            }
+    }
+}
+
+// A View extension to make the modifier easier to use.
+extension View {
+    func onShake(perform action: @escaping () -> Void) -> some View {
+        self.modifier(DeviceShakeViewModifier(action: action))
     }
 }

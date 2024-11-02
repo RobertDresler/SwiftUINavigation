@@ -4,16 +4,9 @@ struct SwiftUINavigationStackNodeResolvedView<
     Resolver: SwiftUINavigationDeepLinkResolver
 >: View {
 
-    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var resolver: Resolver
-    @Namespace private var namespace
-    @ObservedObject private var node: SwiftUINavigationNode<Resolver.DeepLink>
-
-    // MARK: Init
-
-    init(node: SwiftUINavigationNode<Resolver.DeepLink>) {
-        self.node = node
-    }
+    @EnvironmentObject private var node: SwiftUINavigationNode<Resolver.DeepLink>
+    @Environment(\.wrappedNavigationStackNodeNamespace) private var wrappedNavigationStackNodeNamespace
 
     // MARK: Getters
 
@@ -21,13 +14,6 @@ struct SwiftUINavigationStackNodeResolvedView<
         NavigationStack(path: path) {
             navigationStackResolvedRoot
         }
-            .connectingSheetLogic(pathHolder: node, resolverType: Resolver.self)
-            .connectingAlertLogic(pathHolder: node)
-            .environmentObject(node)
-            .wrappedCustomNavigationStackNamespace(namespace)
-            .onAppear {
-                node.setOpenURL({ openURL($0) })
-            }
     }
 
     private var path: Binding<NavigationPath> {
@@ -37,8 +23,8 @@ struct SwiftUINavigationStackNodeResolvedView<
                 stackNodes.removeFirst() /// Because first is root
                 return NavigationPath(stackNodes.compactMap { $0.toStackDeepLink })
             },
-            set: { newPath in
-                node.mapStackNodes { nodes in
+            set: { [weak node] newPath in
+                node?.mapStackNodes { nodes in
                     Array(nodes.prefix(newPath.count + 1))
                 }
             }
@@ -48,11 +34,11 @@ struct SwiftUINavigationStackNodeResolvedView<
     private var navigationStackResolvedRoot: some View {
         Group {
             if let rootNode = node.stackNodes?.first?.destination {
-                resolvedStackNode(resolver: resolver, node: rootNode)
+                SwiftUINavigationResolvedView<Resolver>(node: rootNode)
                     .connectingNavigationDestinationLogic(
-                        resolver: resolver,
+                        resolverType: Resolver.self,
                         nodeForDeepLinkInstanceID: { node(for: $0) },
-                        namespace: namespace
+                        namespace: wrappedNavigationStackNodeNamespace
                     )
             }
         }
@@ -60,7 +46,13 @@ struct SwiftUINavigationStackNodeResolvedView<
 
     private func node(for deepLinkInstanceID: String) -> SwiftUINavigationNode<Resolver.DeepLink>? {
         guard let stackNodes else { return nil }
-        return stackNodes.first(where: { $0.destination.wrappedDeepLink?.instanceID == deepLinkInstanceID })?.destination
+        return stackNodes.first(where: { node in
+            if case .deepLink(let deepLink) = node.destination.value {
+                deepLink.instanceID == deepLinkInstanceID
+            } else {
+                false
+            }
+        })?.destination
     }
 
     private var stackNodes: [SwiftUINavigationNode<Resolver.DeepLink>.NodeStackDeepLink]? {
@@ -72,38 +64,26 @@ struct SwiftUINavigationStackNodeResolvedView<
 
 fileprivate extension View {
     func connectingNavigationDestinationLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
-        resolver: Resolver,
+        resolverType: Resolver.Type,
         nodeForDeepLinkInstanceID: @escaping (String) -> SwiftUINavigationNode<Resolver.DeepLink>?,
-        namespace: Namespace.ID
+        namespace: Namespace.ID?
     ) -> some View {
         navigationDestination(for: StackDeepLink<Resolver.DeepLink>.self) { data in
             Group {
                 if let node = nodeForDeepLinkInstanceID(data.destination.instanceID) {
-                    resolvedStackNode(resolver: resolver, node: node)
+                    SwiftUINavigationResolvedView<Resolver>(node: node)
                         .destinationWithNavigationTransition(transition: data.transition, namespace: namespace)
                 }
             }
         }
     }
 
-    func resolvedStackNode<Resolver: SwiftUINavigationDeepLinkResolver>(
-        resolver: Resolver,
-        node: SwiftUINavigationNode<Resolver.DeepLink>
-    ) -> some View {
-        Group {
-            if let deepLink = node.wrappedDeepLink {
-                resolver.resolve(deepLink)
-                    .environmentObject(node)
-            }
-        }
-    }
-
     func destinationWithNavigationTransition<Destination: NavigationDeepLink>(
         transition: StackDeepLink<Destination>.Transition?,
-        namespace: Namespace.ID
+        namespace: Namespace.ID?
     ) -> some View {
         Group {
-            if #available(iOS 18.0, *) {
+            if #available(iOS 18.0, *), let namespace {
                 switch transition {
                 case .zoom(let sourceID):
                     navigationTransition(.zoom(sourceID: sourceID, in: namespace))
@@ -115,122 +95,4 @@ fileprivate extension View {
             }
         }
     }
-
-    func connectingSheetLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
-        pathHolder: SwiftUINavigationNode<Resolver.DeepLink>,
-        resolverType: Resolver.Type
-    ) -> some View {
-        sheet(
-            isPresented: Binding(
-                get: {
-                    pathHolder.presentedSheetNode != nil
-                },
-                set: { isPresented in
-                    guard !isPresented else { return }
-                    pathHolder.presentedSheetNode = nil
-                }
-            ),
-            content: {
-                if let presentedSheetNode = pathHolder.presentedSheetNode {
-                    SwiftUINavigationStackNodeResolvedView<Resolver>(node: presentedSheetNode)
-                }
-            }
-        )
-    }
-
-    func connectingAlertLogic<Destination: NavigationDeepLink>(
-        pathHolder: SwiftUINavigationNode<Destination>
-    ) -> some View {
-        alert(
-            Text(pathHolder.alertConfig?.title ?? ""),
-            isPresented: Binding(
-                get: { pathHolder.alertConfig != nil },
-                set: { isPresented in
-                    guard !isPresented else { return }
-                    pathHolder.alertConfig = nil
-                }
-            ),
-            actions: {
-                ForEach(Array((pathHolder.alertConfig?.actions ?? []).enumerated()), id: \.offset) { enumeration in
-                    Button(role: enumeration.element.role, action: enumeration.element.handler) {
-                        Text(enumeration.element.title)
-                    }
-                }
-            },
-            message: { Text(pathHolder.alertConfig?.message ?? "") }
-        )
-    }
 }
-
-// MARK: Preview
-
-enum CustomNavigationStackPreviewDeepLink: NavigationDeepLink {
-    case text1
-    case text2
-
-    var instanceID: String {
-        switch self {
-        case .text1:
-            "text1"
-        case .text2:
-            "text2"
-        }
-    }
-}
-
-struct CustomNavigationStackPreviewRootView: View {
-
-    @EnvironmentObject private var pathHolder: SwiftUINavigationNode<CustomNavigationStackPreviewDeepLink>
-
-    var body: some View {
-        VStack {
-            Button("to text1") {
-                pathHolder.append(StackDeepLink(destination: .text1, transition: nil))
-            }
-            Button("to text2") {
-                pathHolder.append(StackDeepLink(destination: .text2, transition: nil))
-            }
-        }
-    }
-
-}
-
-struct CustomNavigationStackPreviewDestinationView: View {
-
-    @EnvironmentObject private var pathHolder: SwiftUINavigationNode<CustomNavigationStackPreviewDeepLink>
-
-    var text: String
-
-    var body: some View {
-        VStack {
-            Text("I'm \(text)")
-            Button("Back") {
-                pathHolder.removeLast()
-            }
-        }
-    }
-
-}
-
-final class CustomNavigationResolver: SwiftUINavigationDeepLinkResolver {
-
-    func resolve(_ deepLink: CustomNavigationStackPreviewDeepLink) -> some View {
-        Group {
-            switch deepLink {
-            case .text1:
-                CustomNavigationStackPreviewDestinationView(text: "text1")
-            case .text2:
-                CustomNavigationStackPreviewDestinationView(text: "text2")
-            }
-        }
-    }
-
-}
-
-/*#Preview {
-    SwiftUINavigationWindow(
-        root: CustomNavigationStackPreviewDeepLink.text1,
-        resolver: CustomNavigationResolver()
-    )
-}
-*/

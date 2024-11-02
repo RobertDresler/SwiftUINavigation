@@ -5,6 +5,7 @@ import ModuleA
 import ModuleB
 import App
 import Start
+import MainTabs
 
 public final class ExamplesNavigationDeepLinkResolver: SwiftUINavigationDeepLinkResolver {
 
@@ -15,10 +16,10 @@ public final class ExamplesNavigationDeepLinkResolver: SwiftUINavigationDeepLink
             switch deepLink.destination {
             case .root(let deepLink):
                 SwiftUINavigationSwitchedNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
-            case .notLogged(let deepLink):
-                SwiftUINavigationStandaloneNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
-            case .logged(let deepLink):
-                SwiftUINavigationStackNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+           // case .notLogged(let deepLink):
+           //     SwiftUINavigationStandaloneNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
+           // case .logged(let deepLink):
+           //     SwiftUINavigationStackNodeView<ExamplesNavigationDeepLinkResolver>(deepLink: deepLink)
             case .app(let inputData):
                 AppNavigationView<ExamplesNavigationDeepLinkResolver>(inputData: inputData)
             case .start(let inputData):
@@ -27,6 +28,8 @@ public final class ExamplesNavigationDeepLinkResolver: SwiftUINavigationDeepLink
                 ModuleANavigationView(inputData: inputData)
             case .moduleB(let inputData):
                 ModuleBNavigationView(inputData: inputData)
+            case .mainTabs(let inputData):
+                MainTabsNavigationView(inputData: inputData)
             }
         }
     }

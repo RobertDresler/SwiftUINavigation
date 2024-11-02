@@ -14,8 +14,8 @@ public struct StartNavigationView: View {
     public var body: some View {
         StartView(
             inputData: inputData,
-            executeNavigationCommand: { node.executeCommand($0) }
-        ).onAppear {
+            executeNavigationCommand: { [weak node] in node?.executeCommand($0) }
+        ).onAppear { [weak node] in
             let node = node
         }
     }

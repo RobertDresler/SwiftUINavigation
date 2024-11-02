@@ -22,6 +22,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Modules/App,
+				Modules/MainTabs,
 				Modules/ModuleA,
 				Modules/ModuleB,
 				Modules/Start,

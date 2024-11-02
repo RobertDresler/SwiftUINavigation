@@ -4,22 +4,17 @@ public struct SwiftUINavigationSwitchedNodeResolvedView<Resolver: SwiftUINavigat
 
     @EnvironmentObject private var node: SwiftUINavigationNode<Resolver.DeepLink>
     @EnvironmentObject private var resolver: Resolver
-    private let deepLink: Resolver.DeepLink
 
-    public init(deepLink: Resolver.DeepLink) {
-        self.deepLink = deepLink
-    }
+    public init() {}
 
     public var body: some View {
-        Group {
-            if let deepLink = node.switchedNodeDeepLink {
-                resolver.resolve(deepLink)
+        Group { [weak node] in
+            if let switchedNode = node?.switchedNode {
+                SwiftUINavigationResolvedView<Resolver>(node: switchedNode)
             } else {
                 Color.clear
             }
         }
-            .onAppear { node.executeCommand(.switchNode(deepLink)) }
-            .onChange(of: deepLink) { deepLink in node.executeCommand(.switchNode(deepLink)) }
     }
 
 }

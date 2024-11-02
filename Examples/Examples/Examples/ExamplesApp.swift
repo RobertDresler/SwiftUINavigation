@@ -21,8 +21,10 @@ struct ExamplesApp: App {
         WindowGroup {
             SwiftUINavigationWindow(
                 resolver: ExamplesNavigationDeepLinkResolver(),
-                rootDeepLink: ExamplesNavigationDeepLink(
-                    destination: .root(ExamplesNavigationDeepLink(destination: .app(AppInputData())))
+                rootNode: SwiftUINavigationNode(
+                    type: .switchedNode,
+                    value: .deepLink(ExamplesNavigationDeepLink(destination: .app(AppInputData()))),
+                    parent: nil
                 )
             ).environmentObject(userRepository)
         }

@@ -4,7 +4,7 @@ import SwiftUINavigation
 
 struct ModuleAView: View {
 
-    @Environment(\.wrappedCustomNavigationStackNamespace) private var wrappedCustomNavigationStackNamespace
+    @Environment(\.wrappedNavigationStackNodeNamespace) private var wrappedNavigationStackNodeNamespace
     var inputData: ModuleAInputData
     var executeNavigationCommand: (SwiftUINavigationNode<ExamplesNavigationDeepLink>.Command) -> Void
 
@@ -38,13 +38,13 @@ struct ModuleAView: View {
 
     private var pushModuleBButton: some View {
         Group {
-            if #available(iOS 18.0, *), let wrappedCustomNavigationStackNamespace {
+            if #available(iOS 18.0, *), let wrappedNavigationStackNodeNamespace {
                 Button(action: { pushModuleB() }) {
                     Text("Push Module B")
                         .padding(64)
                         .background(Material.regular)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
-                }.matchedTransitionSource(id: pushModuleBSourceID, in: wrappedCustomNavigationStackNamespace)
+                }.matchedTransitionSource(id: pushModuleBSourceID, in: wrappedNavigationStackNodeNamespace)
             } else {
                 EmptyView()
             }

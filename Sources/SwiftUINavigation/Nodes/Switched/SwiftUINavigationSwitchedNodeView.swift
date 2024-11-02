@@ -11,8 +11,13 @@ public struct SwiftUINavigationSwitchedNodeView<Resolver: SwiftUINavigationDeepL
     }
 
     public var body: some View {
-        resolver.resolve(deepLink)
-            .environmentObject(SwiftUINavigationNode(type: .switchedNode, wrappedDeepLink: deepLink, parent: parentNode))
+        SwiftUINavigationResolvedView<Resolver>(
+            node: SwiftUINavigationNode(
+                type: .switchedNode,
+                value: .deepLink(deepLink),
+                parent: parentNode
+            )
+        )
     }
 
 }
