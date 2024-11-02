@@ -15,6 +15,7 @@ struct ModuleAView: View {
                 presentModuleBButton
                 setModuleBRootButton
                 showAlertButton
+                openURLButton
             }
             pushModuleBButton
         }.navigationTitle("Module A")
@@ -34,6 +35,10 @@ struct ModuleAView: View {
 
     private var showAlertButton: some View {
         Button("Show alert", action: { showAlert() })
+    }
+
+    private var openURLButton: some View {
+        Button("Open URL", action: { openURL() })
     }
 
     private var pushModuleBButton: some View {
@@ -95,6 +100,11 @@ struct ModuleAView: View {
                 clear: true
             )
         )
+    }
+
+    private func openURL() {
+        guard let url = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ") else { return }
+        executeNavigationCommand(.openURL(url))
     }
 
     private func showAlert() {

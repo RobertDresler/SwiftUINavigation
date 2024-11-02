@@ -16,7 +16,7 @@ struct SwiftUINavigationResolvedView<Resolver: SwiftUINavigationDeepLinkResolver
             .connectingSheetLogic(node: node, resolverType: Resolver.self)
            // .connectingAlertLogic(pathHolder: node)
             .wrappedNavigationStackNodeNamespace(node.type == .stackRoot ? namespace : nil)
-            .onAppear { [weak node] in node?.setOpenURL({ openURL($0) }) }
+            .onReceive(node.urlToOpen) { openURLAction($0) }
             .environmentObject(node)
     }
 
@@ -31,6 +31,11 @@ struct SwiftUINavigationResolvedView<Resolver: SwiftUINavigationDeepLinkResolver
                 EmptyView()
             }
         }
+    }
+
+    func openURLAction(_ url: URL?) {
+        guard let url else { return }
+        openURL(url)
     }
 
 }

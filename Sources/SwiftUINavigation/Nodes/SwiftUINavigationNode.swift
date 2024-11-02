@@ -25,6 +25,7 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
         case dismiss
         case setRoot(DeepLink, clear: Bool)
         case switchNode(SwiftUINavigationNode<DeepLink>)
+        case openURL(URL)
     }
 
     struct NodeStackDeepLink {
@@ -46,9 +47,9 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
     @Published var alertConfig: AlertConfig?
     @Published public var presentedSheetNode: SwiftUINavigationNode<DeepLink>?
     @Published public var switchedNode: SwiftUINavigationNode<DeepLink>?
+    public let urlToOpen = PassthroughSubject<URL, Never>()
     public var directChildNodeReference: SwiftUINavigationNode<DeepLink>?
     private var cancellables = Set<AnyCancellable>()
-    private var _openURL: ((URL) -> Void)?
 
     public weak var parent: SwiftUINavigationNode<DeepLink>?
     let type: NodeType
@@ -73,7 +74,18 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
             print("Init of stackRoot node")
         }
         if let stackNodes {
-            mapStackNodes { _ in stackNodes }
+            mapStackNodes { _ in
+                stackNodes.map { deepLink in
+                    NodeStackDeepLink(
+                        destination: SwiftUINavigationNode(
+                            type: .standalone,
+                            value: .deepLink(deepLink.destination),
+                            parent: self
+                        ),
+                        transition: deepLink.transition
+                    )
+                }
+            }
         }
         if [.windowRoot, .switchedNode].contains(parent?.type) {
             parent?.directChildNodeReference = self
@@ -95,13 +107,18 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
         }
     }
 
-    public func setOpenURL(_ openURL: @escaping (URL) -> Void) {
-        self._openURL = openURL
-    }
-
     public func append(_ value: StackDeepLink<DeepLink>) {
         mapStackNodes { nodes in
-            nodes + [value]
+            nodes + [
+                NodeStackDeepLink(
+                    destination: SwiftUINavigationNode(
+                        type: .standalone,
+                        value: .deepLink(value.destination),
+                        parent: self
+                    ),
+                    transition: value.transition
+                )
+            ]
         }
     }
 
@@ -130,11 +147,18 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
     }
 
     public func openURL(_ url: URL) {
-        _openURL?(url)
+        urlToOpen.send(url)
     }
 
     public func setRoot(_ newRoot: DeepLink, clear: Bool) {
-        let newRootStackDeepLink = StackDeepLink(destination: newRoot)
+        let newRootStackDeepLink = NodeStackDeepLink(
+            destination: SwiftUINavigationNode(
+                type: .standalone,
+                value: .deepLink(newRoot),
+                parent: self
+            ),
+            transition: nil
+        )
         mapStackNodes { nodes in
             if clear || nodes.isEmpty {
                 return [newRootStackDeepLink]
@@ -146,19 +170,14 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
         }
     }
 
-    func mapStackNodes(mappedNodes: ([StackDeepLink<DeepLink>]) -> [StackDeepLink<DeepLink>]) {
+    func mapStackNodes(
+        mappedNodes: ([SwiftUINavigationNode<DeepLink>.NodeStackDeepLink]) -> [SwiftUINavigationNode<DeepLink>.NodeStackDeepLink]
+    ) {
         guard let stackNodes else {
             parent?.mapStackNodes(mappedNodes: mappedNodes)
             return
         }
-        self.stackNodes = mappedNodes(
-            stackNodes.compactMap { $0.toStackDeepLink }
-        ).map { deepLink in
-            NodeStackDeepLink(
-                destination: SwiftUINavigationNode(type: .standalone, value: .deepLink(deepLink.destination), parent: self),
-                transition: deepLink.transition
-            )
-        }
+        self.stackNodes = mappedNodes(stackNodes)
     }
 
     func switchNode(_ node: SwiftUINavigationNode<DeepLink>) {
@@ -187,6 +206,8 @@ public final class SwiftUINavigationNode<DeepLink: NavigationDeepLink>: Observab
             setRoot(deepLink, clear: clear)
         case .switchNode(let node):
             switchNode(node)
+        case .openURL(let url):
+            openURL(url)
         }
     }
 
