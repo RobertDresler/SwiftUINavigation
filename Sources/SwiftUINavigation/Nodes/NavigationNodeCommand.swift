@@ -1,7 +1,7 @@
 import SwiftUI
 
 public enum NavigationNodeCommand {
-    case append(SwiftUINavigationNodeWithStackTransition)
+    case append(NavigationNodeWithStackTransition)
     case removeLast(count: Int = 1)
     case removeAll
     case alert(AlertConfig)

@@ -49,7 +49,7 @@ struct StackRootNavigationNodeView: View {
             })?.destination
         }
 
-        private var stackNodes: [SwiftUINavigationNodeWithStackTransition]? {
+        private var stackNodes: [NavigationNodeWithStackTransition]? {
             node.stackNodes
         }
 

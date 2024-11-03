@@ -7,7 +7,7 @@ public final class StackRootNavigationNode: NavigationNode {
         AnyView(StackRootNavigationNodeView())
     }
 
-    public init(stackNodes: [SwiftUINavigationNodeWithStackTransition]) {
+    public init(stackNodes: [NavigationNodeWithStackTransition]) {
         super.init(stackNodes: stackNodes)
     }
 

@@ -1,4 +1,4 @@
-public struct SwiftUINavigationNodeWithStackTransition {
+public struct NavigationNodeWithStackTransition {
 
     let destination: NavigationNode
     let transition: StackDeepLink.Transition?

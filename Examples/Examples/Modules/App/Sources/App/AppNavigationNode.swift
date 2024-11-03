@@ -46,7 +46,7 @@ public final class AppNavigationNode: NavigationNode {
     private var loggedNode: NavigationNode {
         StackRootNavigationNode(
             stackNodes: [
-                SwiftUINavigationNodeWithStackTransition(
+                NavigationNodeWithStackTransition(
                     destination: ModuleANavigationNode(
                         inputData: ModuleAInputData()
                     ),

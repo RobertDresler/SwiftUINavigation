@@ -3,40 +3,62 @@ import Combine
 
 open class NavigationNode: ObservableObject {
 
-    @Published var stackNodes: [SwiftUINavigationNodeWithStackTransition]?
-    @Published var tabsNodes: [NavigationNode]?
-    // TODO: -RD- separate alert since it's not modal
-    @Published var alertConfig: AlertConfig?
+    // MARK: Open
+
+    @MainActor
+    open var view: AnyView {
+        AnyView(EmptyView())
+    }
+
+    // MARK: Public
+
+    public let id: String
+    @Published public var stackNodes: [NavigationNodeWithStackTransition]?
+    // TODO: -RD- implement @Published public var tabsNodes: [NavigationNode]?
     @Published public var presentedSheetNode: NavigationNode?
     @Published public var switchedNode: NavigationNode?
-    public let urlToOpen = PassthroughSubject<URL, Never>()
-    private var cancellables = Set<AnyCancellable>()
-    public var defaultDeepLinkHandler: NavigationDeepLinkHandler? {
-        _defaultDeepLinkHandler ?? parent?.defaultDeepLinkHandler
-    }
-    public var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
-
     public weak var parent: NavigationNode?
-    private var root: NavigationNode {
+    public var childrenPublisher: AnyPublisher<[NavigationNode], Never> {
+        $stackNodes.compactMap { $0?.map(\.destination) }
+            .merge(
+                with: $presentedSheetNode.map { [$0] },
+                $switchedNode.map { [$0] }
+            )
+            .map { $0.compactMap { $0 }}
+            .eraseToAnyPublisher()
+    }
+
+    public var root: NavigationNode {
         parent?.root ?? self
     }
 
-    public let id: String
+    public var canPresentIfWouldnt: Bool {
+        (parent is StackRootNavigationNode) == false
+    }
 
-    // TODO: -RD- make type more dependent on resolved view - e.g. if you want switched, subclass switched
+    // MARK: Internal
+
+    let urlToOpen = PassthroughSubject<URL, Never>()
+
+    // MARK: Private
+
+    private var cancellables = Set<AnyCancellable>()
+    private var defaultDeepLinkHandler: NavigationDeepLinkHandler? {
+        _defaultDeepLinkHandler ?? parent?.defaultDeepLinkHandler
+    }
+    private var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
+
+    // TODO: -RD- separate alert since it's not modal
+    @Published var alertConfig: AlertConfig?
+
     public init(
-        stackNodes: [SwiftUINavigationNodeWithStackTransition]? = nil,
+        stackNodes: [NavigationNodeWithStackTransition]? = nil,
         defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil
     ) {
         self.id = UUID().uuidString
-        self.stackNodes = stackNodes == nil ? nil : []
+        self.stackNodes = stackNodes
         _defaultDeepLinkHandler = defaultDeepLinkHandler
         printDebugText("Init")
-        if let stackNodes {
-            mapStackNodes { _ in
-                stackNodes
-            }
-        }
         bindParentLogic()
     }
 
@@ -44,53 +66,62 @@ open class NavigationNode: ObservableObject {
         printDebugText("Deinit")
     }
 
-    func bindParentLogic() {
-        // TODO: @Published var tabsNodes: [SwiftUINavigationNode]?
-        // TODO: -RD- merge
-        $stackNodes
-            .compactMap { $0 }
-            .sink { [weak self] nodes in
-                guard let self else { return }
-                nodes.forEach { $0.destination.parent = self }
-            }
-            .store(in: &cancellables)
-
-        $presentedSheetNode
-            .compactMap { $0 }
-            .sink { [weak self] node in
-                guard let self else { return }
-                node.parent = self
-            }
-            .store(in: &cancellables)
-
-        $switchedNode
-            .compactMap { $0 }
-            .sink { [weak self] node in
-                guard let self else { return }
-                node.parent = self
-            }
-            .store(in: &cancellables)
-    }
+    // MARK: Public Methods
 
     public func printDebugText(_ text: String) {
         print("\(debugPrintPrefix): \(text)")
     }
 
-    private var debugPrintPrefix: String {
-        "[\(type(of: self)) \(id)]"
-    }
-
-    @MainActor
-    open var view: AnyView {
-        AnyView(EmptyView())
-    }
-
     // TODO: -RD- make overridable
-    public func handleDeepLink(_ deepLink: any NavigationDeepLink) {
+    open func handleDeepLink(_ deepLink: any NavigationDeepLink) {
         defaultDeepLinkHandler?.handleDeepLink(deepLink, on: self)
     }
 
-    public func append(_ value: SwiftUINavigationNodeWithStackTransition) {
+    public func printDebugGraph() {
+        root.printDebugGraphFromExactNode()
+    }
+
+    public func executeCommand(_ command: NavigationNodeCommand) {
+        switch command {
+        case .append(let destination):
+            append(destination)
+        case .removeLast(let count):
+            removeLast(count)
+        case .removeAll:
+            removeAll()
+        case .alert(let config):
+            alertConfig = config
+        case .presentSheet(let destination):
+            presentSheet(destination)
+        case .dismiss:
+            dismiss()
+        case let .setRoot(node, clear):
+            setRoot(node, clear: clear)
+        case .switchNode(let node):
+            switchNode(node)
+        case .openURL(let url):
+            openURL(url)
+        }
+    }
+
+    // MARK: Internal Methods
+    
+    func mapStackNodes(
+        mappedNodes: ([NavigationNodeWithStackTransition]) -> [NavigationNodeWithStackTransition]
+    ) {
+        guard let stackNodes else {
+            parent?.mapStackNodes(mappedNodes: mappedNodes)
+            return
+        }
+        self.stackNodes = mappedNodes(stackNodes)
+    }
+
+}
+
+// MARK: Command Handling
+// TODO: -RD- refactor
+private extension NavigationNode {
+    public func append(_ value: NavigationNodeWithStackTransition) {
         mapStackNodes { nodes in
             nodes + [value]
         }
@@ -124,12 +155,8 @@ open class NavigationNode: ObservableObject {
         urlToOpen.send(url)
     }
 
-    public var canPresentIfWouldnt: Bool {
-        (parent is StackRootNavigationNode) == false
-    }
-
     public func setRoot(_ newRoot: NavigationNode, clear: Bool) {
-        let newRootStackDeepLink = SwiftUINavigationNodeWithStackTransition(
+        let newRootStackDeepLink = NavigationNodeWithStackTransition(
             destination: newRoot,
             transition: nil
         )
@@ -144,60 +171,27 @@ open class NavigationNode: ObservableObject {
         }
     }
 
-    func mapStackNodes(
-        mappedNodes: ([SwiftUINavigationNodeWithStackTransition]) -> [SwiftUINavigationNodeWithStackTransition]
-    ) {
-        guard let stackNodes else {
-            parent?.mapStackNodes(mappedNodes: mappedNodes)
-            return
-        }
-        self.stackNodes = mappedNodes(stackNodes)
-    }
-
     func switchNode(_ node: NavigationNode) {
         switchedNode = node
     }
-
-    public func printDebugGraph() {
-        root.printDebugGraphFromExactNode()
-    }
-
-    public func executeCommand(_ command: NavigationNodeCommand) {
-        switch command {
-        case .append(let destination):
-            append(destination)
-        case .removeLast(let count):
-            removeLast(count)
-        case .removeAll:
-            removeAll()
-        case .alert(let config):
-            alertConfig = config
-        case .presentSheet(let destination):
-            presentSheet(destination)
-        case .dismiss:
-            dismiss()
-        case let .setRoot(node, clear):
-            setRoot(node, clear: clear)
-        case .switchNode(let node):
-            switchNode(node)
-        case .openURL(let url):
-            openURL(url)
-        }
-    }
-
-}
-
-// MARK: Command Handling
-
-private extension NavigationNode {
 }
 
 // MARK: Private Methods
 
 private extension NavigationNode {
+    func bindParentLogic() {
+        // TODO: @Published var tabsNodes: [SwiftUINavigationNode]?
+        childrenPublisher
+            .sink { [weak self] nodes in
+                guard let self else { return }
+                nodes.forEach { $0.parent = self }
+            }
+            .store(in: &cancellables)
+    }
+
     func presentSheetOnExactNode(_ value: NavigationNode) {
         presentedSheetNode = StackRootNavigationNode(
-            stackNodes: [SwiftUINavigationNodeWithStackTransition(destination: value, transition: nil)]
+            stackNodes: [NavigationNodeWithStackTransition(destination: value, transition: nil)]
         )
     }
     var nearestNodeWhichCanPresent: NavigationNode? {
@@ -222,6 +216,14 @@ private extension NavigationNode {
             + [switchedNode]
             + (stackNodes?.map(\.destination) ?? [])
         ).compactMap { $0 }
+    }
+}
+
+// MARK: Debug Print
+
+private extension NavigationNode {
+    var debugPrintPrefix: String {
+        "[\(type(of: self)) \(id)]"
     }
 
     func printDebugGraphFromExactNode(level: Int = 0) {

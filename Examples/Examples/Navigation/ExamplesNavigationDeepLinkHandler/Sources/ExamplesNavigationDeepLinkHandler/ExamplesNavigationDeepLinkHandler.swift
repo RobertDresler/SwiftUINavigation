@@ -18,7 +18,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
         switch deepLink.destination {
         case .moduleA(let inputData):
             node.append(
-                SwiftUINavigationNodeWithStackTransition(
+                NavigationNodeWithStackTransition(
                     destination: ModuleANavigationNode(inputData: inputData),
                     transition: nil
                 )
@@ -29,7 +29,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
             case .present:
                 node.presentSheet(moduleNode)
             case .push(let transition):
-                node.append(SwiftUINavigationNodeWithStackTransition(destination: moduleNode, transition: transition))
+                node.append(NavigationNodeWithStackTransition(destination: moduleNode, transition: transition))
             case .setRoot:
                 node.setRoot(moduleNode, clear: true)
             }
