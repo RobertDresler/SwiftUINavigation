@@ -13,7 +13,7 @@ struct ExamplesApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SwiftUINavigationWindow(
+            NavigationWindow(
                 rootNode: AppNavigationNode(
                     userRepository: userRepository,
                     defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler()

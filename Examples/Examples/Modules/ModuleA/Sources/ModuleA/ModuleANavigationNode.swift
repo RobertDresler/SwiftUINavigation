@@ -2,7 +2,7 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 
-public final class ModuleANavigationNode: SwiftUINavigationNode {
+public final class ModuleANavigationNode: NavigationNode {
 
     private let inputData: ModuleAInputData
 

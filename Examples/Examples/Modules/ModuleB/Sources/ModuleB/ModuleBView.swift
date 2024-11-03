@@ -4,7 +4,7 @@ import ExamplesNavigation
 
 struct ModuleBView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: SwiftUINavigationNode
+    @EnvironmentNavigationNode private var navigationNode: NavigationNode
     var inputData: ModuleBInputData
 
     var body: some View {

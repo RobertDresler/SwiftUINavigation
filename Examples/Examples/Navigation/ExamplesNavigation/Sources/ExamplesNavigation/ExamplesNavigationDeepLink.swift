@@ -10,11 +10,9 @@ public struct ExamplesNavigationDeepLink: NavigationDeepLink {
     }
 
     public let destination: Destination
-    public let instanceID: String
 
     public init(destination: Destination) {
         self.destination = destination
-        instanceID = UUID().uuidString
     }
 
 }

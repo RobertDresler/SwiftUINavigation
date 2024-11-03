@@ -1,51 +1,14 @@
 import SwiftUI
 import Combine
 
-public final class SwiftUINavigationStackRootNode: SwiftUINavigationNode {
-
-    private struct ViewWrapper: View {
-
-        @Namespace private var namespace
-
-        var body: some View {
-            SwiftUINavigationStackNodeResolvedView()
-                .wrappedNavigationStackNodeNamespace(namespace)
-        }
-
-    }
-
-    @MainActor
-    public override var view: AnyView {
-        AnyView(ViewWrapper())
-    }
-
-    public init(stackNodes: [SwiftUINavigationNodeWithStackTransition]) {
-        super.init(stackNodes: stackNodes)
-    }
-
-}
-
-open class SwiftUINavigationNode: ObservableObject {
-
-    // TODO: -RD- separate
-    public enum Command {
-        case append(SwiftUINavigationNodeWithStackTransition)
-        case removeLast(count: Int = 1)
-        case removeAll
-        case alert(AlertConfig)
-        case presentSheet(SwiftUINavigationNode)
-        case dismiss
-        case setRoot(SwiftUINavigationNode, clear: Bool)
-        case switchNode(SwiftUINavigationNode)
-        case openURL(URL)
-    }
+open class NavigationNode: ObservableObject {
 
     @Published var stackNodes: [SwiftUINavigationNodeWithStackTransition]?
-    @Published var tabsNodes: [SwiftUINavigationNode]?
+    @Published var tabsNodes: [NavigationNode]?
     // TODO: -RD- separate alert since it's not modal
     @Published var alertConfig: AlertConfig?
-    @Published public var presentedSheetNode: SwiftUINavigationNode?
-    @Published public var switchedNode: SwiftUINavigationNode?
+    @Published public var presentedSheetNode: NavigationNode?
+    @Published public var switchedNode: NavigationNode?
     public let urlToOpen = PassthroughSubject<URL, Never>()
     private var cancellables = Set<AnyCancellable>()
     public var defaultDeepLinkHandler: NavigationDeepLinkHandler? {
@@ -53,8 +16,8 @@ open class SwiftUINavigationNode: ObservableObject {
     }
     public var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
 
-    public weak var parent: SwiftUINavigationNode?
-    private var root: SwiftUINavigationNode {
+    public weak var parent: NavigationNode?
+    private var root: NavigationNode {
         parent?.root ?? self
     }
 
@@ -109,8 +72,12 @@ open class SwiftUINavigationNode: ObservableObject {
             .store(in: &cancellables)
     }
 
-    private func printDebugText(_ text: String) {
-        print("[\(type(of: self)) \(id)]: \(text)")
+    public func printDebugText(_ text: String) {
+        print("\(debugPrintPrefix): \(text)")
+    }
+
+    private var debugPrintPrefix: String {
+        "[\(type(of: self)) \(id)]"
     }
 
     @MainActor
@@ -129,7 +96,7 @@ open class SwiftUINavigationNode: ObservableObject {
         }
     }
 
-    public func presentSheet(_ value: SwiftUINavigationNode) {
+    public func presentSheet(_ value: NavigationNode) {
         nearestNodeWhichCanPresent?.presentSheetOnExactNode(value)
     }
 
@@ -158,10 +125,10 @@ open class SwiftUINavigationNode: ObservableObject {
     }
 
     public var canPresentIfWouldnt: Bool {
-        (parent is SwiftUINavigationStackRootNode) == false
+        (parent is StackRootNavigationNode) == false
     }
 
-    public func setRoot(_ newRoot: SwiftUINavigationNode, clear: Bool) {
+    public func setRoot(_ newRoot: NavigationNode, clear: Bool) {
         let newRootStackDeepLink = SwiftUINavigationNodeWithStackTransition(
             destination: newRoot,
             transition: nil
@@ -187,7 +154,7 @@ open class SwiftUINavigationNode: ObservableObject {
         self.stackNodes = mappedNodes(stackNodes)
     }
 
-    func switchNode(_ node: SwiftUINavigationNode) {
+    func switchNode(_ node: NavigationNode) {
         switchedNode = node
     }
 
@@ -195,7 +162,7 @@ open class SwiftUINavigationNode: ObservableObject {
         root.printDebugGraphFromExactNode()
     }
 
-    public func executeCommand(_ command: Command) {
+    public func executeCommand(_ command: NavigationNodeCommand) {
         switch command {
         case .append(let destination):
             append(destination)
@@ -220,23 +187,28 @@ open class SwiftUINavigationNode: ObservableObject {
 
 }
 
+// MARK: Command Handling
+
+private extension NavigationNode {
+}
+
 // MARK: Private Methods
 
-private extension SwiftUINavigationNode {
-    func presentSheetOnExactNode(_ value: SwiftUINavigationNode) {
-        presentedSheetNode = SwiftUINavigationStackRootNode(
+private extension NavigationNode {
+    func presentSheetOnExactNode(_ value: NavigationNode) {
+        presentedSheetNode = StackRootNavigationNode(
             stackNodes: [SwiftUINavigationNodeWithStackTransition(destination: value, transition: nil)]
         )
     }
-    var nearestNodeWhichCanPresent: SwiftUINavigationNode? {
+    var nearestNodeWhichCanPresent: NavigationNode? {
         nearestNodeWhichCanPresentFromParent?.topPresented
     }
 
-    var topPresented: SwiftUINavigationNode {
+    var topPresented: NavigationNode {
         presentedSheetNode?.topPresented ?? self
     }
 
-    var nearestNodeWhichCanPresentFromParent: SwiftUINavigationNode? {
+    var nearestNodeWhichCanPresentFromParent: NavigationNode? {
         if canPresentIfWouldnt {
             self
         } else {
@@ -244,7 +216,7 @@ private extension SwiftUINavigationNode {
         }
     }
 
-    var children: [SwiftUINavigationNode] {
+    var children: [NavigationNode] {
         (
             [presentedSheetNode]
             + [switchedNode]
@@ -254,53 +226,12 @@ private extension SwiftUINavigationNode {
 
     func printDebugGraphFromExactNode(level: Int = 0) {
         let indentation = Array(repeating: "\t", count: level).joined()
-        print("\(indentation)<\(debugGraphNameForPrint)>")
+        print("\(indentation)<\(debugPrintPrefix)>")
         let children = children
         if !children.isEmpty {
             children.forEach { child in
                 child.printDebugGraphFromExactNode(level: level + 1)
             }
         }
-    }
-
-    var debugGraphNameForPrint: String {
-        "\(id)" // TODO: -RD- update
-    }
-}
-
-import SwiftUI
-
-/// Thanks to https://www.hackingwithswift.com/quick-start/swiftui/how-to-detect-shake-gestures
-// The notification we'll send when a shake gesture happens.
-extension UIDevice {
-    static let deviceDidShakeNotification = Notification.Name(rawValue: "deviceDidShakeNotification")
-}
-
-//  Override the default behavior of shake gestures to send our notification instead.
-extension UIWindow {
-     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
-            NotificationCenter.default.post(name: UIDevice.deviceDidShakeNotification, object: nil)
-        }
-     }
-}
-
-// A view modifier that detects shaking and calls a function of our choosing.
-struct DeviceShakeViewModifier: ViewModifier {
-    let action: () -> Void
-
-    func body(content: Content) -> some View {
-        content
-            .onAppear()
-            .onReceive(NotificationCenter.default.publisher(for: UIDevice.deviceDidShakeNotification)) { _ in
-                action()
-            }
-    }
-}
-
-// A View extension to make the modifier easier to use.
-extension View {
-    func onShake(perform action: @escaping () -> Void) -> some View {
-        self.modifier(DeviceShakeViewModifier(action: action))
     }
 }

@@ -1,13 +1,11 @@
 import SwiftUI
 
-struct SwiftUINavigationResolvedView: View {
+struct NavigationNodeResolvedView: View {
 
-    //@EnvironmentObject private var resolver: Resolver
-    @ObservedObject private var node: SwiftUINavigationNode
+    @ObservedObject private var node: NavigationNode
     @Environment(\.openURL) private var openURL
-    @Namespace private var namespace
 
-    init(node: SwiftUINavigationNode) {
+    init(node: NavigationNode) {
         self.node = node
     }
 
@@ -29,20 +27,20 @@ struct SwiftUINavigationResolvedView: View {
 // MARK: View+
 
 fileprivate extension View {
-    func connectingSheetLogic(node: SwiftUINavigationNode) -> some View {
+    func connectingSheetLogic(node: NavigationNode) -> some View {
         sheet(
             isPresented: Binding(
-                get: { [weak node] in
-                    node?.presentedSheetNode != nil
+                get: {
+                    node.presentedSheetNode != nil
                 },
-                set: { [weak node] isPresented in
+                set: { isPresented in
                     guard !isPresented else { return }
-                    node?.presentedSheetNode = nil
+                    node.presentedSheetNode = nil
                 }
             ),
-            content: { [weak node] in
-                if let presentedSheetNode = node?.presentedSheetNode {
-                    SwiftUINavigationResolvedView(node: presentedSheetNode)
+            content: {
+                if let presentedSheetNode = node.presentedSheetNode {
+                    NavigationNodeResolvedView(node: presentedSheetNode)
                 }
             }
         )

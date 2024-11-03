@@ -6,7 +6,7 @@ import Combine
 import Start
 import ModuleA
 
-public final class AppNavigationNode: SwiftUINavigationNode {
+public final class AppNavigationNode: NavigationNode {
 
     private let userRepository: UserRepository
     private var cancellables = Set<AnyCancellable>()
@@ -20,7 +20,12 @@ public final class AppNavigationNode: SwiftUINavigationNode {
 
     @MainActor
     public override var view: AnyView {
-        AnyView(SwiftUINavigationSwitchedNodeResolvedView())
+        AnyView(
+            SwitchedNavigationNodeView()
+                .onShake { [weak self] in
+                    self?.printDebugGraph()
+                }
+        )
     }
 
     private func bind() {
@@ -34,12 +39,12 @@ public final class AppNavigationNode: SwiftUINavigationNode {
         executeCommand(.switchNode(switchedNode))
     }
 
-    private var notLoggedNode: SwiftUINavigationNode {
+    private var notLoggedNode: NavigationNode {
         StartNavigationNode(inputData: StartInputData())
     }
 
-    private var loggedNode: SwiftUINavigationNode {
-        SwiftUINavigationStackRootNode(
+    private var loggedNode: NavigationNode {
+        StackRootNavigationNode(
             stackNodes: [
                 SwiftUINavigationNodeWithStackTransition(
                     destination: ModuleANavigationNode(

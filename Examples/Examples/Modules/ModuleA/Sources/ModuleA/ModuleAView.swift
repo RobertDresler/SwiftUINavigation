@@ -5,7 +5,7 @@ import SwiftUINavigation
 struct ModuleAView: View {
 
     @EnvironmentNavigationNode private var navigationNode: ModuleANavigationNode
-    @Environment(\.wrappedNavigationStackNodeNamespace) private var wrappedNavigationStackNodeNamespace
+    @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
     var inputData: ModuleAInputData
 
     var body: some View {

@@ -1,21 +1,21 @@
 import SwiftUI
 
-private struct WrappedNavigationStackNodeNamespace: EnvironmentKey {
+private struct StackNavigationNamespace: EnvironmentKey {
     static let defaultValue: Namespace.ID? = nil
 }
 
 public extension EnvironmentValues {
-    var wrappedNavigationStackNodeNamespace: Namespace.ID? {
-        get { self[WrappedNavigationStackNodeNamespace.self] }
-        set { self[WrappedNavigationStackNodeNamespace.self] = newValue }
+    var stackNavigationNamespace: Namespace.ID? {
+        get { self[StackNavigationNamespace.self] }
+        set { self[StackNavigationNamespace.self] = newValue }
     }
 }
 
 extension View {
-    func wrappedNavigationStackNodeNamespace(_ namespace: Namespace.ID?) -> some View {
+    func stackNavigationNamespace(_ namespace: Namespace.ID?) -> some View {
         Group {
             if let namespace {
-                environment(\.wrappedNavigationStackNodeNamespace, namespace)
+                environment(\.stackNavigationNamespace, namespace)
             } else {
                 self
             }

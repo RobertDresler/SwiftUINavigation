@@ -13,7 +13,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
 
     public init() {}
 
-    public func handleDeepLink(_ deepLink: any NavigationDeepLink, on node: SwiftUINavigationNode) {
+    public func handleDeepLink(_ deepLink: any NavigationDeepLink, on node: NavigationNode) {
         guard let deepLink = deepLink as? ExamplesNavigationDeepLink else { return }
         switch deepLink.destination {
         case .moduleA(let inputData):

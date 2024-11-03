@@ -2,9 +2,9 @@ import SwiftUI
 
 @MainActor
 @propertyWrapper
-public struct EnvironmentNavigationNode<Node: SwiftUINavigationNode>: DynamicProperty {
+public struct EnvironmentNavigationNode<Node: NavigationNode>: DynamicProperty {
 
-    @EnvironmentObject private var node: SwiftUINavigationNode
+    @EnvironmentObject private var node: NavigationNode
 
     public init() {}
 

@@ -1,3 +1,1 @@
-public protocol NavigationDeepLink: Hashable {
-    var instanceID: String { get }
-}
+public protocol NavigationDeepLink: Hashable {}
