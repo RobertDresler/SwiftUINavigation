@@ -4,9 +4,9 @@ import SwiftUINavigation
 
 struct ModuleAView: View {
 
+    @EnvironmentNavigationNode private var navigationNode: ModuleANavigationNode
     @Environment(\.wrappedNavigationStackNodeNamespace) private var wrappedNavigationStackNodeNamespace
     var inputData: ModuleAInputData
-    var executeNavigationCommand: (SwiftUINavigationNode<ExamplesNavigationDeepLink>.Command) -> Void
 
     var body: some View {
         VStack(spacing: 64) {
@@ -14,7 +14,7 @@ struct ModuleAView: View {
                 pushModuleAButton
                 presentModuleBButton
                 setModuleBRootButton
-                showAlertButton
+                //showAlertButton
                 openURLButton
             }
             pushModuleBButton
@@ -33,9 +33,9 @@ struct ModuleAView: View {
         Button("Set Module B Root", action: { setModuleBRoot() })
     }
 
-    private var showAlertButton: some View {
-        Button("Show alert", action: { showAlert() })
-    }
+  //  private var showAlertButton: some View {
+  //      Button("Show alert", action: { showAlert() })
+  //  }
 
     private var openURLButton: some View {
         Button("Open URL", action: { openURL() })
@@ -60,22 +60,17 @@ struct ModuleAView: View {
     // MARK: Actions
 
     private func pushModuleA() {
-        executeNavigationCommand(
-            .append(
-                StackDeepLink(
-                    destination: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())),
-                    transition: nil
-                )
-            )
-        )
+        navigationNode.handleDeepLink(ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())))
     }
 
     private func pushModuleB() {
-        executeNavigationCommand(
-            .append(
-                StackDeepLink(
-                    destination: ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Pushed"))),
-                    transition: .zoom(sourceID: pushModuleBSourceID)
+        navigationNode.handleDeepLink(
+            ExamplesNavigationDeepLink(
+                destination: .moduleB(
+                    ModuleBInputData(
+                        text: "Pushed",
+                        showRule: .push(.zoom(sourceID: pushModuleBSourceID))
+                    )
                 )
             )
         )
@@ -86,40 +81,34 @@ struct ModuleAView: View {
     }
 
     private func presentModuleB() {
-        executeNavigationCommand(
-            .presentSheet(
-                ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Test present")))
+        navigationNode.handleDeepLink(
+            ExamplesNavigationDeepLink(
+                destination: .moduleB(
+                    ModuleBInputData(
+                        text: "Presented",
+                        showRule: .present
+                    )
+                )
             )
         )
     }
 
     private func setModuleBRoot() {
-        executeNavigationCommand(
-            .setRoot(
-                ExamplesNavigationDeepLink(destination: .moduleB(ModuleBInputData(text: "Test Set Root"))),
-                clear: true
+        navigationNode.handleDeepLink(
+            ExamplesNavigationDeepLink(
+                destination: .moduleB(
+                    ModuleBInputData(
+                        text: "Set root",
+                        showRule: .setRoot
+                    )
+                )
             )
         )
     }
 
     private func openURL() {
         guard let url = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ") else { return }
-        executeNavigationCommand(.openURL(url))
-    }
-
-    private func showAlert() {
-        executeNavigationCommand(
-            .alert(
-                AlertConfig(
-                    title: "Some title",
-                    message: "Some message",
-                    actions: [
-                        AlertConfig.Action(title: "Cancel", role: .cancel),
-                        AlertConfig.Action(title: "Dismiss", role: .destructive)
-                    ]
-                )
-            )
-        )
+        navigationNode.executeCommand(.openURL(url))
     }
 
 }

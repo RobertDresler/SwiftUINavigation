@@ -4,7 +4,7 @@ import ExamplesNavigation
 
 public struct MainTabsNavigationView: View {
 
-    @EnvironmentObject private var node: SwiftUINavigationNode<ExamplesNavigationDeepLink>
+    @EnvironmentObject private var node: SwiftUINavigationNode
     private let inputData: MainTabsInputData
 
     public init(inputData: MainTabsInputData) {

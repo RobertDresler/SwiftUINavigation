@@ -4,12 +4,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "ExamplesNavigationResolving",
+    name: "ExamplesNavigationDeepLinkHandler",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "ExamplesNavigationResolving",
-            targets: ["ExamplesNavigationResolving"]
+            name: "ExamplesNavigationDeepLinkHandler",
+            targets: ["ExamplesNavigationDeepLinkHandler"]
         ),
     ],
     dependencies: [
@@ -22,7 +22,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ExamplesNavigationResolving",
+            name: "ExamplesNavigationDeepLinkHandler",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "ModuleA", package: "ModuleA"),

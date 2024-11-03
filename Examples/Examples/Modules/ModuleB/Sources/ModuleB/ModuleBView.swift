@@ -4,8 +4,8 @@ import ExamplesNavigation
 
 struct ModuleBView: View {
 
+    @EnvironmentNavigationNode private var navigationNode: SwiftUINavigationNode
     var inputData: ModuleBInputData
-    var executeNavigationCommand: (SwiftUINavigationNode<ExamplesNavigationDeepLink>.Command) -> Void
 
     var body: some View {
         VStack {
@@ -31,18 +31,11 @@ struct ModuleBView: View {
     // MARK: Actions
 
     private func dismiss() {
-        executeNavigationCommand(.dismiss)
+        navigationNode.executeCommand(.dismiss)
     }
 
     private func pushModuleA() {
-        executeNavigationCommand(
-            .append(
-                StackDeepLink(
-                    destination: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())),
-                    transition: nil
-                )
-            )
-        )
+        navigationNode.handleDeepLink(ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())))
     }
 
 }

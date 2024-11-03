@@ -2,44 +2,52 @@ import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
 import UserRepository
+import Combine
+import Start
+import ModuleA
 
-public struct AppNavigationView<Resolver: SwiftUINavigationDeepLinkResolver>: View where Resolver.DeepLink == ExamplesNavigationDeepLink {
+public final class AppNavigationNode: SwiftUINavigationNode {
 
-    @EnvironmentObject private var node: SwiftUINavigationNode<ExamplesNavigationDeepLink>
-    @EnvironmentObject private var userRepository: UserRepository
-    @State private var deepLink = ExamplesNavigationDeepLink(destination: .start(StartInputData()))
+    private let userRepository: UserRepository
+    private var cancellables = Set<AnyCancellable>()
 
-    private let inputData: AppInputData
-
-    public init(inputData: AppInputData) {
-        self.inputData = inputData
+    // TODO: -RD- maybe make root node which requires handler?
+    public init(userRepository: UserRepository, defaultDeepLinkHandler: NavigationDeepLinkHandler) {
+        self.userRepository = userRepository
+        super.init(defaultDeepLinkHandler: defaultDeepLinkHandler)
+        bind()
     }
 
-    public var body: some View {
-        SwiftUINavigationSwitchedNodeResolvedView<Resolver>()
-            .onReceive(userRepository.$isUserLogged) { setDeepLink(isUserLogged: $0) }
-            .onShake { node.printDebugGraph() }
+    @MainActor
+    public override var view: AnyView {
+        AnyView(SwiftUINavigationSwitchedNodeResolvedView())
+    }
+
+    private func bind() {
+        userRepository.$isUserLogged
+            .sink { [weak self] in self?.setDeepLink(isUserLogged: $0) }
+            .store(in: &cancellables)
     }
 
     private func setDeepLink(isUserLogged: Bool) {
         let switchedNode = isUserLogged ? loggedNode : notLoggedNode
-        node.executeCommand(.switchNode(switchedNode))
+        executeCommand(.switchNode(switchedNode))
     }
 
-    private var notLoggedNode: SwiftUINavigationNode<ExamplesNavigationDeepLink> {
-        SwiftUINavigationNode(
-            type: .standalone,
-            value: .deepLink(ExamplesNavigationDeepLink(destination: .start(StartInputData()))),
-            parent: node
-        )
+    private var notLoggedNode: SwiftUINavigationNode {
+        StartNavigationNode(inputData: StartInputData())
     }
 
-    private var loggedNode: SwiftUINavigationNode<ExamplesNavigationDeepLink> {
-        SwiftUINavigationNode(
-            type: .stackRoot,
-            value: .stackRoot,
-            parent: node,
-            stackNodes: [StackDeepLink(destination: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())))]
+    private var loggedNode: SwiftUINavigationNode {
+        SwiftUINavigationStackRootNode(
+            stackNodes: [
+                SwiftUINavigationNodeWithStackTransition(
+                    destination: ModuleANavigationNode(
+                        inputData: ModuleAInputData()
+                    ),
+                    transition: nil
+                )
+            ]
         )
     }
 

@@ -14,14 +14,18 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/UserRepository")
+        .package(path: "../../Services/UserRepository"),
+        .package(path: "../../Modules/Start"),
+        .package(path: "../../Modules/ModuleA")
     ],
     targets: [
         .target(
             name: "App",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "UserRepository", package: "UserRepository")
+                .product(name: "UserRepository", package: "UserRepository"),
+                .product(name: "Start", package: "Start"),
+                .product(name: "ModuleA", package: "ModuleA")
             ]
         )
     ]

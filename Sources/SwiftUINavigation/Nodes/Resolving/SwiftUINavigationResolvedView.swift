@@ -1,39 +1,25 @@
 import SwiftUI
 
-struct SwiftUINavigationResolvedView<Resolver: SwiftUINavigationDeepLinkResolver>: View {
+struct SwiftUINavigationResolvedView: View {
 
-    @EnvironmentObject private var resolver: Resolver
-    @ObservedObject private var node: SwiftUINavigationNode<Resolver.DeepLink>
+    //@EnvironmentObject private var resolver: Resolver
+    @ObservedObject private var node: SwiftUINavigationNode
     @Environment(\.openURL) private var openURL
     @Namespace private var namespace
 
-    init(node: SwiftUINavigationNode<Resolver.DeepLink>) {
+    init(node: SwiftUINavigationNode) {
         self.node = node
     }
 
     var body: some View {
-        resolvedValueView
-            .connectingSheetLogic(node: node, resolverType: Resolver.self)
+        node.view
+            .connectingSheetLogic(node: node)
            // .connectingAlertLogic(pathHolder: node)
-            .wrappedNavigationStackNodeNamespace(node.type == .stackRoot ? namespace : nil)
             .onReceive(node.urlToOpen) { openURLAction($0) }
             .environmentObject(node)
     }
 
-    var resolvedValueView: some View {
-        Group { [weak node] in
-            switch node?.value {
-            case .deepLink(let deepLink):
-                resolver.resolve(deepLink)
-            case .stackRoot:
-                SwiftUINavigationStackNodeResolvedView<Resolver>()
-            case .none:
-                EmptyView()
-            }
-        }
-    }
-
-    func openURLAction(_ url: URL?) {
+    private func openURLAction(_ url: URL?) {
         guard let url else { return }
         openURL(url)
     }
@@ -43,10 +29,7 @@ struct SwiftUINavigationResolvedView<Resolver: SwiftUINavigationDeepLinkResolver
 // MARK: View+
 
 fileprivate extension View {
-    func connectingSheetLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
-        node: SwiftUINavigationNode<Resolver.DeepLink>,
-        resolverType: Resolver.Type
-    ) -> some View {
+    func connectingSheetLogic(node: SwiftUINavigationNode) -> some View {
         sheet(
             isPresented: Binding(
                 get: { [weak node] in
@@ -59,14 +42,14 @@ fileprivate extension View {
             ),
             content: { [weak node] in
                 if let presentedSheetNode = node?.presentedSheetNode {
-                    SwiftUINavigationResolvedView<Resolver>(node: presentedSheetNode)
+                    SwiftUINavigationResolvedView(node: presentedSheetNode)
                 }
             }
         )
     }
 
-    func connectingAlertLogic<Destination: NavigationDeepLink>(
-        pathHolder: SwiftUINavigationNode<Destination>
+    /*func connectingAlertLogic(
+        pathHolder: SwiftUINavigationNode
     ) -> some View {
         alert(
             Text(pathHolder.alertConfig?.title ?? ""),
@@ -86,5 +69,5 @@ fileprivate extension View {
             },
             message: { Text(pathHolder.alertConfig?.message ?? "") }
         )
-    }
+    }*/
 }

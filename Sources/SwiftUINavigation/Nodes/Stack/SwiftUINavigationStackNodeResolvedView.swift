@@ -1,11 +1,8 @@
 import SwiftUI
 
-struct SwiftUINavigationStackNodeResolvedView<
-    Resolver: SwiftUINavigationDeepLinkResolver
->: View {
+struct SwiftUINavigationStackNodeResolvedView: View {
 
-    @EnvironmentObject private var resolver: Resolver
-    @EnvironmentObject private var node: SwiftUINavigationNode<Resolver.DeepLink>
+    @EnvironmentObject private var node: SwiftUINavigationNode
     @Environment(\.wrappedNavigationStackNodeNamespace) private var wrappedNavigationStackNodeNamespace
 
     // MARK: Getters
@@ -34,28 +31,23 @@ struct SwiftUINavigationStackNodeResolvedView<
     private var navigationStackResolvedRoot: some View {
         Group {
             if let rootNode = node.stackNodes?.first?.destination {
-                SwiftUINavigationResolvedView<Resolver>(node: rootNode)
+                SwiftUINavigationResolvedView(node: rootNode)
                     .connectingNavigationDestinationLogic(
-                        resolverType: Resolver.self,
-                        nodeForDeepLinkInstanceID: { node(for: $0) },
+                        nodeForNodeID: { node(for: $0) },
                         namespace: wrappedNavigationStackNodeNamespace
                     )
             }
         }
     }
 
-    private func node(for deepLinkInstanceID: String) -> SwiftUINavigationNode<Resolver.DeepLink>? {
+    private func node(for nodeID: String) -> SwiftUINavigationNode? {
         guard let stackNodes else { return nil }
         return stackNodes.first(where: { node in
-            if case .deepLink(let deepLink) = node.destination.value {
-                deepLink.instanceID == deepLinkInstanceID
-            } else {
-                false
-            }
+            nodeID == node.destination.id
         })?.destination
     }
 
-    private var stackNodes: [SwiftUINavigationNode<Resolver.DeepLink>.NodeStackDeepLink]? {
+    private var stackNodes: [SwiftUINavigationNodeWithStackTransition]? {
         node.stackNodes
     }
 }
@@ -63,23 +55,22 @@ struct SwiftUINavigationStackNodeResolvedView<
 // MARK: View+
 
 fileprivate extension View {
-    func connectingNavigationDestinationLogic<Resolver: SwiftUINavigationDeepLinkResolver>(
-        resolverType: Resolver.Type,
-        nodeForDeepLinkInstanceID: @escaping (String) -> SwiftUINavigationNode<Resolver.DeepLink>?,
+    func connectingNavigationDestinationLogic(
+        nodeForNodeID: @escaping (String) -> SwiftUINavigationNode?,
         namespace: Namespace.ID?
     ) -> some View {
-        navigationDestination(for: StackDeepLink<Resolver.DeepLink>.self) { data in
+        navigationDestination(for: StackDeepLink.self) { data in
             Group {
-                if let node = nodeForDeepLinkInstanceID(data.destination.instanceID) {
-                    SwiftUINavigationResolvedView<Resolver>(node: node)
+                if let node = nodeForNodeID(data.nodeID) {
+                    SwiftUINavigationResolvedView(node: node)
                         .destinationWithNavigationTransition(transition: data.transition, namespace: namespace)
                 }
             }
         }
     }
 
-    func destinationWithNavigationTransition<Destination: NavigationDeepLink>(
-        transition: StackDeepLink<Destination>.Transition?,
+    func destinationWithNavigationTransition(
+        transition: StackDeepLink.Transition?,
         namespace: Namespace.ID?
     ) -> some View {
         Group {

@@ -1,9 +1,19 @@
+import SwiftUINavigation
+
 public struct ModuleBInputData: Hashable {
 
-    public let text: String
+    public enum ShowRule: Hashable {
+        case present
+        case push(StackDeepLink.Transition)
+        case setRoot
+    }
 
-    public init(text: String) {
+    public let text: String
+    public let showRule: ShowRule
+
+    public init(text: String, showRule: ShowRule) {
         self.text = text
+        self.showRule = showRule
     }
 
 }
