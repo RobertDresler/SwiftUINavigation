@@ -12,7 +12,9 @@ struct ModuleAView: View {
         VStack(spacing: 64) {
             VStack {
                 pushModuleAButton
-                presentModuleBButton
+                presentModuleBAsFullScreenCoverButton
+                presentModuleBAsSheetButton
+                presentModuleBAsSheetWithDetentsButton
                 setModuleBRootButton
                 //showAlertButton
                 openURLButton
@@ -25,8 +27,16 @@ struct ModuleAView: View {
         Button("Push Module A", action: { pushModuleA() })
     }
 
-    private var presentModuleBButton: some View {
-        Button("Present Module B", action: { presentModuleB() })
+    private var presentModuleBAsFullScreenCoverButton: some View {
+        Button("Present Module B as fullScreenCover", action: { presentModuleBAsFullScreenCover() })
+    }
+
+    private var presentModuleBAsSheetButton: some View {
+        Button("Present Module B as sheet", action: { presentModuleBAsSheet() })
+    }
+
+    private var presentModuleBAsSheetWithDetentsButton: some View {
+        Button("Present Module B as sheetWithDetents", action: { presentModuleBAsSheetWithDetents() })
     }
 
     private var setModuleBRootButton: some View {
@@ -80,13 +90,39 @@ struct ModuleAView: View {
         "pushModuleBSourceID"
     }
 
-    private func presentModuleB() {
+    private func presentModuleBAsFullScreenCover() {
         navigationNode.handleDeepLink(
             ExamplesNavigationDeepLink(
                 destination: .moduleB(
                     ModuleBInputData(
-                        text: "Presented",
-                        showRule: .present
+                        text: "Presented as fullScreenCover",
+                        showRule: .present(style: .fullScreenCover)
+                    )
+                )
+            )
+        )
+    }
+
+    private func presentModuleBAsSheet() {
+        navigationNode.handleDeepLink(
+            ExamplesNavigationDeepLink(
+                destination: .moduleB(
+                    ModuleBInputData(
+                        text: "Presented as sheet",
+                        showRule: .present(style: .sheet(detents: []))
+                    )
+                )
+            )
+        )
+    }
+
+    private func presentModuleBAsSheetWithDetents() {
+        navigationNode.handleDeepLink(
+            ExamplesNavigationDeepLink(
+                destination: .moduleB(
+                    ModuleBInputData(
+                        text: "Presented as sheet with detents",
+                        showRule: .present(style: .sheet(detents: [.medium, .large]))
                     )
                 )
             )

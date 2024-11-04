@@ -11,6 +11,7 @@ struct NavigationNodeResolvedView: View {
 
     var body: some View {
         node.view
+            .connectingFullScreenCoverLogic(node: node)
             .connectingSheetLogic(node: node)
            // .connectingAlertLogic(pathHolder: node)
             .onReceive(node.urlToOpen) { openURLAction($0) }
@@ -27,20 +28,48 @@ struct NavigationNodeResolvedView: View {
 // MARK: View+
 
 fileprivate extension View {
+    func connectingFullScreenCoverLogic(node: NavigationNode) -> some View {
+        fullScreenCover(
+            isPresented: Binding(
+                get: {
+                    if case .fullScreenCover = node.presentedNode?.style {
+                        true
+                    } else {
+                        false
+                    }
+                },
+                set: { isPresented in
+                    guard !isPresented else { return }
+                    node.presentedNode = nil
+                }
+            ),
+            content: {
+                if let node = node.presentedNode, case .fullScreenCover = node.style {
+                    NavigationNodeResolvedView(node: node.node)
+                }
+            }
+        )
+    }
+
     func connectingSheetLogic(node: NavigationNode) -> some View {
         sheet(
             isPresented: Binding(
                 get: {
-                    node.presentedSheetNode != nil
+                    if case .sheet = node.presentedNode?.style {
+                        true
+                    } else {
+                        false
+                    }
                 },
                 set: { isPresented in
                     guard !isPresented else { return }
-                    node.presentedSheetNode = nil
+                    node.presentedNode = nil
                 }
             ),
             content: {
-                if let presentedSheetNode = node.presentedSheetNode {
-                    NavigationNodeResolvedView(node: presentedSheetNode)
+                if let node = node.presentedNode, case .sheet(let detents) = node.style {
+                    NavigationNodeResolvedView(node: node.node)
+                        .presentationDetents(detents)
                 }
             }
         )

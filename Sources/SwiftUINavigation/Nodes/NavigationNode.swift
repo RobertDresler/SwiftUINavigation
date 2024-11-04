@@ -15,18 +15,11 @@ open class NavigationNode: ObservableObject {
     public let id: String
     @Published public var stackNodes: [NavigationNodeWithStackTransition]?
     // TODO: -RD- implement @Published public var tabsNodes: [NavigationNode]?
-    @Published public var presentedSheetNode: NavigationNode?
+    @Published public var presentedNode: PresentedNavigationNode?
     @Published public var switchedNode: NavigationNode?
     public weak var parent: NavigationNode?
-    public var childrenPublisher: AnyPublisher<[NavigationNode], Never> {
-        $stackNodes.compactMap { $0?.map(\.destination) }
-            .merge(
-                with: $presentedSheetNode.map { [$0] },
-                $switchedNode.map { [$0] }
-            )
-            .map { $0.compactMap { $0 }}
-            .eraseToAnyPublisher()
-    }
+    public var childrenPublisher: AnyPublisher<[NavigationNode], Never> { _childrenPublisher.eraseToAnyPublisher() }
+    public var children: [NavigationNode] { _childrenPublisher.value }
 
     public var root: NavigationNode {
         parent?.root ?? self
@@ -47,6 +40,7 @@ open class NavigationNode: ObservableObject {
         _defaultDeepLinkHandler ?? parent?.defaultDeepLinkHandler
     }
     private var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
+    private var _childrenPublisher = CurrentValueSubject<[NavigationNode], Never>([])
 
     // TODO: -RD- separate alert since it's not modal
     @Published var alertConfig: AlertConfig?
@@ -59,7 +53,7 @@ open class NavigationNode: ObservableObject {
         self.stackNodes = stackNodes
         _defaultDeepLinkHandler = defaultDeepLinkHandler
         printDebugText("Init")
-        bindParentLogic()
+        bind()
     }
 
     deinit {
@@ -91,8 +85,8 @@ open class NavigationNode: ObservableObject {
             removeAll()
         case .alert(let config):
             alertConfig = config
-        case .presentSheet(let destination):
-            presentSheet(destination)
+        case .present(let node):
+            present(node)
         case .dismiss:
             dismiss()
         case let .setRoot(node, clear):
@@ -121,41 +115,61 @@ open class NavigationNode: ObservableObject {
 // MARK: Command Handling
 // TODO: -RD- refactor
 private extension NavigationNode {
-    public func append(_ value: NavigationNodeWithStackTransition) {
+    func append(_ value: NavigationNodeWithStackTransition) {
         mapStackNodes { nodes in
             nodes + [value]
         }
     }
 
-    public func presentSheet(_ value: NavigationNode) {
-        nearestNodeWhichCanPresent?.presentSheetOnExactNode(value)
+    func present(_ node: PresentedNavigationNode) {
+        nearestNodeWhichCanPresent?.presentOnExactNode(node)
     }
 
-    public func dismiss() {
-        if presentedSheetNode != nil {
-            presentedSheetNode = nil
+    func presentOnExactNode(_ node: PresentedNavigationNode) {
+        presentedNode = node
+    }
+    
+    var nearestNodeWhichCanPresent: NavigationNode? {
+        nearestNodeWhichCanPresentFromParent?.topPresented
+    }
+
+    var topPresented: NavigationNode {
+        presentedNode?.node.topPresented ?? self
+    }
+
+    var nearestNodeWhichCanPresentFromParent: NavigationNode? {
+        if canPresentIfWouldnt {
+            self
+        } else {
+            parent?.nearestNodeWhichCanPresentFromParent
+        }
+    }
+
+    func dismiss() {
+        if presentedNode != nil {
+            presentedNode = nil
         } else {
             parent?.dismiss()
         }
     }
 
-    public func removeLast(_ count: Int = 1) {
+    func removeLast(_ count: Int = 1) {
         // TODO: -RD- implement path.removeLast(count)
     }
 
-    public func removeAll() {
+    func removeAll() {
         // TODO: -RD- implement path = NavigationPath()
     }
 
-    public func showAlert(_ config: AlertConfig) {
+    func showAlert(_ config: AlertConfig) {
         alertConfig = config
     }
 
-    public func openURL(_ url: URL) {
+    func openURL(_ url: URL) {
         urlToOpen.send(url)
     }
 
-    public func setRoot(_ newRoot: NavigationNode, clear: Bool) {
+    func setRoot(_ newRoot: NavigationNode, clear: Bool) {
         let newRootStackDeepLink = NavigationNodeWithStackTransition(
             destination: newRoot,
             transition: nil
@@ -179,6 +193,22 @@ private extension NavigationNode {
 // MARK: Private Methods
 
 private extension NavigationNode {
+    func bind() {
+        bindParentLogic()
+        bindChildren()
+    }
+
+    func bindChildren() {
+        $stackNodes.compactMap { $0?.map(\.destination) }
+            .merge(
+                with: $presentedNode.map { [$0?.node] },
+                $switchedNode.map { [$0] }
+            )
+            .map { $0.compactMap { $0 } }
+            .subscribe(_childrenPublisher)
+            .store(in: &cancellables)
+    }
+
     func bindParentLogic() {
         // TODO: @Published var tabsNodes: [SwiftUINavigationNode]?
         childrenPublisher
@@ -187,35 +217,6 @@ private extension NavigationNode {
                 nodes.forEach { $0.parent = self }
             }
             .store(in: &cancellables)
-    }
-
-    func presentSheetOnExactNode(_ value: NavigationNode) {
-        presentedSheetNode = StackRootNavigationNode(
-            stackNodes: [NavigationNodeWithStackTransition(destination: value, transition: nil)]
-        )
-    }
-    var nearestNodeWhichCanPresent: NavigationNode? {
-        nearestNodeWhichCanPresentFromParent?.topPresented
-    }
-
-    var topPresented: NavigationNode {
-        presentedSheetNode?.topPresented ?? self
-    }
-
-    var nearestNodeWhichCanPresentFromParent: NavigationNode? {
-        if canPresentIfWouldnt {
-            self
-        } else {
-            parent?.nearestNodeWhichCanPresentFromParent
-        }
-    }
-
-    var children: [NavigationNode] {
-        (
-            [presentedSheetNode]
-            + [switchedNode]
-            + (stackNodes?.map(\.destination) ?? [])
-        ).compactMap { $0 }
     }
 }
 
