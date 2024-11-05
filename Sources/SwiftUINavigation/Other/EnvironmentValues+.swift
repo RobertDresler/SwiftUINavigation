@@ -22,3 +22,20 @@ extension View {
         }
     }
 }
+
+private struct RegisteredCustomPresentableNavigationNodes: EnvironmentKey {
+    static let defaultValue: [any PresentedNavigationNode.Type] = []
+}
+
+public extension EnvironmentValues {
+    var registeredCustomPresentableNavigationNodes: [any PresentedNavigationNode.Type] {
+        get { self[RegisteredCustomPresentableNavigationNodes.self] }
+        set { self[RegisteredCustomPresentableNavigationNodes.self] = newValue }
+    }
+}
+
+extension View {
+    func registerCustomPresentableNavigationNodes(_ nodes: [any PresentedNavigationNode.Type]) -> some View {
+        environment(\.registeredCustomPresentableNavigationNodes, nodes)
+    }
+}

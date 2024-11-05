@@ -15,7 +15,7 @@ open class NavigationNode: ObservableObject {
     public let id: String
     @Published public var stackNodes: [NavigationNodeWithStackTransition]?
     // TODO: -RD- implement @Published public var tabsNodes: [NavigationNode]?
-    @Published public var presentedNode: PresentedNavigationNode?
+    @Published public var presentedNode: (any PresentedNavigationNode)?
     @Published public var switchedNode: NavigationNode?
     public weak var parent: NavigationNode?
     public var childrenPublisher: AnyPublisher<[NavigationNode], Never> { _childrenPublisher.eraseToAnyPublisher() }
@@ -87,6 +87,8 @@ open class NavigationNode: ObservableObject {
             alertConfig = config
         case .present(let node):
             present(node)
+        case .presentOnExactNode(let node):
+            presentOnExactNode(node)
         case .dismiss:
             dismiss()
         case let .setRoot(node, clear):
@@ -121,11 +123,11 @@ private extension NavigationNode {
         }
     }
 
-    func present(_ node: PresentedNavigationNode) {
+    func present(_ node: any PresentedNavigationNode) {
         nearestNodeWhichCanPresent?.presentOnExactNode(node)
     }
 
-    func presentOnExactNode(_ node: PresentedNavigationNode) {
+    func presentOnExactNode(_ node: any PresentedNavigationNode) {
         presentedNode = node
     }
     

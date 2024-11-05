@@ -4,18 +4,33 @@ struct NavigationNodeResolvedView: View {
 
     @ObservedObject private var node: NavigationNode
     @Environment(\.openURL) private var openURL
+    @Environment(\.registeredCustomPresentableNavigationNodes) private var registeredCustomPresentableNavigationNodes
 
     init(node: NavigationNode) {
         self.node = node
     }
 
     var body: some View {
-        node.view
-            .connectingFullScreenCoverLogic(node: node)
-            .connectingSheetLogic(node: node)
+        modifyNodeViewWithPresentableNavigationNodes(node.view)
+            //.connectingFullScreenCoverLogic(node: node)
+            //.connectingSheetLogic(node: node)
            // .connectingAlertLogic(pathHolder: node)
             .onReceive(node.urlToOpen) { openURLAction($0) }
             .environmentObject(node)
+    }
+
+    private func modifyNodeViewWithPresentableNavigationNodes(_ view: some View) -> some View {
+        registeredPresentableNavigationNodes.reduce(AnyView(view)) { resolvedView, modifier in
+            AnyView(modifier.self.presenterResolvedViewModifier(resolvedViewNode: node, content: resolvedView, id: nil))
+        }
+    }
+
+    private var registeredPresentableNavigationNodes: [any PresentedNavigationNode.Type] {
+        [
+            PresentedNavigationNodeFullScreenCover.self//,
+            //AlertPresentedNavigationNode.self
+        ]
+        + registeredCustomPresentableNavigationNodes
     }
 
     private func openURLAction(_ url: URL?) {
@@ -26,7 +41,7 @@ struct NavigationNodeResolvedView: View {
 }
 
 // MARK: View+
-
+/*
 fileprivate extension View {
     func connectingFullScreenCoverLogic(node: NavigationNode) -> some View {
         fullScreenCover(
@@ -98,3 +113,4 @@ fileprivate extension View {
         )
     }*/
 }
+*/

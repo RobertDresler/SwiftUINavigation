@@ -19,12 +19,32 @@ extension UIWindow {
 struct DeviceShakeViewModifier: ViewModifier {
     let action: () -> Void
 
-    func body(content: Content) -> some View {
+    func body(content: Content) -> AnyView {
+        AnyView(
         content
             .onAppear()
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.deviceDidShakeNotification)) { _ in
                 action()
             }
+        )
+    }
+}
+
+@MainActor
+protocol NavigationNodeResolvedViewModifier {
+    associatedtype Body: View
+    func body(content: AnyView) -> Body
+}
+
+struct AnyM: NavigationNodeResolvedViewModifier {
+    func body(content: AnyView) -> some View {
+        content
+    }
+}
+
+struct AnyN: NavigationNodeResolvedViewModifier {
+    func body(content: AnyView) -> some View {
+        content
     }
 }
 
@@ -32,5 +52,12 @@ struct DeviceShakeViewModifier: ViewModifier {
 extension View {
     func onShake(perform action: @escaping () -> Void) -> some View {
         self.modifier(DeviceShakeViewModifier(action: action))
+    }
+
+    func addModifers() -> some View {
+        let modifiers: [any NavigationNodeResolvedViewModifier] = [AnyM(), AnyN()]
+        return modifiers.reduce(AnyView(self)) { resultView, modifier in
+            AnyView(modifier.body(content: resultView))
+        }
     }
 }

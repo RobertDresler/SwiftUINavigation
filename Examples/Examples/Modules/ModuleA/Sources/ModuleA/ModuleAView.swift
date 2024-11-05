@@ -20,6 +20,7 @@ struct ModuleAView: View {
                 openURLButton
             }
             pushModuleBButton
+            showAlertButton
         }.navigationTitle("Module A")
     }
 
@@ -43,9 +44,10 @@ struct ModuleAView: View {
         Button("Set Module B Root", action: { setModuleBRoot() })
     }
 
-  //  private var showAlertButton: some View {
-  //      Button("Show alert", action: { showAlert() })
-  //  }
+    private var showAlertButton: some View {
+        Button("Show alert", action: { navigationNode.presentAlert(sourceID: "Tea") })
+            .presentingNavigationSource(id: "Tea")
+    }
 
     private var openURLButton: some View {
         Button("Open URL", action: { openURL() })
@@ -109,7 +111,7 @@ struct ModuleAView: View {
                 destination: .moduleB(
                     ModuleBInputData(
                         text: "Presented as sheet",
-                        showRule: .present(style: .sheet(detents: []))
+                        showRule: .present(style: .sheet)// TODO: -RD- implement(detents: []))
                     )
                 )
             )
@@ -122,7 +124,7 @@ struct ModuleAView: View {
                 destination: .moduleB(
                     ModuleBInputData(
                         text: "Presented as sheet with detents",
-                        showRule: .present(style: .sheet(detents: [.medium, .large]))
+                        showRule: .present(style: .sheet)// TODO: -RD- implement(detents: [.medium, .large]))
                     )
                 )
             )
@@ -140,6 +142,19 @@ struct ModuleAView: View {
                 )
             )
         )
+    }
+
+    private func showAlert() {
+       /* navigationNode.handleDeepLink(
+            ExamplesNavigationDeepLink(
+                destination: .alert(
+                    AlertInputData(
+                        title: "Test title",
+                        message: "Test message"
+                    )
+                )
+            )
+        )*/
     }
 
     private func openURL() {

@@ -29,14 +29,16 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
             let moduleNode = ModuleBNavigationNode(inputData: inputData)
             switch inputData.showRule {
             case .present(let style):
-                node.executeCommand(
-                    .present(
-                        .stacked(
-                            style: style,
-                            node: moduleNode
+                switch style {
+                case .fullScreenCover:
+                    node.executeCommand(
+                        .present(
+                            PresentedNavigationNodeFullScreenCover.stacked(node: moduleNode)
                         )
                     )
-                )
+                case .sheet:
+                    break // TODO: -RD- implement
+                }
             case .push(let transition):
                 node.executeCommand(
                     .append(NavigationNodeWithStackTransition(destination: moduleNode, transition: transition))
@@ -46,6 +48,8 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
             }
         case .mainTabs(let inputData):
             break // TODO: -RD- implement//MainTabsNavigationView(inputData: inputData)
+        case .alert(let inputData):
+            node.executeCommand(.present(AlertPresentedNavigationNode(inputData: inputData)))
         }
     }
 

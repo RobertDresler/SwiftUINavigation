@@ -5,7 +5,8 @@ public enum NavigationNodeCommand {
     case removeLast(count: Int = 1)
     case removeAll
     case alert(AlertConfig)
-    case present(PresentedNavigationNode)
+    case present(any PresentedNavigationNode)
+    case presentOnExactNode(any PresentedNavigationNode)
     case dismiss
     case setRoot(NavigationNode, clear: Bool)
     case switchNode(NavigationNode)

@@ -3,7 +3,13 @@ import SwiftUINavigation
 public struct ModuleBInputData: Hashable {
 
     public enum ShowRule: Hashable {
-        case present(style: PresentedNavigationNode.Style)
+
+        public enum PresentStyle {
+            case fullScreenCover
+            case sheet
+        }
+
+        case present(style: PresentStyle)
         case push(StackDeepLink.Transition)
         case setRoot
     }

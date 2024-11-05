@@ -7,6 +7,7 @@ public struct ExamplesNavigationDeepLink: NavigationDeepLink {
         case moduleA(ModuleAInputData)
         case moduleB(ModuleBInputData)
         case mainTabs(MainTabsInputData)
+        case alert(AlertInputData)
     }
 
     public let destination: Destination
