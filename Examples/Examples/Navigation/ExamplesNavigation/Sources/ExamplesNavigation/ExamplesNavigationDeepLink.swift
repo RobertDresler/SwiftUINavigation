@@ -4,9 +4,8 @@ import Foundation
 public struct ExamplesNavigationDeepLink: NavigationDeepLink {
 
     public indirect enum Destination: Hashable {
-        case moduleA(ModuleAInputData)
+        case moduleA(ModuleAInputData, animated: Bool = true)
         case moduleB(ModuleBInputData)
-        case mainTabs(MainTabsInputData)
         case alert(AlertInputData)
     }
 

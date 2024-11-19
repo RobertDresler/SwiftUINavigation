@@ -16,5 +16,9 @@ public final class ModuleBNavigationNode: NavigationNode {
         AnyView(ModuleBView(inputData: inputData))
     }
 
+    func hide() {
+        executeCommand(ResolvedHideNavigationCommand())
+    }
+
 }
 

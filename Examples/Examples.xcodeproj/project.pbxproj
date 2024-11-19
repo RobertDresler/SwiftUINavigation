@@ -26,6 +26,7 @@
 				Modules/MainTabs,
 				Modules/ModuleA,
 				Modules/ModuleB,
+				Modules/Settings,
 				Modules/Start,
 				Navigation/ExamplesNavigation,
 				Services/UserRepository,

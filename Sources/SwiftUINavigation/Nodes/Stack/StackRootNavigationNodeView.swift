@@ -2,64 +2,58 @@ import SwiftUI
 
 struct StackRootNavigationNodeView: View {
 
-    private struct ViewWrapper: View {
-
-        @EnvironmentObject private var node: NavigationNode
-        @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
-
-        // MARK: Getters
-
-        var body: some View {
-            NavigationStack(path: path) {
-                navigationStackResolvedRoot
-            }
-        }
-
-        private var path: Binding<NavigationPath> {
-            Binding(
-                get: {
-                    guard var stackNodes = stackNodes, !stackNodes.isEmpty else { return NavigationPath() }
-                    stackNodes.removeFirst() /// Because first is root
-                    return NavigationPath(stackNodes.compactMap { $0.toStackDeepLink })
-                },
-                set: { newPath in
-                    node.mapStackNodes { nodes in
-                        Array(nodes.prefix(newPath.count + 1))
-                    }
-                }
-            )
-        }
-
-        private var navigationStackResolvedRoot: some View {
-            Group {
-                if let rootNode = node.stackNodes?.first?.destination {
-                    NavigationNodeResolvedView(node: rootNode)
-                        .connectingNavigationDestinationLogic(
-                            nodeForNodeID: { node(for: $0) },
-                            namespace: wrappedNavigationStackNodeNamespace
-                        )
-                }
-            }
-        }
-
-        private func node(for nodeID: String) -> NavigationNode? {
-            guard let stackNodes else { return nil }
-            return stackNodes.first(where: { node in
-                nodeID == node.destination.id
-            })?.destination
-        }
-
-        private var stackNodes: [NavigationNodeWithStackTransition]? {
-            node.stackNodes
-        }
-
-    }
-
     @Namespace private var namespace
+    @EnvironmentNavigationNode private var node: StackRootNavigationNode
+
+    // MARK: Getters
 
     var body: some View {
-        ViewWrapper()
-            .stackNavigationNamespace(namespace)
+        NavigationStack(path: path) {
+            navigationStackResolvedRoot
+        }.stackNavigationNamespace(namespace)
+    }
+
+    private var path: Binding<NavigationPath> {
+        Binding(
+            get: {
+                var stackNodes = stackNodes
+                guard !stackNodes.isEmpty else { return NavigationPath() }
+                stackNodes.removeFirst() /// Because first is root
+                return NavigationPath(stackNodes.compactMap { $0.toStackDeepLink })
+            },
+            set: { newPath in
+                node.executeCommand(
+                    StackMapNavigationCommand(
+                        animated: false,
+                        transform: { nodes in
+                            Array(nodes.prefix(newPath.count + 1))
+                        }
+                    )
+                )
+            }
+        )
+    }
+
+    private var navigationStackResolvedRoot: some View {
+        Group {
+            if let rootNode = node.stackNodes.first?.destination {
+                NavigationNodeResolvedView(node: rootNode)
+                    .connectingNavigationDestinationLogic(
+                        nodeForNodeID: { node(for: $0) },
+                        namespace: namespace
+                    )
+            }
+        }
+    }
+
+    private func node(for nodeID: String) -> NavigationNode? {
+        stackNodes.first(where: { node in
+            nodeID == node.destination.id
+        })?.destination
+    }
+
+    private var stackNodes: [NavigationNodeWithStackTransition] {
+        node.stackNodes
     }
 
 }

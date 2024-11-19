@@ -5,8 +5,9 @@ import UserRepository
 import Combine
 import Start
 import ModuleA
+import Settings
 
-public final class AppNavigationNode: NavigationNode {
+public final class AppNavigationNode: SwitchedNavigationNode {
 
     private let userRepository: UserRepository
     private var cancellables = Set<AnyCancellable>()
@@ -21,10 +22,8 @@ public final class AppNavigationNode: NavigationNode {
     @MainActor
     public override var view: AnyView {
         AnyView(
-            SwitchedNavigationNodeView()
-                .onShake { [weak self] in
-                    self?.printDebugGraph()
-                }
+            super.view
+                .onShake { [weak self] in self?.printDebugGraph() }
         )
     }
 
@@ -36,7 +35,7 @@ public final class AppNavigationNode: NavigationNode {
 
     private func setDeepLink(isUserLogged: Bool) {
         let switchedNode = isUserLogged ? loggedNode : notLoggedNode
-        executeCommand(.switchNode(switchedNode))
+        executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
     }
 
     private var notLoggedNode: NavigationNode {
@@ -44,14 +43,39 @@ public final class AppNavigationNode: NavigationNode {
     }
 
     private var loggedNode: NavigationNode {
-        StackRootNavigationNode(
-            stackNodes: [
-                NavigationNodeWithStackTransition(
-                    destination: ModuleANavigationNode(
-                        inputData: ModuleAInputData()
-                    ),
-                    transition: nil
-                )
+        let homeTab = DefaultTabNode(
+            image: Image(systemName: "house.fill"),
+            title: "Home",
+            navigationNode: StackRootNavigationNode(
+                stackNodes: [
+                    NavigationNodeWithStackTransition(
+                        destination: ModuleANavigationNode(
+                            inputData: ModuleAInputData()
+                        ),
+                        transition: nil
+                    )
+                ]
+            )
+        )
+        let settingsTab = DefaultTabNode(
+            image: Image(systemName: "gearshape.fill"),
+            title: "Settings",
+            navigationNode: StackRootNavigationNode(
+                stackNodes: [
+                    NavigationNodeWithStackTransition(
+                        destination: SettingsNavigationNode(
+                            inputData: SettingsInputData()
+                        ),
+                        transition: nil
+                    )
+                ]
+            )
+        )
+        return TabsRootNavigationNode(
+            selectedTabNode: homeTab,
+            tabsNodes: [
+                homeTab,
+                settingsTab
             ]
         )
     }

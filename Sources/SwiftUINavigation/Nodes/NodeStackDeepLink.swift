@@ -1,6 +1,6 @@
 public struct NavigationNodeWithStackTransition {
 
-    let destination: NavigationNode
+    public let destination: NavigationNode
     let transition: StackDeepLink.Transition?
 
     var toStackDeepLink: StackDeepLink? {

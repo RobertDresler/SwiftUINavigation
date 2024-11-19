@@ -4,13 +4,13 @@ import ExamplesNavigation
 
 struct ModuleBView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: NavigationNode
+    @EnvironmentNavigationNode private var navigationNode: ModuleBNavigationNode
     var inputData: ModuleBInputData
 
     var body: some View {
         VStack {
             text
-            dismissButton
+            hideButton
             pushModuleAButton
         }
             .navigationTitle("Module B")
@@ -20,8 +20,8 @@ struct ModuleBView: View {
         Text(inputData.text)
     }
 
-    private var dismissButton: some View {
-        Button("Dismiss", action: { dismiss() })
+    private var hideButton: some View {
+        Button("Hide", action: { hide() })
     }
 
     private var pushModuleAButton: some View {
@@ -30,12 +30,16 @@ struct ModuleBView: View {
 
     // MARK: Actions
 
-    private func dismiss() {
-        navigationNode.executeCommand(.dismiss)
+    private func hide() {
+        navigationNode.hide()
     }
 
     private func pushModuleA() {
-        navigationNode.handleDeepLink(ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())))
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData()))
+            )
+        )
     }
 
 }

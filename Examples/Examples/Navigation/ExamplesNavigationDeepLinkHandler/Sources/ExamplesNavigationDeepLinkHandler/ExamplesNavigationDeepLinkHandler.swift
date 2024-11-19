@@ -16,13 +16,14 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
     public func handleDeepLink(_ deepLink: any NavigationDeepLink, on node: NavigationNode) {
         guard let deepLink = deepLink as? ExamplesNavigationDeepLink else { return }
         switch deepLink.destination {
-        case .moduleA(let inputData):
+        case let .moduleA(inputData, animated):
             node.executeCommand(
-                .append(
-                    NavigationNodeWithStackTransition(
+                StackAppendNavigationCommand(
+                    appendedNode: NavigationNodeWithStackTransition(
                         destination: ModuleANavigationNode(inputData: inputData),
                         transition: nil
-                    )
+                    ),
+                    animated: animated
                 )
             )
         case .moduleB(let inputData):
@@ -32,8 +33,8 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
                 switch style {
                 case .fullScreenCover:
                     node.executeCommand(
-                        .present(
-                            PresentedNavigationNodeFullScreenCover.stacked(node: moduleNode)
+                        PresentNavigationCommand(
+                            presentedNode: PresentedNavigationNodeFullScreenCover.stacked(node: moduleNode)
                         )
                     )
                 case .sheet:
@@ -41,15 +42,24 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
                 }
             case .push(let transition):
                 node.executeCommand(
-                    .append(NavigationNodeWithStackTransition(destination: moduleNode, transition: transition))
+                    StackAppendNavigationCommand(
+                        appendedNode: NavigationNodeWithStackTransition(destination: moduleNode, transition: transition)
+                    )
                 )
             case .setRoot:
-                node.executeCommand(.setRoot(moduleNode, clear: true))
+                node.executeCommand(
+                    StackSetRootNavigationCommand(
+                        rootNode: moduleNode,
+                        clear: true
+                    )
+                )
             }
-        case .mainTabs(let inputData):
-            break // TODO: -RD- implement//MainTabsNavigationView(inputData: inputData)
         case .alert(let inputData):
-            node.executeCommand(.present(AlertPresentedNavigationNode(inputData: inputData)))
+            node.executeCommand(
+                PresentNavigationCommand(
+                    presentedNode: AlertPresentedNavigationNode(inputData: inputData)
+                )
+            )
         }
     }
 

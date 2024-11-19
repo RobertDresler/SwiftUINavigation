@@ -18,8 +18,8 @@ public final class ModuleANavigationNode: NavigationNode {
 
     public func presentAlert(sourceID: String) {
         executeCommand(
-            .presentOnExactNode(
-                AlertPresentedNavigationNode(
+            PresentOnGivenNodeNavigationCommand(
+                presentedNode: AlertPresentedNavigationNode(
                     inputData: AlertInputData(
                         title: "title",
                         message: "message message"

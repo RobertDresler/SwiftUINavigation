@@ -12,6 +12,7 @@ struct ModuleAView: View {
         VStack(spacing: 64) {
             VStack {
                 pushModuleAButton
+                pushModuleAWithoutAnimationButton
                 presentModuleBAsFullScreenCoverButton
                 presentModuleBAsSheetButton
                 presentModuleBAsSheetWithDetentsButton
@@ -26,6 +27,10 @@ struct ModuleAView: View {
 
     private var pushModuleAButton: some View {
         Button("Push Module A", action: { pushModuleA() })
+    }
+
+    private var pushModuleAWithoutAnimationButton: some View {
+        Button("Push Module A Without Animation", action: { pushModuleAWithoutAnimation() })
     }
 
     private var presentModuleBAsFullScreenCoverButton: some View {
@@ -72,16 +77,30 @@ struct ModuleAView: View {
     // MARK: Actions
 
     private func pushModuleA() {
-        navigationNode.handleDeepLink(ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData())))
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData()))
+            )
+        )
+    }
+
+    private func pushModuleAWithoutAnimation() {
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(destination: .moduleA(ModuleAInputData(), animated: false))
+            )
+        )
     }
 
     private func pushModuleB() {
-        navigationNode.handleDeepLink(
-            ExamplesNavigationDeepLink(
-                destination: .moduleB(
-                    ModuleBInputData(
-                        text: "Pushed",
-                        showRule: .push(.zoom(sourceID: pushModuleBSourceID))
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(
+                    destination: .moduleB(
+                        ModuleBInputData(
+                            text: "Pushed",
+                            showRule: .push(.zoom(sourceID: pushModuleBSourceID))
+                        )
                     )
                 )
             )
@@ -93,12 +112,14 @@ struct ModuleAView: View {
     }
 
     private func presentModuleBAsFullScreenCover() {
-        navigationNode.handleDeepLink(
-            ExamplesNavigationDeepLink(
-                destination: .moduleB(
-                    ModuleBInputData(
-                        text: "Presented as fullScreenCover",
-                        showRule: .present(style: .fullScreenCover)
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(
+                    destination: .moduleB(
+                        ModuleBInputData(
+                            text: "Presented as fullScreenCover",
+                            showRule: .present(style: .fullScreenCover)
+                        )
                     )
                 )
             )
@@ -106,12 +127,14 @@ struct ModuleAView: View {
     }
 
     private func presentModuleBAsSheet() {
-        navigationNode.handleDeepLink(
-            ExamplesNavigationDeepLink(
-                destination: .moduleB(
-                    ModuleBInputData(
-                        text: "Presented as sheet",
-                        showRule: .present(style: .sheet)// TODO: -RD- implement(detents: []))
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(
+                    destination: .moduleB(
+                        ModuleBInputData(
+                            text: "Presented as sheet",
+                            showRule: .present(style: .sheet)// TODO: -RD- implement(detents: []))
+                        )
                     )
                 )
             )
@@ -119,12 +142,14 @@ struct ModuleAView: View {
     }
 
     private func presentModuleBAsSheetWithDetents() {
-        navigationNode.handleDeepLink(
-            ExamplesNavigationDeepLink(
-                destination: .moduleB(
-                    ModuleBInputData(
-                        text: "Presented as sheet with detents",
-                        showRule: .present(style: .sheet)// TODO: -RD- implement(detents: [.medium, .large]))
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(
+                    destination: .moduleB(
+                        ModuleBInputData(
+                            text: "Presented as sheet with detents",
+                            showRule: .present(style: .sheet)// TODO: -RD- implement(detents: [.medium, .large]))
+                        )
                     )
                 )
             )
@@ -132,12 +157,14 @@ struct ModuleAView: View {
     }
 
     private func setModuleBRoot() {
-        navigationNode.handleDeepLink(
-            ExamplesNavigationDeepLink(
-                destination: .moduleB(
-                    ModuleBInputData(
-                        text: "Set root",
-                        showRule: .setRoot
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(
+                    destination: .moduleB(
+                        ModuleBInputData(
+                            text: "Set root",
+                            showRule: .setRoot
+                        )
                     )
                 )
             )
@@ -145,21 +172,23 @@ struct ModuleAView: View {
     }
 
     private func showAlert() {
-       /* navigationNode.handleDeepLink(
-            ExamplesNavigationDeepLink(
-                destination: .alert(
-                    AlertInputData(
-                        title: "Test title",
-                        message: "Test message"
+        navigationNode.executeCommand(
+            DefaultHandleDeepLinkNavigationCommand(
+                deepLink: ExamplesNavigationDeepLink(
+                    destination: .alert(
+                        AlertInputData(
+                            title: "Test title",
+                            message: "Test message"
+                        )
                     )
                 )
             )
-        )*/
+        )
     }
 
     private func openURL() {
         guard let url = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ") else { return }
-        navigationNode.executeCommand(.openURL(url))
+        navigationNode.executeCommand(OpenURLNavigationCommand(url: url))
     }
 
 }
