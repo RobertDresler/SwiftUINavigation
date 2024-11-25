@@ -58,7 +58,7 @@ public struct AlertSourceViewModifier: ViewModifier {
     }
 
     func modifyNodeViewWithPresentableNavigationNodes(_ view: some View) -> some View {
-        [AlertPresentedNavigationNode.self].reduce(AnyView(view)) { resolvedView, modifier in
+        [ConfirmationDialogPresentedNavigationNode.self].reduce(AnyView(view)) { resolvedView, modifier in
             AnyView(modifier.self.presenterResolvedViewModifier(resolvedViewNode: navigationNode, content: resolvedView, id: id))
         }
     }
@@ -147,6 +147,114 @@ public struct AlertPresentedNavigationNode: PresentedNavigationNode {
                 }
             )*/
 
+    }
+
+}
+
+public struct ConfirmationDialogInputData: Hashable {
+
+    public struct Action: Hashable {
+
+        public enum Role {
+            case cancel
+            case destructive
+        }
+
+        let id: String
+        let title: String
+        let role: Role?
+        let handler: (() -> Void)?
+
+        public init(id: String = UUID().uuidString, title: String, role: Role? = nil, handler: (() -> Void)? = nil) {
+            self.id = id
+            self.title = title
+            self.role = role
+            self.handler = handler
+        }
+
+        public static func == (lhs: ConfirmationDialogInputData.Action, rhs: ConfirmationDialogInputData.Action) -> Bool {
+            lhs.id == rhs.id
+        }
+
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
+
+    }
+
+    let message: String?
+    let actions: [Action]
+
+    public init(message: String? = nil, actions: [Action]) {
+        self.message = message
+        self.actions = actions
+    }
+
+}
+
+public final class ConfirmationDialogNavigationNode: NavigationNode {
+
+    let inputData: ConfirmationDialogInputData
+    let sourceID: String?
+
+    init(inputData: ConfirmationDialogInputData, sourceID: String?) {
+        self.inputData = inputData
+        self.sourceID = sourceID
+    }
+
+}
+
+
+public struct ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode {
+
+    public let node: NavigationNode
+
+    public init(inputData: ConfirmationDialogInputData, sourceID: String? = nil) {
+        self.node = ConfirmationDialogNavigationNode(inputData: inputData, sourceID: sourceID)
+    }
+
+    public static func presenterResolvedViewModifier(resolvedViewNode: NavigationNode, content: AnyView, id: String?) -> some View {
+        content
+            .confirmationDialog(
+                Text(""),
+                isPresented: Binding(
+                    get: {
+                        if resolvedViewNode.presentedNode?.node is ConfirmationDialogNavigationNode,
+                        id == (resolvedViewNode.presentedNode?.node as? ConfirmationDialogNavigationNode)?.sourceID {
+                            true
+                        } else {
+                            false
+                        }
+                    },
+                    set: { isPresented in
+                        guard !isPresented else { return }
+                        resolvedViewNode.presentedNode = nil
+                    }
+                ),
+                actions: {
+                    ForEach((resolvedViewNode.presentedNode?.node as? ConfirmationDialogNavigationNode)?.inputData.actions ?? [], id: \.id) { action in
+                        Button(
+                            action.title,
+                            role: {
+                                switch action.role {
+                                case .cancel:
+                                    .cancel
+                                case .destructive:
+                                    .destructive
+                                case .none:
+                                    .none
+                                }
+                            }(),
+                            action: { action.handler?() }
+                        )
+                    }
+                },
+                message: {
+                    if let message = (resolvedViewNode.presentedNode?.node as? ConfirmationDialogNavigationNode)?.inputData.message {
+                        Text(message)
+                    }
+                }
+            )
     }
 
 }
