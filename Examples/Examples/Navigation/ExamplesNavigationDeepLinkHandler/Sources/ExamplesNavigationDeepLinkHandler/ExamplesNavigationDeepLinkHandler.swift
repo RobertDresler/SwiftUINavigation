@@ -19,7 +19,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
         case let .moduleA(inputData, animated):
             node.executeCommand(
                 StackAppendNavigationCommand(
-                    appendedNode: NavigationNodeWithStackTransition(
+                    appendedNode: StackNavigationNode(
                         destination: ModuleANavigationNode(inputData: inputData),
                         transition: nil
                     ),
@@ -34,7 +34,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
                 case .fullScreenCover:
                     node.executeCommand(
                         PresentNavigationCommand(
-                            presentedNode: PresentedNavigationNodeFullScreenCover.stacked(node: moduleNode)
+                            presentedNode: FullScreenCoverPresentedNavigationNode.stacked(node: moduleNode)
                         )
                     )
                 case .sheet:
@@ -43,7 +43,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
             case .push(let transition):
                 node.executeCommand(
                     StackAppendNavigationCommand(
-                        appendedNode: NavigationNodeWithStackTransition(destination: moduleNode, transition: transition)
+                        appendedNode: StackNavigationNode(destination: moduleNode, transition: transition)
                     )
                 )
             case .setRoot:

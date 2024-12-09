@@ -3,7 +3,7 @@ import Combine
 
 public final class StackRootNavigationNode: NavigationNode {
 
-    @Published public internal(set) var stackNodes: [NavigationNodeWithStackTransition]
+    @Published public internal(set) var stackNodes: [StackNavigationNode]
     public override var isWrapperNode: Bool { true }
 
     public override var childrenPublisher: AnyPublisher<[NavigationNode], Never> {
@@ -17,7 +17,7 @@ public final class StackRootNavigationNode: NavigationNode {
         AnyView(StackRootNavigationNodeView())
     }
 
-    public init(stackNodes: [NavigationNodeWithStackTransition]) {
+    public init(stackNodes: [StackNavigationNode]) {
         self.stackNodes = stackNodes
         super.init()
     }

@@ -15,22 +15,8 @@ struct StackRootNavigationNodeView: View {
 
     private var path: Binding<NavigationPath> {
         Binding(
-            get: {
-                var stackNodes = stackNodes
-                guard !stackNodes.isEmpty else { return NavigationPath() }
-                stackNodes.removeFirst() /// Because first is root
-                return NavigationPath(stackNodes.compactMap { $0.toStackDeepLink })
-            },
-            set: { newPath in
-                node.executeCommand(
-                    StackMapNavigationCommand(
-                        animated: false,
-                        transform: { nodes in
-                            Array(nodes.prefix(newPath.count + 1))
-                        }
-                    )
-                )
-            }
+            get: { navigationPath },
+            set: { setNewPath($0) }
         )
     }
 
@@ -52,8 +38,35 @@ struct StackRootNavigationNodeView: View {
         })?.destination
     }
 
-    private var stackNodes: [NavigationNodeWithStackTransition] {
+    private var navigationPath: NavigationPath {
+        var stackNodes = stackNodes
+        guard !stackNodes.isEmpty else { return NavigationPath() }
+        stackNodes.removeFirst() /// Because first is root
+        return NavigationPath(
+            stackNodes.compactMap { node in
+                StackNavigationDestination(
+                    nodeID: node.destination.id,
+                    transition: node.transition
+                )
+            }
+        )
+    }
+
+    private var stackNodes: [StackNavigationNode] {
         node.stackNodes
+    }
+
+    // MARK: Methods
+
+    private func setNewPath(_ newPath: NavigationPath) {
+        node.executeCommand(
+            StackMapNavigationCommand(
+                animated: false,
+                transform: { nodes in
+                    Array(nodes.prefix(newPath.count + 1))
+                }
+            )
+        )
     }
 
 }
@@ -65,7 +78,7 @@ fileprivate extension View {
         nodeForNodeID: @escaping (String) -> NavigationNode?,
         namespace: Namespace.ID?
     ) -> some View {
-        navigationDestination(for: StackDeepLink.self) { data in
+        navigationDestination(for: StackNavigationDestination.self) { data in
             Group {
                 if let node = nodeForNodeID(data.nodeID) {
                     NavigationNodeResolvedView(node: node)
@@ -76,7 +89,7 @@ fileprivate extension View {
     }
 
     func destinationWithNavigationTransition(
-        transition: StackDeepLink.Transition?,
+        transition: StackNavigationTransition?,
         namespace: Namespace.ID?
     ) -> some View {
         Group {

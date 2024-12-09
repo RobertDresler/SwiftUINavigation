@@ -48,7 +48,7 @@ public final class AppNavigationNode: SwitchedNavigationNode {
             title: "Home",
             navigationNode: StackRootNavigationNode(
                 stackNodes: [
-                    NavigationNodeWithStackTransition(
+                    StackNavigationNode(
                         destination: ModuleANavigationNode(
                             inputData: ModuleAInputData()
                         ),
@@ -62,7 +62,7 @@ public final class AppNavigationNode: SwitchedNavigationNode {
             title: "Settings",
             navigationNode: StackRootNavigationNode(
                 stackNodes: [
-                    NavigationNodeWithStackTransition(
+                    StackNavigationNode(
                         destination: SettingsNavigationNode(
                             inputData: SettingsInputData()
                         ),

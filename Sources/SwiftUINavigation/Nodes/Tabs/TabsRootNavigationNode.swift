@@ -1,49 +1,6 @@
 import SwiftUI
 import Combine
 
-// TODO: -RD- separate
-// TODO: -RD- implement new iOS 18 Tab API
-public protocol TabNode {
-    var navigationNode: NavigationNode { get }
-    @MainActor
-    var resolvedView: AnyView { get }
-}
-
-public struct DefaultTabNode: TabNode {
-
-    private let image: Image
-    private let title: String
-    public let navigationNode: NavigationNode
-
-    public init(image: Image, title: String, navigationNode: NavigationNode) {
-        self.image = image
-        self.title = title
-        self.navigationNode = navigationNode
-    }
-
-    @MainActor
-    public var resolvedView: AnyView {
-        AnyView(
-            content
-                .tabItem { label }
-        )
-    }
-
-    @MainActor
-    private var content: some View {
-        NavigationNodeResolvedView(node: navigationNode)
-    }
-
-    private var label: some View {
-        Label(
-            title: { Text(title) },
-            icon: { image }
-        )
-    }
-
-}
-
-
 public final class TabsRootNavigationNode: NavigationNode {
 
     @Published public internal(set) var selectedTabNode: TabNode

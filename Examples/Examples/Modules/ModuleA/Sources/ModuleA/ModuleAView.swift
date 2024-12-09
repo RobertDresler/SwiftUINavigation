@@ -50,8 +50,7 @@ struct ModuleAView: View {
     }
 
     private var showAlertButton: some View {
-        Button("Show alert", action: { navigationNode.presentAlert(sourceID: "Tea") })
-            .presentingNavigationSource(id: "Tea")
+        Button("Show alert", action: { navigationNode.presentAlert() })
     }
 
     private var openURLButton: some View {

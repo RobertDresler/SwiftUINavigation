@@ -24,7 +24,7 @@ open class NavigationNode: ObservableObject {
     // MARK: Public
 
     public let id: String
-    @Published public var wrappedNodes: [NavigationNodeWithStackTransition]?
+    @Published public var wrappedNodes: [StackNavigationNode]?
     @Published public var presentedNode: (any PresentedNavigationNode)?
     public weak var parent: NavigationNode?
     public var children: [NavigationNode] { _childrenPublisher.value }

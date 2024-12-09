@@ -10,7 +10,7 @@ public struct ModuleBInputData: Hashable {
         }
 
         case present(style: PresentStyle)
-        case push(StackDeepLink.Transition)
+        case push(StackNavigationTransition)
         case setRoot
     }
 

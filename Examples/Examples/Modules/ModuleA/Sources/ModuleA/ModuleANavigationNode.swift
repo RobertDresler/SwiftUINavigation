@@ -16,15 +16,14 @@ public final class ModuleANavigationNode: NavigationNode {
         AnyView(ModuleAView(inputData: inputData))
     }
 
-    public func presentAlert(sourceID: String) {
+    public func presentAlert() {
         executeCommand(
             PresentOnGivenNodeNavigationCommand(
                 presentedNode: AlertPresentedNavigationNode(
                     inputData: AlertInputData(
                         title: "title",
                         message: "message message"
-                    ),
-                    sourceID: sourceID
+                    )
                 )
             )
         )
