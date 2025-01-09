@@ -23,6 +23,8 @@ struct CommandsGalleryView: View {
                 ModalsAlertsCommandsGalleryDataFactory()
             case .stack:
                 StackCommandsGalleryDataFactory()
+            case .urlHandling:
+                URLHandlingCommandsGalleryDataFactory()
             }
         }()
         self.title = factory.makeTitle()

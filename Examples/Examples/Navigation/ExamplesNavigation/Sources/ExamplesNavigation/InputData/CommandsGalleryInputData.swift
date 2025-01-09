@@ -5,6 +5,7 @@ public struct CommandsGalleryInputData: Hashable {
         case modalsTraditional
         case modalsAlerts
         case stack
+        case urlHandling
     }
 
     public let id: ID

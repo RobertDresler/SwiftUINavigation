@@ -16,15 +16,7 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                     title: "Modals - Traditional",
                     subtitle: "Full Screen Covers and Sheets"
                 ),
-                makeCommand: {
-                    StackAppendNavigationCommand(
-                        appendedNode: StackNavigationNode(
-                            destination: CommandsGalleryNavigationNode(
-                                inputData: CommandsGalleryInputData(id: .modalsTraditional)
-                            )
-                        )
-                    )
-                }
+                makeCommand: makeAppendCommandsGalleryCommand(for: .modalsTraditional)
             ),
             .new(
                 viewModel: CommandsGalleryItemView.ViewModel(
@@ -33,15 +25,7 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                     title: "Modals - Alerts",
                     subtitle: "Alerts and Confirmation Dialogs"
                 ),
-                makeCommand: {
-                    StackAppendNavigationCommand(
-                        appendedNode: StackNavigationNode(
-                            destination: CommandsGalleryNavigationNode(
-                                inputData: CommandsGalleryInputData(id: .modalsAlerts)
-                            )
-                        )
-                    )
-                }
+                makeCommand: makeAppendCommandsGalleryCommand(for: .modalsAlerts)
             ),
             .new(
                 viewModel: CommandsGalleryItemView.ViewModel(
@@ -50,15 +34,7 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                     title: "Stack",
                     subtitle: "Commands for managing navigation stack path - append, drop last, set root, ..."
                 ),
-                makeCommand: {
-                    StackAppendNavigationCommand(
-                        appendedNode: StackNavigationNode(
-                            destination: CommandsGalleryNavigationNode(
-                                inputData: CommandsGalleryInputData(id: .stack)
-                            )
-                        )
-                    )
-                }
+                makeCommand: makeAppendCommandsGalleryCommand(for: .stack)
             ),
             .new(
                 viewModel: CommandsGalleryItemView.ViewModel(
@@ -70,8 +46,29 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                 makeCommand: {
                     ResolvedHideNavigationCommand()
                 }
+            ),
+            .new(
+                viewModel: CommandsGalleryItemView.ViewModel(
+                    symbolName: "link",
+                    accentColor: .brown,
+                    title: "URL Handling",
+                    subtitle: "Open URL, redirect to other apps, SFSafari"
+                ),
+                makeCommand: makeAppendCommandsGalleryCommand(for: .urlHandling)
             )
         ]
+    }
+
+    private func makeAppendCommandsGalleryCommand(for id: CommandsGalleryInputData.ID) -> () -> NavigationCommand {
+        {
+            StackAppendNavigationCommand(
+                appendedNode: StackNavigationNode(
+                    destination: CommandsGalleryNavigationNode(
+                        inputData: CommandsGalleryInputData(id: id)
+                    )
+                )
+            )
+        }
     }
 
 
