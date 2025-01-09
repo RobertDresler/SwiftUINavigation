@@ -41,12 +41,12 @@ struct ModalsAlertsCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                 }
             ),
             .new(
-                id: confirmationDialogID,
+                id: confirmationDialogPresentingNavigationSourceID,
                 viewModel: CommandsGalleryItemView.ViewModel(
                     symbolName: "questionmark.bubble.fill",
                     accentColor: .red,
                     title: "Show Confirmation Dialog",
-                    subtitle: "Note that by using the sourceID, it is presented as a popover from the card on iPadOS"
+                    subtitle: "Note that by using the sourceID and presentingNavigationSource(_:), it is presented as a popover from the card on iPadOS"
                 ),
                 makeCommand: {
                     PresentNavigationCommand(
@@ -68,15 +68,16 @@ struct ModalsAlertsCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                                     )
                                 ]
                             ),
-                            sourceID: confirmationDialogID
+                            sourceID: confirmationDialogPresentingNavigationSourceID
                         )
                     )
-                }
+                },
+                presentingNavigationSourceID: confirmationDialogPresentingNavigationSourceID
             )
         ]
     }
 
-    private var confirmationDialogID: String {
+    private var confirmationDialogPresentingNavigationSourceID: String {
         "confirmationDialog"
     }
 

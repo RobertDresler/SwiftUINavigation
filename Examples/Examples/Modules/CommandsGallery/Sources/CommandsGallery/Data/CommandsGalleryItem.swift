@@ -6,28 +6,33 @@ import SwiftUINavigation
 struct CommandsGalleryItem {
     let identifiableViewModel: IdentifiableViewModel<String, CommandsGalleryItemView.ViewModel>
     let makeCommand: (NavigationNode) -> NavigationCommand
+    let presentingNavigationSourceID: String?
 }
 
 extension CommandsGalleryItem {
     static func new(
         id: String = UUID().uuidString,
         viewModel: CommandsGalleryItemView.ViewModel,
-        makeCommand: @escaping (NavigationNode) -> NavigationCommand
+        makeCommand: @escaping (NavigationNode) -> NavigationCommand,
+        presentingNavigationSourceID: String? = nil
     ) -> CommandsGalleryItem {
         CommandsGalleryItem(
             identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
-            makeCommand: makeCommand
+            makeCommand: makeCommand,
+            presentingNavigationSourceID: presentingNavigationSourceID
         )
     }
 
     static func new(
         id: String = UUID().uuidString,
         viewModel: CommandsGalleryItemView.ViewModel,
-        makeCommand: @escaping () -> NavigationCommand
+        makeCommand: @escaping () -> NavigationCommand,
+        presentingNavigationSourceID: String? = nil
     ) -> CommandsGalleryItem {
         CommandsGalleryItem(
             identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
-            makeCommand: { _ in makeCommand() }
+            makeCommand: { _ in makeCommand() },
+            presentingNavigationSourceID: presentingNavigationSourceID
         )
     }
 }

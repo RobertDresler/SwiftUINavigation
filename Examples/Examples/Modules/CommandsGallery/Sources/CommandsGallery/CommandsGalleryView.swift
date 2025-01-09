@@ -62,13 +62,29 @@ struct CommandsGalleryView: View {
     }
     private var itemsView: some View {
         VStack(spacing: 8) {
-            ForEach(items.map(\.identifiableViewModel)) { item in
+            ForEach(items, id: \.identifiableViewModel.id) { item in
                 if #available(iOS 18.0, *), let wrappedNavigationStackNodeNamespace {
-                    configuredItemView(for: item)
-                        .matchedTransitionSource(id: item.id, in: wrappedNavigationStackNodeNamespace)
+                    configuredItemViewWithPresentingNavigationSource(for: item)
+                        .matchedTransitionSource(
+                            id: item.identifiableViewModel.id,
+                            in: wrappedNavigationStackNodeNamespace
+                        )
                 } else {
-                    configuredItemView(for: item)
+                    configuredItemViewWithPresentingNavigationSource(for: item)
                 }
+            }
+        }
+    }
+
+    private func configuredItemViewWithPresentingNavigationSource(
+        for item: CommandsGalleryItem
+    ) -> some View {
+        Group {
+            if let presentingNavigationSourceID = item.presentingNavigationSourceID {
+                configuredItemView(for: item.identifiableViewModel)
+                    .presentingNavigationSource(id: presentingNavigationSourceID)
+            } else {
+                configuredItemView(for: item.identifiableViewModel)
             }
         }
     }
@@ -79,7 +95,7 @@ struct CommandsGalleryView: View {
         CommandsGalleryItemView(
             viewModel: item.viewModel,
             action: { handleAction(for: item.id) }
-        ).presentingNavigationSource(id: item.id)
+        )
     }
 
     // MARK: Actions
