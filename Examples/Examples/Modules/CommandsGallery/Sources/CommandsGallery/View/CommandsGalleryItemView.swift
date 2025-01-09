@@ -41,6 +41,7 @@ struct CommandsGalleryItemView: View {
 
     private var symbol: some View {
         Image(systemName: viewModel.symbolName)
+            .symbolRenderingMode(.hierarchical)
             .font(.system(size: 24))
             .frame(width: 24)
             .foregroundStyle(.tint)
