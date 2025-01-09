@@ -1,10 +1,10 @@
 import SwiftUINavigation
 import ExamplesNavigation
 
-struct ModalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
+struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
 
     func makeTitle() -> String {
-        "Modal Commands"
+        "Modals - Traditional"
     }
     
     func makeItems() -> [CommandsGalleryItem] {

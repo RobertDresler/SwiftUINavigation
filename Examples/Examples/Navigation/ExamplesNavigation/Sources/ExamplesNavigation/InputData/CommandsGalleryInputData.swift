@@ -2,7 +2,8 @@ public struct CommandsGalleryInputData: Hashable {
 
     public enum ID {
         case home
-        case modal
+        case modalsTraditional
+        case modalsAlerts
         case stack
     }
 

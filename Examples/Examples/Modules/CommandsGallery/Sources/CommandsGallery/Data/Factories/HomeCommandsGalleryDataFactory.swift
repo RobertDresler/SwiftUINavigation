@@ -13,16 +13,32 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                 viewModel: CommandsGalleryItemView.ViewModel(
                     symbolName: "rectangle.portrait.badge.plus.fill",
                     accentColor: .blue,
-                    title: "Modal Commands",
-                    subtitle: "Full Screen Covers, Sheets, and More for Managing Modal Presentations"
+                    title: "Modals - Traditional",
+                    subtitle: "Full Screen Covers and Sheets"
                 ),
                 makeCommand: {
                     StackAppendNavigationCommand(
                         appendedNode: StackNavigationNode(
                             destination: CommandsGalleryNavigationNode(
-                                inputData: CommandsGalleryInputData(id: .modal)
-                            ),
-                            transition: nil
+                                inputData: CommandsGalleryInputData(id: .modalsTraditional)
+                            )
+                        )
+                    )
+                }
+            ),
+            .new(
+                viewModel: CommandsGalleryItemView.ViewModel(
+                    symbolName: "exclamationmark.bubble.fill",
+                    accentColor: .red,
+                    title: "Modals - Alerts",
+                    subtitle: "Alerts and Confirmation Dialogs"
+                ),
+                makeCommand: {
+                    StackAppendNavigationCommand(
+                        appendedNode: StackNavigationNode(
+                            destination: CommandsGalleryNavigationNode(
+                                inputData: CommandsGalleryInputData(id: .modalsAlerts)
+                            )
                         )
                     )
                 }
@@ -31,16 +47,15 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                 viewModel: CommandsGalleryItemView.ViewModel(
                     symbolName: "square.stack.3d.down.right.fill",
                     accentColor: .purple,
-                    title: "Stack Commands",
-                    subtitle: "Commands for managing navigation stack actions, including push, pop, and more"
+                    title: "Stack",
+                    subtitle: "Commands for managing navigation stack path - append, drop last, set root, ..."
                 ),
                 makeCommand: {
                     StackAppendNavigationCommand(
                         appendedNode: StackNavigationNode(
                             destination: CommandsGalleryNavigationNode(
                                 inputData: CommandsGalleryInputData(id: .stack)
-                            ),
-                            transition: nil
+                            )
                         )
                     )
                 }

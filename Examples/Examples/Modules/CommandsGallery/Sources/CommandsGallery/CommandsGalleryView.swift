@@ -17,8 +17,10 @@ struct CommandsGalleryView: View {
             switch inputData.id {
             case .home:
                 HomeCommandsGalleryDataFactory()
-            case .modal:
-                ModalCommandsGalleryDataFactory()
+            case .modalsTraditional:
+                ModalsTraditionalCommandsGalleryDataFactory()
+            case .modalsAlerts:
+                ModalsAlertsCommandsGalleryDataFactory()
             case .stack:
                 StackCommandsGalleryDataFactory()
             }
@@ -75,7 +77,7 @@ struct CommandsGalleryView: View {
         CommandsGalleryItemView(
             viewModel: item.viewModel,
             action: { handleAction(for: item.id) }
-        )
+        ).presentingNavigationSource(id: item.id)
     }
 
     // MARK: Actions

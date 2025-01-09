@@ -4,7 +4,7 @@ import ExamplesNavigation
 struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
 
     func makeTitle() -> String {
-        "Stack Commands"
+        "Stack"
     }
     
     func makeItems() -> [CommandsGalleryItem] {
