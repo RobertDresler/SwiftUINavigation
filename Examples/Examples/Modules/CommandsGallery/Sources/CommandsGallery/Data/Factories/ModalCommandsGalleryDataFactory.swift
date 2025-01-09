@@ -22,19 +22,21 @@ struct ModalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                         )
                     )
                 }
-            )//,
-            /*.new(
+            ),
+            .new(
                 viewModel: CommandsGalleryItemView.ViewModel(
                     symbolName: "rectangle.stack.fill.badge.plus",
                     accentColor: .blue,
                     title: "Present Sheet"
                 ),
-                deepLink: PresentNavigationCommand(
-                    presentedNode: sheetno(
-                        node: CommandsGalleryNavigationNode(inputData: .default)
+                makeCommand: {
+                    PresentNavigationCommand(
+                        presentedNode: SheetPresentedNavigationNode.stacked(
+                            node: CommandsGalleryNavigationNode(inputData: .default)
+                        )
                     )
-                )
-            )*/
+                }
+            )
         ]
     }
 

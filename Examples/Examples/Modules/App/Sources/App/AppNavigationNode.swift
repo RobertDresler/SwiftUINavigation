@@ -45,8 +45,8 @@ public final class AppNavigationNode: SwitchedNavigationNode {
 
     private var loggedNode: NavigationNode {
         let homeTab = DefaultTabNode(
-            image: Image(systemName: "house.fill"),
-            title: "CommandsGallery",
+            image: Image(systemName: "square.grid.2x2"),
+            title: "Gallery",
             navigationNode: StackRootNavigationNode(
                 stackNodes: [
                     StackNavigationNode(

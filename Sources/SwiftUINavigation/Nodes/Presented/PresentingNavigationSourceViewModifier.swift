@@ -30,6 +30,7 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
     private var registeredPresentableNavigationNodes: [any PresentedNavigationNode.Type] {
         [
             FullScreenCoverPresentedNavigationNode.self,
+            SheetPresentedNavigationNode.self,
             AlertPresentedNavigationNode.self,
             ConfirmationDialogPresentedNavigationNode.self
         ]
