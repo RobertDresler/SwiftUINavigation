@@ -6,6 +6,10 @@ public struct OpenURLNavigationCommand: NavigationCommand {
         node.urlToOpen.send(url)
     }
 
+    public func canExecute(on node: NavigationNode) -> Bool {
+        true
+    }
+
     private let url: URL
 
     public init(url: URL) {

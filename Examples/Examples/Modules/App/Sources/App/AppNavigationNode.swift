@@ -6,6 +6,7 @@ import Combine
 import Start
 import ModuleA
 import Settings
+import CommandsGallery
 
 public final class AppNavigationNode: SwitchedNavigationNode {
 
@@ -45,12 +46,12 @@ public final class AppNavigationNode: SwitchedNavigationNode {
     private var loggedNode: NavigationNode {
         let homeTab = DefaultTabNode(
             image: Image(systemName: "house.fill"),
-            title: "Home",
+            title: "CommandsGallery",
             navigationNode: StackRootNavigationNode(
                 stackNodes: [
                     StackNavigationNode(
-                        destination: ModuleANavigationNode(
-                            inputData: ModuleAInputData()
+                        destination: CommandsGalleryNavigationNode(
+                            inputData: .default
                         ),
                         transition: nil
                     )

@@ -7,6 +7,10 @@ public struct PresentOnGivenNodeNavigationCommand: NavigationCommand {
         )
     }
 
+    public func canExecute(on node: NavigationNode) -> Bool {
+        true
+    }
+
     private let presentedNode: any PresentedNavigationNode
     private let animated: Bool
 

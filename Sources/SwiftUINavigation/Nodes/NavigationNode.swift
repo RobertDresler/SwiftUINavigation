@@ -21,6 +21,10 @@ open class NavigationNode: ObservableObject {
         command.execute(on: self)
     }
 
+    open func canExecuteCommand(_ command: NavigationCommand) -> Bool {
+        command.canExecute(on: self)
+    }
+
     // MARK: Public
 
     public let id: String
@@ -31,6 +35,14 @@ open class NavigationNode: ObservableObject {
 
     public var root: NavigationNode {
         parent?.root ?? self
+    }
+
+    public var predecessors: [NavigationNode] {
+        parent?.predecessorsIncludingSelf ?? []
+    }
+
+    public var predecessorsIncludingSelf: [NavigationNode] {
+        (parent?.predecessorsIncludingSelf ?? []) + [self]
     }
 
     public var canPresentIfWouldnt: Bool {

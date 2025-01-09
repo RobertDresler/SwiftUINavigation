@@ -4,6 +4,10 @@ public struct StackMapNavigationCommand: NavigationCommand {
         mapStackNodes(on: node)
     }
 
+    public func canExecute(on node: NavigationNode) -> Bool {
+        node.predecessorsIncludingSelf.contains(where: { $0 is StackRootNavigationNode })
+    }
+
     private let animated: Bool
     private let transform: ([StackNavigationNode]) -> [StackNavigationNode]
 

@@ -17,7 +17,8 @@ let package = Package(
         .package(path: "../../Services/UserRepository"),
         .package(path: "../../Modules/Start"),
         .package(path: "../../Modules/ModuleA"),
-        .package(path: "../../Modules/Settings")
+        .package(path: "../../Modules/Settings"),
+        .package(path: "../../Modules/CommandsGallery")
     ],
     targets: [
         .target(
@@ -27,7 +28,8 @@ let package = Package(
                 .product(name: "UserRepository", package: "UserRepository"),
                 .product(name: "Start", package: "Start"),
                 .product(name: "ModuleA", package: "ModuleA"),
-                .product(name: "Settings", package: "Settings")
+                .product(name: "Settings", package: "Settings"),
+                .product(name: "CommandsGallery", package: "CommandsGallery")
             ]
         )
     ]

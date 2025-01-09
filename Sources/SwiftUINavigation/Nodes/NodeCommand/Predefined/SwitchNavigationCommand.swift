@@ -5,6 +5,10 @@ public struct SwitchNavigationCommand: NavigationCommand {
         node.switchedNode = switchedNode
     }
 
+    public func canExecute(on node: NavigationNode) -> Bool {
+        node is SwitchedNavigationNode
+    }
+
     private let switchedNode: NavigationNode
 
     public init(switchedNode: NavigationNode) {

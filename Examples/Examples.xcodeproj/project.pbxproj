@@ -23,12 +23,14 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Modules/App,
+				Modules/Home,
 				Modules/MainTabs,
 				Modules/ModuleA,
 				Modules/ModuleB,
 				Modules/Settings,
 				Modules/Start,
 				Navigation/ExamplesNavigation,
+				Services/Shared,
 				Services/UserRepository,
 			);
 			target = D04318B12CC8D7430077101C /* Examples */;
