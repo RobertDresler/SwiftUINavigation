@@ -1,7 +1,7 @@
 import SwiftUI
 import Shared
 
-struct CommandsGalleryItemView: View {
+struct ActionableListItemView: View {
 
     struct ViewModel {
         let symbolName: String
@@ -73,8 +73,8 @@ struct CommandsGalleryItemView: View {
 }
 
 #Preview {
-    CommandsGalleryItemView(
-        viewModel: CommandsGalleryItemView.ViewModel(
+    ActionableListItemView(
+        viewModel: ActionableListItemView.ViewModel(
             symbolName: "heart.fill",
             accentColor: .red,
             title: "Title",

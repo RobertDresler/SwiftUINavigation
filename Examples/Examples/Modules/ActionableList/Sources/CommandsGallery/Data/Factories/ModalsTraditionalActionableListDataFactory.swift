@@ -1,13 +1,13 @@
 import SwiftUINavigation
 import ExamplesNavigation
 
-struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
+struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
         "Modals - Traditional"
     }
     
-    func makeItems() -> [CommandsGalleryItem] {
+    func makeItems() -> [ActionableListItem] {
         [
             presentFullScreenCoverItem,
             presentFullScreenCoverWithoutAnimationItem,
@@ -17,9 +17,9 @@ struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         ]
     }
 
-    private var presentFullScreenCoverItem: CommandsGalleryItem {
+    private var presentFullScreenCoverItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.portrait.badge.plus.fill",
                 accentColor: .blue,
                 title: "Present Full Screen Cover"
@@ -27,16 +27,16 @@ struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 PresentNavigationCommand(
                     presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
-                        node: CommandsGalleryNavigationNode(inputData: .default)
+                        node: ActionableListNavigationNode(inputData: .default)
                     )
                 )
             }
         )
     }
 
-    private var presentFullScreenCoverWithoutAnimationItem: CommandsGalleryItem {
+    private var presentFullScreenCoverWithoutAnimationItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.portrait.badge.plus",
                 accentColor: .blue,
                 title: "Present Full Screen Cover",
@@ -45,7 +45,7 @@ struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 PresentNavigationCommand(
                     presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
-                        node: CommandsGalleryNavigationNode(inputData: .default)
+                        node: ActionableListNavigationNode(inputData: .default)
                     ),
                     animated: false
                 )
@@ -53,9 +53,9 @@ struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var presentSheetItem: CommandsGalleryItem {
+    private var presentSheetItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.stack.fill.badge.plus",
                 accentColor: .blue,
                 title: "Present Sheet"
@@ -63,16 +63,16 @@ struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 PresentNavigationCommand(
                     presentedNode: SheetPresentedNavigationNode.stacked(
-                        node: CommandsGalleryNavigationNode(inputData: .default)
+                        node: ActionableListNavigationNode(inputData: .default)
                     )
                 )
             }
         )
     }
 
-    private var presentBottomSheetItem: CommandsGalleryItem {
+    private var presentBottomSheetItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "inset.filled.bottomhalf.rectangle.portrait",
                 accentColor: .blue,
                 title: "Present Sheet",
@@ -81,8 +81,8 @@ struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 PresentNavigationCommand(
                     presentedNode: SheetPresentedNavigationNode.stacked(
-                        node: CommandsGalleryNavigationNode(
-                            inputData: CommandsGalleryInputData(
+                        node: ActionableListNavigationNode(
+                            inputData: ActionableListInputData(
                                 id: .home,
                                 addPresentationDetents: true
                             )
@@ -93,9 +93,9 @@ struct ModalsTraditionalCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var dismissItem: CommandsGalleryItem {
+    private var dismissItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "xmark.circle",
                 accentColor: .blue,
                 title: "Dismiss"

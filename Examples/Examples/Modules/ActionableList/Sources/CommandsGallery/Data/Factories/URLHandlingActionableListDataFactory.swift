@@ -2,13 +2,13 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 
-struct URLHandlingCommandsGalleryDataFactory: CommandsGalleryDataFactory {
+struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
         "URL Handling"
     }
     
-    func makeItems() -> [CommandsGalleryItem] {
+    func makeItems() -> [ActionableListItem] {
         [
             openURLItem,
             sfSafariItem,
@@ -16,9 +16,9 @@ struct URLHandlingCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         ]
     }
 
-    private var openURLItem: CommandsGalleryItem {
+    private var openURLItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "link",
                 accentColor: .brown,
                 title: "Open URL",
@@ -32,9 +32,9 @@ struct URLHandlingCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var sfSafariItem: CommandsGalleryItem {
+    private var sfSafariItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "safari.fill",
                 accentColor: .brown,
                 title: "Open URL",
@@ -52,9 +52,9 @@ struct URLHandlingCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var appSettingsItem: CommandsGalleryItem {
+    private var appSettingsItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "gear",
                 accentColor: .brown,
                 title: "Go to App Settings"

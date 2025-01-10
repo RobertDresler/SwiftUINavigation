@@ -3,28 +3,28 @@ import ExamplesNavigation
 import SwiftUINavigation
 import Shared
 
-struct CommandsGalleryView: View {
+struct ActionableListView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: CommandsGalleryNavigationNode
+    @EnvironmentNavigationNode private var navigationNode: ActionableListNavigationNode
     @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
-    var inputData: CommandsGalleryInputData
+    var inputData: ActionableListInputData
     let title: String
-    let items: [CommandsGalleryItem]
+    let items: [ActionableListItem]
 
-    init(inputData: CommandsGalleryInputData) {
+    init(inputData: ActionableListInputData) {
         self.inputData = inputData
-        let factory: CommandsGalleryDataFactory = {
+        let factory: ActionableListDataFactory = {
             switch inputData.id {
             case .home:
-                HomeCommandsGalleryDataFactory()
+                HomeActionableListDataFactory()
             case .modalsTraditional:
-                ModalsTraditionalCommandsGalleryDataFactory()
+                ModalsTraditionalActionableListDataFactory()
             case .modalsSpecial:
-                ModalsSpecialCommandsGalleryDataFactory()
+                ModalsSpecialActionableListDataFactory()
             case .stack:
-                StackCommandsGalleryDataFactory()
+                StackActionableListDataFactory()
             case .urlHandling:
-                URLHandlingCommandsGalleryDataFactory()
+                URLHandlingActionableListDataFactory()
             }
         }()
         self.title = factory.makeTitle()
@@ -77,7 +77,7 @@ struct CommandsGalleryView: View {
     }
 
     private func configuredItemViewWithPresentingNavigationSource(
-        for item: CommandsGalleryItem
+        for item: ActionableListItem
     ) -> some View {
         Group {
             if let presentingNavigationSourceID = item.presentingNavigationSourceID {
@@ -90,9 +90,9 @@ struct CommandsGalleryView: View {
     }
 
     private func configuredItemView(
-        for item: IdentifiableViewModel<String, CommandsGalleryItemView.ViewModel>
+        for item: IdentifiableViewModel<String, ActionableListItemView.ViewModel>
     ) -> some View {
-        CommandsGalleryItemView(
+        ActionableListItemView(
             viewModel: item.viewModel,
             action: { handleAction(for: item.id) }
         )
@@ -108,5 +108,5 @@ struct CommandsGalleryView: View {
 }
 
 #Preview {
-    CommandsGalleryNavigationNode(inputData: CommandsGalleryInputData(id: .home)).view
+    ActionableListNavigationNode(inputData: ActionableListInputData(id: .home)).view
 }

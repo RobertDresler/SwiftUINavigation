@@ -4,27 +4,28 @@
 import PackageDescription
 
 let package = Package(
-    name: "MainTabs",
+    name: "SubscriptionPremium",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "MainTabs",
-            targets: ["MainTabs"]
+            name: "SubscriptionPremium",
+            targets: ["SubscriptionPremium"]
         ),
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Modules/ActionableList"),
-        .package(path: "../../Modules/Settings")
+        .package(path: "../../SwiftUINavigation"),
+        .package(path: "../../Services/UserRepository")
     ],
     targets: [
         .target(
-            name: "MainTabs",
+            name: "SubscriptionPremium",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "ActionableList", package: "ActionableList"),
-                .product(name: "Settings", package: "Settings")
-            ]
+                .product(name: "SwiftUINavigation", package: "SwiftUINavigation"),
+                .product(name: "UserRepository", package: "UserRepository")
+            ],
+            resources: [.process("Resources")]
         )
     ]
 )

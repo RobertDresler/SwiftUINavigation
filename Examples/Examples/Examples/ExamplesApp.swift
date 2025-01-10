@@ -21,7 +21,9 @@ struct ExamplesApp: App {
             NavigationWindow(
                 rootNode: AppNavigationNode(
                     userRepository: userRepository,
-                    defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler()
+                    defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler(
+                        userRepository: userRepository
+                    )
                 )
             )
                 .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])

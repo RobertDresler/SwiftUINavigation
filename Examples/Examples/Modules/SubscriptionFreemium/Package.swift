@@ -4,24 +4,26 @@
 import PackageDescription
 
 let package = Package(
-    name: "CommandsGallery",
+    name: "SubscriptionFreemium",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "CommandsGallery",
-            targets: ["CommandsGallery"]
+            name: "SubscriptionFreemium",
+            targets: ["SubscriptionFreemium"]
         ),
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/Shared")
+        .package(path: "../../SwiftUINavigation"),
+        .package(path: "../../Services/UserRepository")
     ],
     targets: [
         .target(
-            name: "CommandsGallery",
+            name: "SubscriptionFreemium",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "Shared", package: "Shared")
+                .product(name: "SwiftUINavigation", package: "SwiftUINavigation"),
+                .product(name: "UserRepository", package: "UserRepository")
             ]
         )
     ]

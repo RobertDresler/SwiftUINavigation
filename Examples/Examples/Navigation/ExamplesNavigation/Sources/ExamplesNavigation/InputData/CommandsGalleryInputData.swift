@@ -1,4 +1,4 @@
-public struct CommandsGalleryInputData: Hashable {
+public struct ActionableListInputData: Hashable {
 
     public enum ID {
         case home
@@ -16,8 +16,8 @@ public struct CommandsGalleryInputData: Hashable {
         self.addPresentationDetents = addPresentationDetents
     }
 
-    public static var `default`: CommandsGalleryInputData {
-        CommandsGalleryInputData(id: .home)
+    public static var `default`: ActionableListInputData {
+        ActionableListInputData(id: .home)
     }
 
 }

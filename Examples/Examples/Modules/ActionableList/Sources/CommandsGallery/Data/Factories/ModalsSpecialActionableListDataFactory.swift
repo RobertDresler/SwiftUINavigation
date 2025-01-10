@@ -2,13 +2,13 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
-struct ModalsSpecialCommandsGalleryDataFactory: CommandsGalleryDataFactory {
+struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
         "Modals - Special"
     }
     
-    func makeItems() -> [CommandsGalleryItem] {
+    func makeItems() -> [ActionableListItem] {
         [
             showAlertItem,
             showConfirmationDialogItem,
@@ -16,9 +16,9 @@ struct ModalsSpecialCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         ]
     }
 
-    private var showAlertItem: CommandsGalleryItem {
+    private var showAlertItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "exclamationmark.bubble.fill",
                 accentColor: .red,
                 title: "Show Alert"
@@ -50,11 +50,11 @@ struct ModalsSpecialCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var showConfirmationDialogItem: CommandsGalleryItem {
+    private var showConfirmationDialogItem: ActionableListItem {
         let presentingNavigationSourceID = "confirmationDialog"
         return .new(
             id: presentingNavigationSourceID,
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "questionmark.bubble.fill",
                 accentColor: .red,
                 title: "Show Confirmation Dialog",
@@ -88,11 +88,11 @@ struct ModalsSpecialCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var showPhotosPickerItem: CommandsGalleryItem {
+    private var showPhotosPickerItem: ActionableListItem {
         let presentingNavigationSourceID = "photosPicker"
         return .new(
             id: presentingNavigationSourceID,
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "person.2.crop.square.stack.fill",
                 accentColor: .red,
                 title: "Photos Picker",

@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import CommandsGallery
+import ActionableList
 import Settings
 
 public final class MainTabsNavigationNode: TabsRootNavigationNode {
@@ -14,7 +14,7 @@ public final class MainTabsNavigationNode: TabsRootNavigationNode {
             navigationNode: StackRootNavigationNode(
                 stackNodes: [
                     StackNavigationNode(
-                        destination: CommandsGalleryNavigationNode(
+                        destination: ActionableListNavigationNode(
                             inputData: .default
                         ),
                         transition: nil

@@ -1,63 +1,29 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import ModuleA
-import ModuleB
-import App
-import Start
-import MainTabs
+import Subscription
+import UserRepository
 
 public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler {
 
-    public typealias DeepLink = ExamplesNavigationDeepLink
+    private let userRepository: UserRepository
 
-    public init() {}
+    public init(userRepository: UserRepository) {
+        self.userRepository = userRepository
+    }
 
     public func handleDeepLink(_ deepLink: any NavigationDeepLink, on node: NavigationNode) {
         guard let deepLink = deepLink as? ExamplesNavigationDeepLink else { return }
         switch deepLink.destination {
-        case let .moduleA(inputData, animated):
-            node.executeCommand(
-                StackAppendNavigationCommand(
-                    appendedNode: StackNavigationNode(
-                        destination: ModuleANavigationNode(inputData: inputData),
-                        transition: nil
-                    ),
-                    animated: animated
-                )
-            )
-        case .moduleB(let inputData):
-            let moduleNode = ModuleBNavigationNode(inputData: inputData)
-            switch inputData.showRule {
-            case .present(let style):
-                switch style {
-                case .fullScreenCover:
-                    node.executeCommand(
-                        PresentNavigationCommand(
-                            presentedNode: FullScreenCoverPresentedNavigationNode.stacked(node: moduleNode)
-                        )
-                    )
-                case .sheet:
-                    break // TODO: -RD- implement
-                }
-            case .push(let transition):
-                node.executeCommand(
-                    StackAppendNavigationCommand(
-                        appendedNode: StackNavigationNode(destination: moduleNode, transition: transition)
-                    )
-                )
-            case .setRoot:
-                node.executeCommand(
-                    StackSetRootNavigationCommand(
-                        rootNode: moduleNode,
-                        clear: true
-                    )
-                )
-            }
-        case .alert(let inputData):
+        case .subscription(let inputData):
             node.executeCommand(
                 PresentNavigationCommand(
-                    presentedNode: AlertPresentedNavigationNode(inputData: inputData)
+                    presentedNode: SheetPresentedNavigationNode.stacked(
+                        node: SubscriptionNavigationNode(
+                            inputData: inputData,
+                            userRepository: userRepository
+                        )
+                    )
                 )
             )
         }

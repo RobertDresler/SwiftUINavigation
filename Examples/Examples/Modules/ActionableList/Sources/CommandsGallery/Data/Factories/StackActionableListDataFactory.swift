@@ -2,13 +2,13 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
-struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
+struct StackActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
         "Stack"
     }
     
-    func makeItems() -> [CommandsGalleryItem] {
+    func makeItems() -> [ActionableListItem] {
         [
             appendItem,
             appendWithoutAnimationItem,
@@ -23,9 +23,9 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         ]
     }
 
-    private var appendItem: CommandsGalleryItem {
+    private var appendItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.stack.fill.badge.plus",
                 accentColor: .purple,
                 title: "Append"
@@ -33,16 +33,16 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 StackAppendNavigationCommand(
                     appendedNode: StackNavigationNode(
-                        destination: CommandsGalleryNavigationNode(inputData: .default)
+                        destination: ActionableListNavigationNode(inputData: .default)
                     )
                 )
             }
         )
     }
 
-    private var appendWithoutAnimationItem: CommandsGalleryItem {
+    private var appendWithoutAnimationItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.stack.badge.plus",
                 accentColor: .purple,
                 title: "Append",
@@ -51,7 +51,7 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 StackAppendNavigationCommand(
                     appendedNode: StackNavigationNode(
-                        destination: CommandsGalleryNavigationNode(inputData: .default)
+                        destination: ActionableListNavigationNode(inputData: .default)
                     ),
                     animated: false
                 )
@@ -59,11 +59,11 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var appendWithZoomTransitionItem: CommandsGalleryItem {
+    private var appendWithZoomTransitionItem: ActionableListItem {
         let transitionID = "appendWithTransition"
         return .new(
             id: transitionID,
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "plus.magnifyingglass",
                 accentColor: .purple,
                 title: "Append",
@@ -72,7 +72,7 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 StackAppendNavigationCommand(
                     appendedNode: StackNavigationNode(
-                        destination: CommandsGalleryNavigationNode(inputData: .default),
+                        destination: ActionableListNavigationNode(inputData: .default),
                         transition: .zoom(sourceID: transitionID)
                     )
                 )
@@ -80,9 +80,9 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var setThisAsRootItem: CommandsGalleryItem {
+    private var setThisAsRootItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.fill",
                 accentColor: .purple,
                 title: "Set This As Root",
@@ -94,9 +94,9 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var replaceRootItem: CommandsGalleryItem {
+    private var replaceRootItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.fill.on.rectangle.angled.fill",
                 accentColor: .purple,
                 title: "Replace Root with new Stack Commands Gallery",
@@ -104,16 +104,16 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             ),
             makeCommand: {
                 StackSetRootNavigationCommand(
-                    rootNode: CommandsGalleryNavigationNode(inputData: CommandsGalleryInputData(id: .stack)),
+                    rootNode: ActionableListNavigationNode(inputData: ActionableListInputData(id: .stack)),
                     clear: false
                 )
             }
         )
     }
 
-    private var dropLastItem: CommandsGalleryItem {
+    private var dropLastItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.stack.fill.badge.minus",
                 accentColor: .purple,
                 title: "Drop Last"
@@ -124,9 +124,9 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var dropLastWithoutAnimationItem: CommandsGalleryItem {
+    private var dropLastWithoutAnimationItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.stack.badge.minus",
                 accentColor: .purple,
                 title: "Drop Last",
@@ -138,9 +138,9 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var dropToRootItem: CommandsGalleryItem {
+    private var dropToRootItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "house.fill",
                 accentColor: .purple,
                 title: "Drop To Root"
@@ -151,9 +151,9 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var dropLast3Item: CommandsGalleryItem {
+    private var dropLast3Item: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "square.3.layers.3d.down.right.slash",
                 accentColor: .purple,
                 title: "Drop Last 3",
@@ -165,9 +165,9 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var reversePathItem: CommandsGalleryItem {
+    private var reversePathItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "arrow.trianglehead.2.clockwise.rotate.90",
                 accentColor: .purple,
                 title: "Reverse Path (Custom StackMap Command)",

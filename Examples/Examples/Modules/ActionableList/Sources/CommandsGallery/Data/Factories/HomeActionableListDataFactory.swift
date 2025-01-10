@@ -2,13 +2,13 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
-struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
+struct HomeActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
         "Commands Gallery"
     }
     
-    func makeItems() -> [CommandsGalleryItem] {
+    func makeItems() -> [ActionableListItem] {
         [
             modalsTraditionalItem,
             modalsSpecialItem,
@@ -16,49 +16,50 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             hideItem,
             urlHandlingItem,
             selectTabsItemItem,
-            customCommandItem
+            customCommandItem,
+            deepLinkItem
         ]
     }
 
-    private var modalsTraditionalItem: CommandsGalleryItem {
+    private var modalsTraditionalItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.portrait.badge.plus.fill",
                 accentColor: .blue,
                 title: "Modals - Traditional",
                 subtitle: "Full Screen Covers and Sheets"
             ),
-            makeCommand: makeAppendCommandsGalleryCommand(for: .modalsTraditional)
+            makeCommand: makeAppendActionableListCommand(for: .modalsTraditional)
         )
     }
 
-    private var modalsSpecialItem: CommandsGalleryItem {
+    private var modalsSpecialItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "exclamationmark.bubble.fill",
                 accentColor: .pink,
                 title: "Modals - Special",
                 subtitle: "Alert, Confirmation Dialog, PhotoPicker"
             ),
-            makeCommand: makeAppendCommandsGalleryCommand(for: .modalsSpecial)
+            makeCommand: makeAppendActionableListCommand(for: .modalsSpecial)
         )
     }
 
-    private var stackItem: CommandsGalleryItem {
+    private var stackItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "square.stack.3d.down.right.fill",
                 accentColor: .purple,
                 title: "Stack",
                 subtitle: "Commands for managing navigation stack path - append, drop last, set root, ..."
             ),
-            makeCommand: makeAppendCommandsGalleryCommand(for: .stack)
+            makeCommand: makeAppendActionableListCommand(for: .stack)
         )
     }
 
-    private var hideItem: CommandsGalleryItem {
+    private var hideItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.stack.fill.badge.minus",
                 accentColor: .teal,
                 title: "Hide",
@@ -70,21 +71,21 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var urlHandlingItem: CommandsGalleryItem {
+    private var urlHandlingItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "link",
                 accentColor: .brown,
                 title: "URL Handling",
                 subtitle: "Open URL, redirect to other apps, SFSafari"
             ),
-            makeCommand: makeAppendCommandsGalleryCommand(for: .urlHandling)
+            makeCommand: makeAppendActionableListCommand(for: .urlHandling)
         )
     }
 
-    private var selectTabsItemItem: CommandsGalleryItem {
+    private var selectTabsItemItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "rectangle.split.3x1.fill",
                 accentColor: .green,
                 title: "Select Tabs Item",
@@ -96,9 +97,9 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private var customCommandItem: CommandsGalleryItem {
+    private var customCommandItem: ActionableListItem {
         .new(
-            viewModel: CommandsGalleryItemView.ViewModel(
+            viewModel: ActionableListItemView.ViewModel(
                 symbolName: "wrench.and.screwdriver.fill",
                 accentColor: .yellow,
                 title: "Custom Command (Show View and Automatically Hide After 2s)",
@@ -107,7 +108,7 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             makeCommand: {
                 ShowAndHideAfterDelayNavigationCommand(
                     presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
-                        node: CommandsGalleryNavigationNode(inputData: .default)
+                        node: ActionableListNavigationNode(inputData: .default)
                     ),
                     hideDelay: 2
                 )
@@ -115,12 +116,24 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
         )
     }
 
-    private func makeAppendCommandsGalleryCommand(for id: CommandsGalleryInputData.ID) -> () -> NavigationCommand {
+    private var deepLinkItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "arrow.up.and.down.and.arrow.left.and.right",
+                accentColor: .orange,
+                title: "Deep Link",
+                subtitle: "The Deep Link feature enables routing between modules without direct dependency. You can verify that this module doesn't depend on the Subscription module, as routing is handled by ExamplesNavigationDeepLinkHandler."
+            ),
+            deepLink: ExamplesNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
+        )
+    }
+
+    private func makeAppendActionableListCommand(for id: ActionableListInputData.ID) -> () -> NavigationCommand {
         {
             StackAppendNavigationCommand(
                 appendedNode: StackNavigationNode(
-                    destination: CommandsGalleryNavigationNode(
-                        inputData: CommandsGalleryInputData(id: id)
+                    destination: ActionableListNavigationNode(
+                        inputData: ActionableListInputData(id: id)
                     )
                 )
             )

@@ -4,26 +4,24 @@
 import PackageDescription
 
 let package = Package(
-    name: "MainTabs",
+    name: "ActionableList",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "MainTabs",
-            targets: ["MainTabs"]
+            name: "ActionableList",
+            targets: ["ActionableList"]
         ),
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Modules/ActionableList"),
-        .package(path: "../../Modules/Settings")
+        .package(path: "../../Services/Shared")
     ],
     targets: [
         .target(
-            name: "MainTabs",
+            name: "ActionableList",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "ActionableList", package: "ActionableList"),
-                .product(name: "Settings", package: "Settings")
+                .product(name: "Shared", package: "Shared")
             ]
         )
     ]
