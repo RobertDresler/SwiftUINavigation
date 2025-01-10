@@ -19,8 +19,8 @@ struct CommandsGalleryView: View {
                 HomeCommandsGalleryDataFactory()
             case .modalsTraditional:
                 ModalsTraditionalCommandsGalleryDataFactory()
-            case .modalsAlerts:
-                ModalsAlertsCommandsGalleryDataFactory()
+            case .modalsSpecial:
+                ModalsSpecialCommandsGalleryDataFactory()
             case .stack:
                 StackCommandsGalleryDataFactory()
             case .urlHandling:

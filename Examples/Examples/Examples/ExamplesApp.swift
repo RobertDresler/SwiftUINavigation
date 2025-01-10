@@ -5,6 +5,7 @@ import ExamplesNavigation
 import ExamplesNavigationDeepLinkHandler
 import UserRepository
 import App
+import Shared
 
 @main
 struct ExamplesApp: App {
@@ -22,7 +23,9 @@ struct ExamplesApp: App {
                     userRepository: userRepository,
                     defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler()
                 )
-            ).environmentObject(userRepository)
+            )
+                .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])
+                .environmentObject(userRepository)
         }
     }
 
