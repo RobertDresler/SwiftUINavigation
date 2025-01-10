@@ -1,11 +1,12 @@
 public struct ActionableListInputData: Hashable {
 
     public enum ID {
-        case home
+        case commands
         case modalsTraditional
         case modalsSpecial
         case stack
         case urlHandling
+        case flows
     }
 
     public let id: ID
@@ -17,7 +18,7 @@ public struct ActionableListInputData: Hashable {
     }
 
     public static var `default`: ActionableListInputData {
-        ActionableListInputData(id: .home)
+        ActionableListInputData(id: .commands)
     }
 
 }

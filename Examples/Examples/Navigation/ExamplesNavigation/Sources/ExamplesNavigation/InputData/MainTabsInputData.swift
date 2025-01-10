@@ -2,7 +2,7 @@ public struct MainTabsInputData: Hashable {
 
     public enum Tab {
         case commands
-        case settings
+        case flows
     }
 
     public let initialTab: AnyHashable

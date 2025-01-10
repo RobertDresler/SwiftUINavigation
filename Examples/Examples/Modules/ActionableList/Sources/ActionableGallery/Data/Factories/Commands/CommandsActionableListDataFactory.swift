@@ -2,12 +2,16 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
-struct HomeActionableListDataFactory: ActionableListDataFactory {
+struct CommandsActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
-        "Commands Gallery"
+        "Commands"
     }
-    
+
+    func makeSubtitle() -> String? {
+        "Explore various commands like Present, Append, and more. For flows like Onboarding or Login/Logout, check the 'Flows' tab."
+    }
+
     func makeItems() -> [ActionableListItem] {
         [
             modalsTraditionalItem,
@@ -89,10 +93,10 @@ struct HomeActionableListDataFactory: ActionableListDataFactory {
                 symbolName: "rectangle.split.3x1.fill",
                 accentColor: .green,
                 title: "Select Tabs Item",
-                subtitle: "Use TabsSelectItemNavigationCommand with a specific ID to select the settings tab"
+                subtitle: "Use TabsSelectItemNavigationCommand with a specific ID to select the flows tab"
             ),
             makeCommand: {
-                TabsSelectItemNavigationCommand(itemID: MainTabsInputData.Tab.settings)
+                TabsSelectItemNavigationCommand(itemID: MainTabsInputData.Tab.flows)
             }
         )
     }

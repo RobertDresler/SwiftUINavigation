@@ -22,15 +22,15 @@ public final class MainTabsNavigationNode: TabsRootNavigationNode {
                 ]
             )
         )
-        let settingsTab = DefaultTabNode(
-            id: MainTabsInputData.Tab.settings,
-            image: Image(systemName: "gearshape.fill"),
-            title: "Settings",
+        let flowsTab = DefaultTabNode(
+            id: MainTabsInputData.Tab.flows,
+            image: Image(systemName: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"),
+            title: "Flows",
             navigationNode: StackRootNavigationNode(
                 stackNodes: [
                     StackNavigationNode(
-                        destination: SettingsNavigationNode(
-                            inputData: SettingsInputData()
+                        destination: ActionableListNavigationNode(
+                            inputData: ActionableListInputData(id: .flows)
                         ),
                         transition: nil
                     )
@@ -39,7 +39,7 @@ public final class MainTabsNavigationNode: TabsRootNavigationNode {
         )
         let tabsNodes = [
             commandsTab,
-            settingsTab
+            flowsTab
         ]
         super.init(
             selectedTabNode: tabsNodes.first(where: { $0.id == inputData.initialTab }) ?? commandsTab,

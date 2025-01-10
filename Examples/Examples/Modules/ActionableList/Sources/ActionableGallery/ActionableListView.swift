@@ -9,14 +9,15 @@ struct ActionableListView: View {
     @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
     var inputData: ActionableListInputData
     let title: String
+    let subtitle: String?
     let items: [ActionableListItem]
 
     init(inputData: ActionableListInputData) {
         self.inputData = inputData
         let factory: ActionableListDataFactory = {
             switch inputData.id {
-            case .home:
-                HomeActionableListDataFactory()
+            case .commands:
+                CommandsActionableListDataFactory()
             case .modalsTraditional:
                 ModalsTraditionalActionableListDataFactory()
             case .modalsSpecial:
@@ -25,9 +26,12 @@ struct ActionableListView: View {
                 StackActionableListDataFactory()
             case .urlHandling:
                 URLHandlingActionableListDataFactory()
+            case .flows:
+                FlowsActionableListDataFactory()
             }
         }()
         self.title = factory.makeTitle()
+        self.subtitle = factory.makeSubtitle()
         self.items = factory.makeItems()
     }
 
@@ -55,11 +59,23 @@ struct ActionableListView: View {
 
     private var scrollView: some View {
         ScrollView {
-            itemsView
+            VStack(spacing: 24) {
+                if let subtitle {
+                    self.subtitle(for: subtitle)
+                }
+                itemsView
+            }
                 .padding()
         }.background(SharedColor.backgroundGray)
-
     }
+
+    private func subtitle(for subtitle: String) -> some View {
+        Text(subtitle)
+            .font(.system(size: 16))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .multilineTextAlignment(.leading)
+    }
+
     private var itemsView: some View {
         VStack(spacing: 8) {
             ForEach(items, id: \.identifiableViewModel.id) { item in
@@ -108,5 +124,5 @@ struct ActionableListView: View {
 }
 
 #Preview {
-    ActionableListNavigationNode(inputData: ActionableListInputData(id: .home)).view
+    ActionableListNavigationNode(inputData: .default).view
 }

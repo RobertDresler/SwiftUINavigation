@@ -83,7 +83,7 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                     presentedNode: SheetPresentedNavigationNode.stacked(
                         node: ActionableListNavigationNode(
                             inputData: ActionableListInputData(
-                                id: .home,
+                                id: .commands,
                                 addPresentationDetents: true
                             )
                         )
