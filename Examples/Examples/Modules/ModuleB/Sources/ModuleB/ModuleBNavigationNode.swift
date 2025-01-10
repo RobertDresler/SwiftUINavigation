@@ -11,7 +11,6 @@ public final class ModuleBNavigationNode: NavigationNode {
         super.init()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(ModuleBView(inputData: inputData))
     }

@@ -11,7 +11,6 @@ open class SwitchedNavigationNode: NavigationNode {
             .eraseToAnyPublisher()
     }
 
-    @MainActor
     open override var view: AnyView {
         AnyView(SwitchedNavigationNodeView())
     }

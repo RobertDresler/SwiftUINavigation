@@ -11,7 +11,6 @@ public final class StartNavigationNode: NavigationNode {
         super.init()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(StartView(inputData: inputData))
     }

@@ -1,9 +1,9 @@
 import SwiftUI
 
+@MainActor
 public protocol PresentedNavigationNode {
     associatedtype Body: View
     var node: NavigationNode { get }
-    @MainActor
     static func presenterResolvedViewModifier(
         presentedNode: (any PresentedNavigationNode)?,
         content: AnyView,
@@ -11,7 +11,6 @@ public protocol PresentedNavigationNode {
     ) -> Body
 }
 
-@MainActor
 public extension PresentedNavigationNode {
     static func makeIsPresentedBinding<AdditionalCheckNavigationNode: NavigationNode>(
         presentedNode: (any PresentedNavigationNode)?,

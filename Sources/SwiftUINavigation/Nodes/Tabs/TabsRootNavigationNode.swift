@@ -13,7 +13,6 @@ public final class TabsRootNavigationNode: NavigationNode {
             .eraseToAnyPublisher()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(TabsRootNavigationNodeView())
     }

@@ -25,7 +25,6 @@ public struct ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode
             )
     }
 
-    @MainActor
     private static func actions(for node: NavigationNode?) -> some View {
         Group {
             if let node = node as? ConfirmationDialogNavigationNode {
@@ -49,7 +48,6 @@ public struct ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode
         }
     }
 
-    @MainActor
     private static func message(for node: NavigationNode?) -> some View {
         Group {
             if let message = (node as? ConfirmationDialogNavigationNode)?.inputData.message {

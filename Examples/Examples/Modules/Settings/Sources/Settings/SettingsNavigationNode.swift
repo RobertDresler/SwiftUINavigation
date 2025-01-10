@@ -11,7 +11,6 @@ public final class SettingsNavigationNode: NavigationNode {
         super.init()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(SettingsView(inputData: inputData))
     }

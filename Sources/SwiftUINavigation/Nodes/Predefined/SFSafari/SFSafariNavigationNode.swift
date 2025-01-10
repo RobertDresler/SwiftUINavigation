@@ -9,7 +9,6 @@ public final class SFSafariNavigationNode: NavigationNode {
         super.init()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(SFSafariView(inputData: inputData))
     }

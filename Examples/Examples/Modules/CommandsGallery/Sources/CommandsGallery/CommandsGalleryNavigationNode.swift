@@ -11,7 +11,6 @@ public final class CommandsGalleryNavigationNode: NavigationNode {
         super.init()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(CommandsGalleryView(inputData: inputData))
     }

@@ -20,7 +20,6 @@ public final class AppNavigationNode: SwitchedNavigationNode {
         bind()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(
             super.view

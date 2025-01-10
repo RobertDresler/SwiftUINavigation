@@ -1,11 +1,10 @@
 import SwiftUI
 import Combine
 
-open class NavigationNode: ObservableObject {
+@MainActor open class NavigationNode: ObservableObject {
 
     // MARK: Open
 
-    @MainActor
     open var view: AnyView {
         AnyView(EmptyView())
     }
@@ -61,10 +60,13 @@ open class NavigationNode: ObservableObject {
     }
     private var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
     private var _childrenPublisher = CurrentValueSubject<[NavigationNode], Never>([])
+    private let debugPrintPrefix: String
 
+    @MainActor
     public init(defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
         self.id = UUID().uuidString
         _defaultDeepLinkHandler = defaultDeepLinkHandler
+        debugPrintPrefix = "[\(type(of: self)) \(id.prefix(3))...]"
         printDebugText("Init")
         bind()
     }
@@ -75,6 +77,7 @@ open class NavigationNode: ObservableObject {
 
     // MARK: Public Methods
 
+    nonisolated
     public func printDebugText(_ text: String) {
         print("\(debugPrintPrefix): \(text)")
     }
@@ -112,10 +115,6 @@ private extension NavigationNode {
 // MARK: Debug Print
 
 private extension NavigationNode {
-    var debugPrintPrefix: String {
-        "[\(type(of: self)) \(id.prefix(3))...]"
-    }
-
     func printDebugGraphFromExactNode(level: Int = 0) {
         let indentation = Array(repeating: "\t", count: level).joined()
         print("\(indentation)<\(debugPrintPrefix)>")

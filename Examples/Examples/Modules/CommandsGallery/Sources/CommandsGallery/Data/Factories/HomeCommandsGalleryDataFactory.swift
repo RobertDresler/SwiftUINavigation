@@ -1,5 +1,6 @@
 import SwiftUINavigation
 import ExamplesNavigation
+import Shared
 
 struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
 
@@ -55,6 +56,22 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                     subtitle: "Open URL, redirect to other apps, SFSafari"
                 ),
                 makeCommand: makeAppendCommandsGalleryCommand(for: .urlHandling)
+            ),
+            .new(
+                viewModel: CommandsGalleryItemView.ViewModel(
+                    symbolName: "wrench.and.screwdriver.fill",
+                    accentColor: .green,
+                    title: "Custom Command (Show View and Automatically Hide After 2s)",
+                    subtitle: "Easily create a custom command like ShowAndHideAfterDelayNavigationCommand to achieve this behavior"
+                ),
+                makeCommand: {
+                    ShowAndHideAfterDelayNavigationCommand(
+                        presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
+                            node: CommandsGalleryNavigationNode(inputData: .default)
+                        ),
+                        hideDelay: 2
+                    )
+                }
             )
         ]
     }

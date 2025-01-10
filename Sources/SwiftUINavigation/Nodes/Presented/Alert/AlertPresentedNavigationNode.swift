@@ -25,12 +25,10 @@ public struct AlertPresentedNavigationNode: PresentedNavigationNode {
             )
     }
 
-    @MainActor
     private static func title(for node: NavigationNode?) -> Text {
         Text((node as? AlertNavigationNode)?.inputData.title ?? "")
     }
 
-    @MainActor
     private static func actions(for node: NavigationNode?) -> some View {
         Group {
             if let node = node as? AlertNavigationNode {
@@ -54,7 +52,6 @@ public struct AlertPresentedNavigationNode: PresentedNavigationNode {
         }
     }
 
-    @MainActor
     private static func message(for node: NavigationNode?) -> some View {
         Group {
             if let message = (node as? AlertNavigationNode)?.inputData.message {

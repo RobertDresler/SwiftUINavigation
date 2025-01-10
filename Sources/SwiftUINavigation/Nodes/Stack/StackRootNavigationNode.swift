@@ -12,7 +12,6 @@ public final class StackRootNavigationNode: NavigationNode {
             .eraseToAnyPublisher()
     }
 
-    @MainActor
     public override var view: AnyView {
         AnyView(StackRootNavigationNodeView())
     }

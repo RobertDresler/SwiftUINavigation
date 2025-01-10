@@ -13,7 +13,6 @@ public struct DefaultTabNode: TabNode {
         self.navigationNode = navigationNode
     }
 
-    @MainActor
     public var resolvedView: AnyView {
         AnyView(
             content
@@ -21,7 +20,6 @@ public struct DefaultTabNode: TabNode {
         )
     }
 
-    @MainActor
     private var content: some View {
         NavigationNodeResolvedView(node: navigationNode)
     }
