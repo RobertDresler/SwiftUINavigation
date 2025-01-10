@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../Services/UserRepository"),
+        .package(path: "../../Services/DeepLinkForwarderService"),
         .package(path: "../../Modules/Start"),
         .package(path: "../../Modules/MainTabs")
     ],
@@ -24,6 +25,7 @@ let package = Package(
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "UserRepository", package: "UserRepository"),
+                .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
                 .product(name: "Start", package: "Start"),
                 .product(name: "MainTabs", package: "MainTabs")
             ]

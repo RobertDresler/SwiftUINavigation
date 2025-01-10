@@ -10,6 +10,7 @@ struct ActionableListItem {
 
         enum CustomAction {
             case logout(sourceID: String)
+            case sendNotification
         }
 
         case command(makeCommand: (NavigationNode) -> NavigationCommand)

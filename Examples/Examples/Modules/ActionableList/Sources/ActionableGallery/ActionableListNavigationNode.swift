@@ -42,5 +42,10 @@ public final class ActionableListNavigationNode: NavigationNode {
         }
     }
 
+    func openNotificationSettings() {
+        guard let url = URL(string: UIApplication.openNotificationSettingsURLString) else { return }
+        executeCommand(OpenURLNavigationCommand(url: url))
+    }
+
 }
 

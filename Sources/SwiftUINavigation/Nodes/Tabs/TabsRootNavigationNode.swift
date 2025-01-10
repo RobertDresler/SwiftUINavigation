@@ -7,10 +7,9 @@ open class TabsRootNavigationNode: NavigationNode {
     @Published public internal(set) var tabsNodes: [TabNode]
     public override var isWrapperNode: Bool { true }
 
-    public override var childrenPublisher: AnyPublisher<[NavigationNode], Never> {
-        super.childrenPublisher
-            .merge(with: $tabsNodes.map { $0.map { $0.navigationNode }})
-            .eraseToAnyPublisher()
+    public override var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
+        super.childrenPublishers
+        + [$tabsNodes.map { $0.map { $0.navigationNode } }.eraseToAnyPublisher()]
     }
 
     public override var view: AnyView {

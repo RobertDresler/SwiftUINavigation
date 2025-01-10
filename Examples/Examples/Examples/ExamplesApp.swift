@@ -6,13 +6,35 @@ import ExamplesNavigationDeepLinkHandler
 import UserRepository
 import App
 import Shared
+import NotificationsService
+import DeepLinkForwarderService
 
 @main
 struct ExamplesApp: App {
 
-    private let userRepository = UserRepository()
+    // MARK: Dependencies
+
+    final class Dependencies {
+
+        let userRepository = UserRepository()
+        let notificationCenter = UNUserNotificationCenter.current()
+        lazy var notificationsService = NotificationsService(notificationCenter: notificationCenter)
+        let deepLinkForwarderService = DeepLinkForwarderService()
+
+    }
+
+    private let dependencies: Dependencies
+
+    // MARK: Body
+
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     init() {
+        dependencies = Dependencies()
+        delegate.configure(
+            notificationCenter: dependencies.notificationCenter,
+            deepLinkForwarderService: dependencies.deepLinkForwarderService
+        )
         NavigationConfig.shared.isDebugPrintEnabled = true
     }
 
@@ -20,14 +42,17 @@ struct ExamplesApp: App {
         WindowGroup {
             NavigationWindow(
                 rootNode: AppNavigationNode(
-                    userRepository: userRepository,
+                    userRepository: dependencies.userRepository,
+                    deepLinkForwarderService: dependencies.deepLinkForwarderService,
                     defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler(
-                        userRepository: userRepository
+                        userRepository: dependencies.userRepository
                     )
                 )
             )
                 .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])
-                .environmentObject(userRepository)
+                .environmentObject(dependencies.userRepository)
+                .environmentObject(dependencies.notificationsService)
+                .environmentObject(dependencies.deepLinkForwarderService)
         }
     }
 

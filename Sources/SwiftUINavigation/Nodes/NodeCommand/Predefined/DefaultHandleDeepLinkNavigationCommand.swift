@@ -1,17 +1,23 @@
 public struct DefaultHandleDeepLinkNavigationCommand: NavigationCommand {
 
     public func execute(on node: NavigationNode) {
-        node.defaultDeepLinkHandler?.handleDeepLink(deepLink, on: node)
+        guard let handlerNode = handlerNode(for: node) else { return }
+        handlerNode.defaultDeepLinkHandler?.handleDeepLink(deepLink, on: handlerNode)
     }
 
     public func canExecute(on node: NavigationNode) -> Bool {
-        node.defaultDeepLinkHandler != nil
+        guard let handlerNode = handlerNode(for: node) else { return false }
+        return handlerNode.defaultDeepLinkHandler != nil
     }
 
     private let deepLink: any NavigationDeepLink
 
     public init(deepLink: any NavigationDeepLink) {
         self.deepLink = deepLink
+    }
+
+    private func handlerNode(for node: NavigationNode) -> NavigationNode? {
+        node.nearestNodeWhichCanPresent
     }
 
 }

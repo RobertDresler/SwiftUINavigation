@@ -12,6 +12,8 @@
 		D0746C752CCA68BD00D26F9F /* UserRepository in Frameworks */ = {isa = PBXBuildFile; productRef = D0746C742CCA68BD00D26F9F /* UserRepository */; };
 		D0EB4DC22CD6420D0052F1AC /* App in Frameworks */ = {isa = PBXBuildFile; productRef = D0EB4DC12CD6420D0052F1AC /* App */; };
 		D0EB4E3F2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler in Frameworks */ = {isa = PBXBuildFile; productRef = D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */; };
+		D0FC8E372D3162C60041253F /* NotificationsService in Frameworks */ = {isa = PBXBuildFile; productRef = D0FC8E362D3162C60041253F /* NotificationsService */; };
+		D0FC8E3B2D3167040041253F /* DeepLinkForwarderService in Frameworks */ = {isa = PBXBuildFile; productRef = D0FC8E3A2D3167040041253F /* DeepLinkForwarderService */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,7 @@
 		D04319402CC8E9A10077101C /* Exceptions for "Examples" folder in "Examples" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Info.plist,
 				Modules/App,
 				Modules/MainTabs,
 				Modules/Start,
@@ -29,6 +32,8 @@
 				Modules/SubscriptionFreemium,
 				Modules/SubscriptionPremium,
 				Navigation/ExamplesNavigation,
+				Services/DeepLinkForwarderService,
+				Services/NotificationsService,
 				Services/Shared,
 				Services/UserRepository,
 			);
@@ -55,7 +60,9 @@
 				D0EB4DC22CD6420D0052F1AC /* App in Frameworks */,
 				D04319512CC8EB380077101C /* ExamplesNavigation in Frameworks */,
 				D0746C752CCA68BD00D26F9F /* UserRepository in Frameworks */,
+				D0FC8E372D3162C60041253F /* NotificationsService in Frameworks */,
 				D0EB4E3F2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler in Frameworks */,
+				D0FC8E3B2D3167040041253F /* DeepLinkForwarderService in Frameworks */,
 				D04318D32CC8D85E0077101C /* SwiftUINavigation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,6 +111,8 @@
 				D0746C742CCA68BD00D26F9F /* UserRepository */,
 				D0EB4DC12CD6420D0052F1AC /* App */,
 				D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */,
+				D0FC8E362D3162C60041253F /* NotificationsService */,
+				D0FC8E3A2D3167040041253F /* DeepLinkForwarderService */,
 			);
 			productName = Examples;
 			productReference = D04318B22CC8D7430077101C /* Examples.app */;
@@ -139,6 +148,8 @@
 				D0746C732CCA68BD00D26F9F /* XCLocalSwiftPackageReference "Examples/Services/UserRepository" */,
 				D0EB4DC02CD6420D0052F1AC /* XCLocalSwiftPackageReference "Examples/Modules/App" */,
 				D0EB4E3D2CD783F50052F1AC /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigationDeepLinkHandler" */,
+				D0FC8E352D3162C60041253F /* XCLocalSwiftPackageReference "Examples/Services/NotificationsService" */,
+				D0FC8E392D3167040041253F /* XCLocalSwiftPackageReference "Examples/Services/DeepLinkForwarderService" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D04318B32CC8D7430077101C /* Products */;
@@ -301,6 +312,7 @@
 				DEVELOPMENT_TEAM = 4Z52AAGX2K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Examples/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -331,6 +343,7 @@
 				DEVELOPMENT_TEAM = 4Z52AAGX2K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Examples/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -394,6 +407,14 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Examples/Navigation/ExamplesNavigationDeepLinkHandler;
 		};
+		D0FC8E352D3162C60041253F /* XCLocalSwiftPackageReference "Examples/Services/NotificationsService" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Examples/Services/NotificationsService;
+		};
+		D0FC8E392D3167040041253F /* XCLocalSwiftPackageReference "Examples/Services/DeepLinkForwarderService" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Examples/Services/DeepLinkForwarderService;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -416,6 +437,14 @@
 		D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ExamplesNavigationDeepLinkHandler;
+		};
+		D0FC8E362D3162C60041253F /* NotificationsService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NotificationsService;
+		};
+		D0FC8E3A2D3167040041253F /* DeepLinkForwarderService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeepLinkForwarderService;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

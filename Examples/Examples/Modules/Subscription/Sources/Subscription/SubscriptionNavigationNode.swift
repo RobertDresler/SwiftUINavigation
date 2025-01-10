@@ -21,11 +21,11 @@ public final class SubscriptionNavigationNode: SwitchedNavigationNode {
 
     private func bind() {
         userRepository.$isUserPremium
-            .sink { [weak self] in self?.setDeepLink(isUserPremium: $0) }
+            .sink { [weak self] in self?.setNode(isUserPremium: $0) }
             .store(in: &cancellables)
     }
 
-    private func setDeepLink(isUserPremium: Bool) {
+    private func setNode(isUserPremium: Bool) {
         let switchedNode = isUserPremium ? premiumNode : freemiumNode
         executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
     }

@@ -3,12 +3,16 @@ import ExamplesNavigation
 import SwiftUINavigation
 import Shared
 import UserRepository
+import NotificationsService
+import DeepLinkForwarderService
 
 struct ActionableListView: View {
 
     @EnvironmentNavigationNode private var navigationNode: ActionableListNavigationNode
     @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
     @EnvironmentObject private var userRepository: UserRepository
+    @EnvironmentObject private var notificationsService: NotificationsService
+    @EnvironmentObject private var deepLinkForwarderService: DeepLinkForwarderService
 
     var inputData: ActionableListInputData
     let title: String
@@ -128,6 +132,8 @@ struct ActionableListView: View {
             switch customAction {
             case .logout(let sourceID):
                 handleLogoutAction(sourceID: sourceID)
+            case .sendNotification:
+                handleSendNotificationAction()
             }
         }
     }
@@ -136,6 +142,43 @@ struct ActionableListView: View {
         Task {
             guard await navigationNode.confirmLogout(sourceID: sourceID) else { return }
             userRepository.isUserLogged = false
+        }
+    }
+
+    private func handleSendNotificationAction() {
+        Task { @MainActor in
+            switch await notificationsService.getAuthorizationStatus() {
+            case .notDetermined:
+                if await notificationsService.requestAuthorization() {
+                    await sendNotification()
+                } else {
+                    openNotificationSettings()
+                }
+            case .denied, .provisional, .ephemeral:
+                openNotificationSettings()
+            case .authorized:
+                await sendNotification()
+            @unknown default:
+                openNotificationSettings()
+            }
+        }
+    }
+
+    private func openNotificationSettings() {
+        navigationNode.openNotificationSettings()
+    }
+
+    private func sendNotification() async {
+        do {
+            try await notificationsService.sendNotification(
+                title: "Ready for Premium?",
+                body: "Tap here to check out the Subscription screen. Who knows, maybe it's your lucky day for an upgrade!",
+                userInfo: deepLinkForwarderService.userInfo(
+                    for: ExamplesNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
+                )
+            )
+        } catch {
+            print(error)
         }
     }
 

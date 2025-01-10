@@ -15,6 +15,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
     func makeItems() -> [ActionableListItem] {
         [
             logoutItem,
+            sendNotificationItem,
             subscriptionItem
         ]
     }
@@ -31,6 +32,18 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             ),
             customAction: .logout(sourceID: presentingNavigationSourceID),
             presentingNavigationSourceID: presentingNavigationSourceID
+        )
+    }
+
+    private var sendNotificationItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "bell.badge.fill",
+                accentColor: .red,
+                title: "Notification with Deep Link",
+                subtitle: "Sends a notification that redirects to a deep link when tapped, called by DeepLinkForwarderService in AppDelegate and handled in AppNavigationNode."
+            ),
+            customAction: .sendNotification
         )
     }
 

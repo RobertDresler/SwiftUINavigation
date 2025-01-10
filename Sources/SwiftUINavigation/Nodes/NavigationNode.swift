@@ -10,10 +10,11 @@ import Combine
     }
 
     open var isWrapperNode: Bool { false }
-    open var childrenPublisher: AnyPublisher<[NavigationNode], Never> {
-        $presentedNode.map { [$0?.node] }
+    open var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
+        let presentedNodePublisher = $presentedNode.map { [$0?.node] }
             .map { $0.compactMap { $0 } }
             .eraseToAnyPublisher()
+        return [presentedNodePublisher]
     }
 
     open func executeCommand(_ command: NavigationCommand) {
@@ -45,6 +46,24 @@ import Combine
 
     public var canPresentIfWouldnt: Bool {
         parent?.isWrapperNode == false
+    }
+
+    public var nearestNodeWhichCanPresent: NavigationNode? {
+        nearestNodeWhichCanPresentFromParent?.topPresented ?? nearestChildrenNodeWhichCanPresent
+    }
+
+    public var topPresented: NavigationNode {
+        if let presentedNode = presentedNode?.node {
+            presentedNode.topPresented
+        } else {
+            self
+        }
+    }
+
+    public var nearestChildrenNodeWhichCanPresent: NavigationNode? {
+        let childrenNodesWhichCanPresent = childrenNodesWhichCanPresent
+        return childrenNodesWhichCanPresent.compactMap { $0.presentedNode?.node }.first?.nearestChildrenNodeWhichCanPresent
+            ?? childrenNodesWhichCanPresent.last
     }
 
     // MARK: Internal
@@ -112,6 +131,34 @@ private extension NavigationNode {
                 nodes.forEach { $0.parent = self }
             }
             .store(in: &cancellables)
+    }
+
+    var childrenPublisher: AnyPublisher<[NavigationNode], Never> {
+        guard let firstPublisher = childrenPublishers.first else {
+            return Just([]).eraseToAnyPublisher()
+        }
+        return childrenPublishers.dropFirst().reduce(firstPublisher) { combinedPublisher, nextPublisher in
+            combinedPublisher.combineLatest(nextPublisher)
+                .map { $0 + $1 }
+                .eraseToAnyPublisher()
+        }
+    }
+
+    var nearestNodeWhichCanPresentFromParent: NavigationNode? {
+        if canPresentIfWouldnt {
+            self
+        } else {
+            parent?.nearestNodeWhichCanPresentFromParent
+        }
+    }
+
+    var childrenNodesWhichCanPresent: [NavigationNode] {
+        var nodes = [NavigationNode]()
+        if canPresentIfWouldnt {
+            nodes.append(self)
+        }
+        nodes += children.flatMap { $0.childrenNodesWhichCanPresent }
+        return nodes
     }
 }
 

@@ -5,10 +5,9 @@ open class SwitchedNavigationNode: NavigationNode {
 
     @Published public internal(set) var switchedNode: NavigationNode?
 
-    public override var childrenPublisher: AnyPublisher<[NavigationNode], Never> {
-        super.childrenPublisher
-            .merge(with: $switchedNode.map { [$0].compactMap { $0} })
-            .eraseToAnyPublisher()
+    public override var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
+        super.childrenPublishers
+        + [$switchedNode.map { [$0].compactMap { $0 } }.eraseToAnyPublisher()]
     }
 
     open override var view: AnyView {

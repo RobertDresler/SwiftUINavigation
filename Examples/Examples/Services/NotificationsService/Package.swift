@@ -4,17 +4,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "UserRepository",
+    name: "NotificationsService",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "UserRepository",
-            targets: ["UserRepository"]
+            name: "NotificationsService",
+            targets: ["NotificationsService"]
         )
     ],
     targets: [
         .target(
-            name: "UserRepository"
+            name: "NotificationsService"
         )
     ]
 )

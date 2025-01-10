@@ -5,15 +5,22 @@ import UserRepository
 import Combine
 import Start
 import MainTabs
+import DeepLinkForwarderService
 
 public final class AppNavigationNode: SwitchedNavigationNode {
 
     private let userRepository: UserRepository
+    private let deepLinkForwarderService: DeepLinkForwarderService
     private var cancellables = Set<AnyCancellable>()
 
     // TODO: -RD- maybe make root node which requires handler?
-    public init(userRepository: UserRepository, defaultDeepLinkHandler: NavigationDeepLinkHandler) {
+    public init(
+        userRepository: UserRepository,
+        deepLinkForwarderService: DeepLinkForwarderService,
+        defaultDeepLinkHandler: NavigationDeepLinkHandler
+    ) {
         self.userRepository = userRepository
+        self.deepLinkForwarderService = deepLinkForwarderService
         super.init(defaultDeepLinkHandler: defaultDeepLinkHandler)
         bind()
     }
@@ -23,17 +30,6 @@ public final class AppNavigationNode: SwitchedNavigationNode {
             super.view
                 .onShake { [weak self] in self?.printDebugGraph() }
         )
-    }
-
-    private func bind() {
-        userRepository.$isUserLogged
-            .sink { [weak self] in self?.setDeepLink(isUserLogged: $0) }
-            .store(in: &cancellables)
-    }
-
-    private func setDeepLink(isUserLogged: Bool) {
-        let switchedNode = isUserLogged ? loggedNode : notLoggedNode
-        executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
     }
 
     private var notLoggedNode: NavigationNode {
@@ -46,6 +42,27 @@ public final class AppNavigationNode: SwitchedNavigationNode {
                 initialTab: .commands
             )
         )
+    }
+
+    // MARK: Actions
+
+    private func bind() {
+        userRepository.$isUserLogged
+            .sink { [weak self] in self?.setNode(isUserLogged: $0) }
+            .store(in: &cancellables)
+
+        deepLinkForwarderService.deepLinkPublisher
+            .sink { [weak self] in self?.handleDeepLink($0) }
+            .store(in: &cancellables)
+    }
+
+    private func setNode(isUserLogged: Bool) {
+        let switchedNode = isUserLogged ? loggedNode : notLoggedNode
+        executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
+    }
+
+    private func handleDeepLink(_ deepLink: any NavigationDeepLink) {
+        executeCommand(DefaultHandleDeepLinkNavigationCommand(deepLink: deepLink))
     }
 
 }
