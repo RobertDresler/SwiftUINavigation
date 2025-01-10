@@ -11,6 +11,7 @@ struct ActionableListItem {
         enum CustomAction {
             case logout(sourceID: String)
             case sendNotification
+            case logoutWithCustomConfirmationDialog
         }
 
         case command(makeCommand: (NavigationNode) -> NavigationCommand)
@@ -53,7 +54,7 @@ extension ActionableListItem {
     static func new(
         id: String = UUID().uuidString,
         viewModel: ActionableListItemView.ViewModel,
-        deepLink: any NavigationDeepLink,
+        deepLink: NavigationDeepLink,
         presentingNavigationSourceID: String? = nil
     ) -> ActionableListItem {
         ActionableListItem(

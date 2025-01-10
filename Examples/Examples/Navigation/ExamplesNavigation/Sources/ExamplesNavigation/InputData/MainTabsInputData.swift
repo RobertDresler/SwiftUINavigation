@@ -1,4 +1,4 @@
-public struct MainTabsInputData: Hashable {
+public struct MainTabsInputData {
 
     public enum Tab {
         case commands

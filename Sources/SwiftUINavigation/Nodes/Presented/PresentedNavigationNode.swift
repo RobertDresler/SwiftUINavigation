@@ -1,7 +1,7 @@
 import SwiftUI
 
 @MainActor
-public protocol PresentedNavigationNode {
+public protocol PresentedNavigationNode: AnyObject {
     associatedtype Body: View
     var node: NavigationNode { get }
     static func presenterResolvedViewModifier(

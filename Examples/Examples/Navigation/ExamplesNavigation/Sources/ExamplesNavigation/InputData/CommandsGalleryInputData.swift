@@ -1,4 +1,4 @@
-public struct ActionableListInputData: Hashable {
+public struct ActionableListInputData {
 
     public enum ID {
         case commands

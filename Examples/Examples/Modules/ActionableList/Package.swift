@@ -17,7 +17,8 @@ let package = Package(
         .package(path: "../../Services/Shared"),
         .package(path: "../../Services/UserRepository"),
         .package(path: "../../Services/NotificationsService"),
-        .package(path: "../../Services/DeepLinkForwarderService")
+        .package(path: "../../Services/DeepLinkForwarderService"),
+        .package(path: "../../Modules/CustomConfirmationDialog")
     ],
     targets: [
         .target(
@@ -27,7 +28,8 @@ let package = Package(
                 .product(name: "Shared", package: "Shared"),
                 .product(name: "UserRepository", package: "UserRepository"),
                 .product(name: "NotificationsService", package: "NotificationsService"),
-                .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService")
+                .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
+                .product(name: "CustomConfirmationDialog", package: "CustomConfirmationDialog")
             ]
         )
     ]

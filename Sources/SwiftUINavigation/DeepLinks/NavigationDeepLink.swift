@@ -1,1 +1,1 @@
-public protocol NavigationDeepLink: Hashable {}
+public protocol NavigationDeepLink {}

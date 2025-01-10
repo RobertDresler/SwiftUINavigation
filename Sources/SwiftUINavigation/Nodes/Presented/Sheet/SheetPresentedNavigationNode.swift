@@ -1,14 +1,14 @@
 import SwiftUI
 
-public struct SheetPresentedNavigationNode: PresentedNavigationNode {
+public final class SheetPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Getters
 
-    public static func standalone(node: NavigationNode) -> Self {
+    public static func standalone(node: NavigationNode) -> SheetPresentedNavigationNode {
         SheetPresentedNavigationNode(node: node)
     }
 
-    public static func stacked(node: NavigationNode) -> Self {
+    public static func stacked(node: NavigationNode) -> SheetPresentedNavigationNode {
         SheetPresentedNavigationNode(
             node: StackRootNavigationNode(
                 stackNodes: [StackNavigationNode(destination: node, transition: nil)]

@@ -1,4 +1,4 @@
-public struct SubscriptionPremiumInputData: Hashable {
+public struct SubscriptionPremiumInputData {
 
     public init() {}
 

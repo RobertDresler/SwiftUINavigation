@@ -1,14 +1,14 @@
 import SwiftUI
 
-public struct FullScreenCoverPresentedNavigationNode: PresentedNavigationNode {
+public final class FullScreenCoverPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Getters
 
-    public static func standalone(node: NavigationNode) -> Self {
+    public static func standalone(node: NavigationNode) -> FullScreenCoverPresentedNavigationNode {
         FullScreenCoverPresentedNavigationNode(node: node)
     }
 
-    public static func stacked(node: NavigationNode) -> Self {
+    public static func stacked(node: NavigationNode) -> FullScreenCoverPresentedNavigationNode {
         FullScreenCoverPresentedNavigationNode(
             node: StackRootNavigationNode(
                 stackNodes: [StackNavigationNode(destination: node, transition: nil)]

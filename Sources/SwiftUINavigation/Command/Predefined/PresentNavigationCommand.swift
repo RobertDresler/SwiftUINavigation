@@ -1,11 +1,13 @@
 public struct PresentNavigationCommand: NavigationCommand {
 
     public func execute(on node: NavigationNode) {
-        executableCommand(on: node)?.execute(on: node)
+        guard let presenterNode = presenterNode(for: node) else { return }
+        executableCommand.execute(on: presenterNode)
     }
 
     public func canExecute(on node: NavigationNode) -> Bool {
-        executableCommand(on: node)?.canExecute(on: node) ?? false
+        guard let presenterNode = presenterNode(for: node) else { return false }
+        return executableCommand.canExecute(on: node)
     }
 
     private let presentedNode: any PresentedNavigationNode
@@ -16,12 +18,15 @@ public struct PresentNavigationCommand: NavigationCommand {
         self.animated = animated
     }
 
-    private func executableCommand(on node: NavigationNode) -> NavigationCommand? {
-        guard let presenterNode = node.nearestNodeWhichCanPresent else { return nil }
-        return PresentOnGivenNodeNavigationCommand(
+    private var executableCommand: NavigationCommand {
+        PresentOnGivenNodeNavigationCommand(
             presentedNode: presentedNode,
             animated: animated
         )
+    }
+
+    private func presenterNode(for node: NavigationNode) -> NavigationNode? {
+        node.nearestNodeWhichCanPresent
     }
 
 }

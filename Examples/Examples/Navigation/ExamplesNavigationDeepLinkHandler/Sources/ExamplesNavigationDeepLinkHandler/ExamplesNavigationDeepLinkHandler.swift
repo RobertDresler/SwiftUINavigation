@@ -12,7 +12,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
         self.userRepository = userRepository
     }
 
-    public func handleDeepLink(_ deepLink: any NavigationDeepLink, on node: NavigationNode) {
+    public func handleDeepLink(_ deepLink: NavigationDeepLink, on node: NavigationNode) {
         guard let deepLink = deepLink as? ExamplesNavigationDeepLink else { return }
         switch deepLink.destination {
         case .subscription(let inputData):

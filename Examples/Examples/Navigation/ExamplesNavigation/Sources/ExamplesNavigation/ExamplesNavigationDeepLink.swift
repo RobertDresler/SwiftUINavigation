@@ -3,7 +3,7 @@ import Foundation
 
 public struct ExamplesNavigationDeepLink: NavigationDeepLink {
 
-    public indirect enum Destination: Hashable {
+    public indirect enum Destination {
         case subscription(SubscriptionInputData)
     }
 

@@ -1,6 +1,7 @@
 import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
+import CustomConfirmationDialog
 
 public final class ActionableListNavigationNode: NavigationNode {
 
@@ -35,7 +36,7 @@ public final class ActionableListNavigationNode: NavigationNode {
                 ]
             )
             executeCommand(
-                PresentNavigationCommand(
+                PresentOnGivenNodeNavigationCommand(
                     presentedNode: ConfirmationDialogPresentedNavigationNode(inputData: inputData, sourceID: sourceID)
                 )
             )
@@ -45,6 +46,34 @@ public final class ActionableListNavigationNode: NavigationNode {
     func openNotificationSettings() {
         guard let url = URL(string: UIApplication.openNotificationSettingsURLString) else { return }
         executeCommand(OpenURLNavigationCommand(url: url))
+    }
+
+    func confirmLogoutWithCustomConfirmationDialog() async -> Bool {
+        await withCheckedContinuation { continuation in
+            let node = createLogoutCustomConfirmationDialogNavigationNode()
+            var didConfirm = false
+            node.addMessageListener({ message in
+                if message is CustomConfirmationDialogConfirmationNavigationMessage {
+                    didConfirm = true
+                } else if message is RemovalNavigationMessage {
+                    continuation.resume(returning: didConfirm)
+                }
+            })
+            executeCommand(
+                PresentNavigationCommand(
+                    presentedNode: SheetPresentedNavigationNode.stacked(node: node)
+                )
+            )
+        }
+    }
+
+    private func createLogoutCustomConfirmationDialogNavigationNode() -> CustomConfirmationDialogNavigationNode {
+        let inputData = CustomConfirmationDialogInputData(
+            title: "Confirm Logout",
+            message: "Are you sure you want to log out? You can easily log in again anytime.",
+            confirmButtonTitle: "Log Out"
+        )
+        return CustomConfirmationDialogNavigationNode(inputData: inputData)
     }
 
 }

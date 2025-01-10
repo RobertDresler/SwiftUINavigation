@@ -1,4 +1,4 @@
 @MainActor
 public protocol NavigationDeepLinkHandler {
-    func handleDeepLink(_ deepLink: any NavigationDeepLink, on node: NavigationNode)
+    func handleDeepLink(_ deepLink: NavigationDeepLink, on node: NavigationNode)
 }

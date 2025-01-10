@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct AlertPresentedNavigationNode: PresentedNavigationNode {
+public final class AlertPresentedNavigationNode: PresentedNavigationNode {
 
     public let node: NavigationNode
 

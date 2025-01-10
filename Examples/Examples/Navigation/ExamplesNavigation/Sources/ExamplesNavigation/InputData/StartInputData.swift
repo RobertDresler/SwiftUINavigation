@@ -1,4 +1,4 @@
-public struct StartInputData: Hashable {
+public struct StartInputData {
 
     public init() {}
 

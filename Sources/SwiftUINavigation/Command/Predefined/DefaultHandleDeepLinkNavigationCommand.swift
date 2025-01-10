@@ -10,9 +10,9 @@ public struct DefaultHandleDeepLinkNavigationCommand: NavigationCommand {
         return handlerNode.defaultDeepLinkHandler != nil
     }
 
-    private let deepLink: any NavigationDeepLink
+    private let deepLink: NavigationDeepLink
 
-    public init(deepLink: any NavigationDeepLink) {
+    public init(deepLink: NavigationDeepLink) {
         self.deepLink = deepLink
     }
 

@@ -12,13 +12,8 @@ struct NavigationNodeResolvedView: View {
     var body: some View {
         node.view
             .presentingNavigationSource(id: nil)
-            .onReceive(node.urlToOpen) { openURLAction($0) }
+            .onReceive(node.urlToOpen) { openURL($0) }
             .environmentObject(node)
-    }
-
-    private func openURLAction(_ url: URL?) {
-        guard let url else { return }
-        openURL(url)
     }
 
 }

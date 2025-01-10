@@ -61,7 +61,7 @@ public final class AppNavigationNode: SwitchedNavigationNode {
         executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
     }
 
-    private func handleDeepLink(_ deepLink: any NavigationDeepLink) {
+    private func handleDeepLink(_ deepLink: NavigationDeepLink) {
         executeCommand(DefaultHandleDeepLinkNavigationCommand(deepLink: deepLink))
     }
 

@@ -56,12 +56,7 @@ struct ActionableListView: View {
     }
 
     private var dismissButton: some View {
-        Button(action: { navigationNode.executeCommand(DismissNavigationCommand()) }) {
-            Image(systemName: "xmark.circle.fill")
-                .symbolRenderingMode(.hierarchical)
-                .tint(SharedColor.grayscaleSecondary)
-                .font(.system(size: 24))
-        }
+        DismissButton(action: { navigationNode.executeCommand(DismissNavigationCommand()) })
     }
 
     private var scrollView: some View {
@@ -134,6 +129,8 @@ struct ActionableListView: View {
                 handleLogoutAction(sourceID: sourceID)
             case .sendNotification:
                 handleSendNotificationAction()
+            case .logoutWithCustomConfirmationDialog:
+                handleLogoutWithCustomConfirmationDialog()
             }
         }
     }
@@ -141,8 +138,12 @@ struct ActionableListView: View {
     private func handleLogoutAction(sourceID: String) {
         Task {
             guard await navigationNode.confirmLogout(sourceID: sourceID) else { return }
-            userRepository.isUserLogged = false
+            logout()
         }
+    }
+
+    private func logout() {
+        userRepository.isUserLogged = false
     }
 
     private func handleSendNotificationAction() {
@@ -179,6 +180,13 @@ struct ActionableListView: View {
             )
         } catch {
             print(error)
+        }
+    }
+
+    private func handleLogoutWithCustomConfirmationDialog() {
+        Task {
+            guard await navigationNode.confirmLogoutWithCustomConfirmationDialog() else { return }
+            logout()
         }
     }
 

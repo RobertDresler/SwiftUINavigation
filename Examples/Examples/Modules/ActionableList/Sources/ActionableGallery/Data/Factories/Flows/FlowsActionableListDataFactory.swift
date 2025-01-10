@@ -15,6 +15,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
     func makeItems() -> [ActionableListItem] {
         [
             logoutItem,
+            messagingBetweenNodesItem,
             sendNotificationItem,
             subscriptionItem
         ]
@@ -32,6 +33,18 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             ),
             customAction: .logout(sourceID: presentingNavigationSourceID),
             presentingNavigationSourceID: presentingNavigationSourceID
+        )
+    }
+
+    private var messagingBetweenNodesItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "bubble.left.and.bubble.right.fill",
+                accentColor: .teal,
+                title: "Messaging Between Nodes",
+                subtitle: "This flow demonstrates messaging between nodes. When you confirm logout, a message is sent to the list node, which handles the logout after the confirmation dialog node is destroyed (RemovalNavigationMessage received)."
+            ),
+            customAction: .logoutWithCustomConfirmationDialog
         )
     }
 

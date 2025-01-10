@@ -27,6 +27,8 @@ import Combine
 
     // MARK: Public
 
+    public typealias MessageListener = (NavigationMessage) -> Void
+
     public let id: String
     @Published public var presentedNode: (any PresentedNavigationNode)?
     public weak var parent: NavigationNode?
@@ -42,6 +44,14 @@ import Combine
 
     public var predecessorsIncludingSelf: [NavigationNode] {
         (parent?.predecessorsIncludingSelf ?? []) + [self]
+    }
+
+    public var successors: [NavigationNode] {
+        children.flatMap(\.successorsIncludingSelf)
+    }
+
+    public var successorsIncludingSelf: [NavigationNode] {
+        [self] + children.flatMap(\.successorsIncludingSelf)
     }
 
     public var canPresentIfWouldnt: Bool {
@@ -66,19 +76,34 @@ import Combine
             ?? childrenNodesWhichCanPresent.last
     }
 
+    public func addMessageListener(_ listener: @escaping MessageListener) {
+        messageListeners.append(listener)
+    }
+
+    public func sendMessage(_ message: NavigationMessage) {
+        messageListeners.forEach { listener in
+            listener(message)
+        }
+    }
+
+    public func sendRemovalMessage() {
+        sendMessage(RemovalNavigationMessage())
+    }
+
     // MARK: Internal
 
     let urlToOpen = PassthroughSubject<URL, Never>()
+    var cancellables = Set<AnyCancellable>()
 
     // MARK: Private
 
-    private var cancellables = Set<AnyCancellable>()
     var defaultDeepLinkHandler: NavigationDeepLinkHandler? {
         _defaultDeepLinkHandler ?? parent?.defaultDeepLinkHandler
     }
     private var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
     private var _childrenPublisher = CurrentValueSubject<[NavigationNode], Never>([])
     private let debugPrintPrefix: String
+    private var messageListeners = [MessageListener]()
 
     @MainActor
     public init(defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
@@ -116,11 +141,27 @@ private extension NavigationNode {
     func bind() {
         bindParentLogic()
         bindChildren()
+        bindSendingRemovalMessages()
     }
 
     func bindChildren() {
         childrenPublisher
             .sink { [weak self] in self?._childrenPublisher.send($0) }
+            .store(in: &cancellables)
+    }
+
+    func bindSendingRemovalMessages() {
+        childrenPublisher.zip(childrenPublisher.dropFirst())
+            .sink { [weak self] oldChildren, newChildren in
+                let removedChildren = oldChildren.filter { oldChild in
+                    !newChildren.contains(where: { oldChild === $0 })
+                }
+                removedChildren.forEach { child in
+                    child.successorsIncludingSelf.forEach { node in
+                        node.sendRemovalMessage()
+                    }
+                }
+            }
             .store(in: &cancellables)
     }
 

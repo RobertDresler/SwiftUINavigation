@@ -26,6 +26,7 @@
 			membershipExceptions = (
 				Info.plist,
 				Modules/App,
+				Modules/CustomConfirmationDialog,
 				Modules/MainTabs,
 				Modules/Start,
 				Modules/Subscription,
