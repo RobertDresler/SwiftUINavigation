@@ -25,8 +25,10 @@ public struct PresentNavigationCommand: NavigationCommand {
         )
     }
 
+    /// If `sourceID` is not `nil`, `presentedNode` is presented on the `node` from `execude(_on:)` since we want to present from
+    /// `presenterResolvedViewModifier(presentedNode:content:sourceID:)` on that source view
     private func presenterNode(for node: NavigationNode) -> NavigationNode? {
-        node.nearestNodeWhichCanPresent
+        presentedNode.sourceID == nil ? node.nearestNodeWhichCanPresent : node
     }
 
 }

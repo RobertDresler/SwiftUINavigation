@@ -3,23 +3,22 @@ import SwiftUI
 public final class AlertPresentedNavigationNode: PresentedNavigationNode {
 
     public let node: NavigationNode
+    public let sourceID: String?
 
     public init(inputData: AlertInputData, sourceID: String? = nil) {
-        self.node = AlertNavigationNode(inputData: inputData, sourceID: sourceID)
+        self.node = AlertNavigationNode(inputData: inputData)
+        self.sourceID = sourceID
     }
 
     public static func presenterResolvedViewModifier(
         presentedNode: (any PresentedNavigationNode)?,
         content: AnyView,
-        id: String?
+        sourceID: String?
     ) -> some View {
         content
             .alert(
                 title(for: presentedNode?.node),
-                isPresented: makeIsPresentedBinding(
-                    presentedNode: presentedNode,
-                    additionalCheck: { (node: AlertNavigationNode) in node.sourceID == id }
-                ),
+                isPresented: makeIsPresentedBinding(presentedNode: presentedNode, sourceID: sourceID),
                 actions: { actions(for: presentedNode?.node) },
                 message: { message(for: presentedNode?.node) }
             )

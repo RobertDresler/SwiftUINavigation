@@ -19,6 +19,7 @@ public final class FullScreenCoverPresentedNavigationNode: PresentedNavigationNo
     // MARK: Other
 
     public let node: NavigationNode
+    public let sourceID: String? = nil
 
     init(node: NavigationNode) {
         self.node = node
@@ -27,11 +28,11 @@ public final class FullScreenCoverPresentedNavigationNode: PresentedNavigationNo
     public static func presenterResolvedViewModifier(
         presentedNode: (any PresentedNavigationNode)?,
         content: AnyView,
-        id: String?
+        sourceID: String?
     ) -> some View {
         content
             .fullScreenCover(
-                isPresented: makeIsPresentedBinding(presentedNode: presentedNode),
+                isPresented: makeIsPresentedBinding(presentedNode: presentedNode, sourceID: sourceID),
                 content: {
                     if let presentedNode = presentedNode as? Self {
                         NavigationNodeResolvedView(node: presentedNode.node)

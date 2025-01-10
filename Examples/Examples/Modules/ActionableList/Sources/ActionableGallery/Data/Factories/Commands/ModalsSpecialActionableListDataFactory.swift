@@ -61,7 +61,7 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Note that by using the sourceID and presentingNavigationSource(_:), it is presented as a popover from the card on iPadOS"
             ),
             makeCommand: {
-                PresentOnGivenNodeNavigationCommand(
+                PresentNavigationCommand(
                     presentedNode: ConfirmationDialogPresentedNavigationNode(
                         inputData: ConfirmationDialogInputData(
                             message: "Are you sure you want to delete all your hard work? You can always undo, but who has time for that, right?",
@@ -99,7 +99,7 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Since the Photos Picker is a custom PresentedNavigationNode, it must be registered using registerCustomPresentableNavigationNodes(_:) on the NavigationWindow"
             ),
             makeCommand: {
-                PresentOnGivenNodeNavigationCommand(
+                PresentNavigationCommand(
                     presentedNode: PhotosPickerPresentedNavigationNode(
                         inputData: PhotosPickerInputData(
                             maxSelectionCount: 3,

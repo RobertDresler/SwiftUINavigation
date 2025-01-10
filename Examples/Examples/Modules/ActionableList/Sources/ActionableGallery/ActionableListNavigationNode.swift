@@ -36,7 +36,7 @@ public final class ActionableListNavigationNode: NavigationNode {
                 ]
             )
             executeCommand(
-                PresentOnGivenNodeNavigationCommand(
+                PresentNavigationCommand(
                     presentedNode: ConfirmationDialogPresentedNavigationNode(inputData: inputData, sourceID: sourceID)
                 )
             )

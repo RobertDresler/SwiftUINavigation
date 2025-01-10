@@ -5,10 +5,10 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
     @EnvironmentNavigationNode private var navigationNode
     @Environment(\.registeredCustomPresentableNavigationNodes) private var registeredCustomPresentableNavigationNodes
 
-    private let id: String?
+    private let sourceID: String?
 
-    init(id: String?) {
-        self.id = id
+    init(sourceID: String?) {
+        self.sourceID = sourceID
     }
 
     public func body(content: Content) -> some View {
@@ -21,7 +21,7 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
                 modifier.presenterResolvedViewModifier(
                     presentedNode: navigationNode.presentedNode,
                     content: resolvedView,
-                    id: id
+                    sourceID: sourceID
                 )
             )
         }
@@ -41,7 +41,7 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
 
 extension View {
     func presentingNavigationSource(id: String?) -> some View {
-        modifier(PresentingNavigationSourceViewModifier(id: id))
+        modifier(PresentingNavigationSourceViewModifier(sourceID: id))
     }
 
     public func presentingNavigationSource(id: String) -> some View {

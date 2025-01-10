@@ -3,23 +3,22 @@ import SwiftUI
 public final class ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode {
 
     public let node: NavigationNode
+    public let sourceID: String?
 
     public init(inputData: ConfirmationDialogInputData, sourceID: String? = nil) {
-        self.node = ConfirmationDialogNavigationNode(inputData: inputData, sourceID: sourceID)
+        self.node = ConfirmationDialogNavigationNode(inputData: inputData)
+        self.sourceID = sourceID
     }
 
     public static func presenterResolvedViewModifier(
         presentedNode: (any PresentedNavigationNode)?,
         content: AnyView,
-        id: String?
+        sourceID: String?
     ) -> some View {
         content
             .confirmationDialog(
                 Text(""),
-                isPresented: makeIsPresentedBinding(
-                    presentedNode: presentedNode,
-                    additionalCheck: { (node: ConfirmationDialogNavigationNode) in node.sourceID == id }
-                ),
+                isPresented: makeIsPresentedBinding(presentedNode: presentedNode, sourceID: sourceID),
                 actions: { actions(for: presentedNode?.node) },
                 message: { message(for: presentedNode?.node) }
             )
