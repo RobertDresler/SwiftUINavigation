@@ -1,5 +1,14 @@
 public struct MainTabsInputData: Hashable {
 
-    public init() {}
+    public enum Tab {
+        case commands
+        case settings
+    }
+
+    public let initialTab: AnyHashable
+
+    public init(initialTab: Tab) {
+        self.initialTab = initialTab
+    }
 
 }

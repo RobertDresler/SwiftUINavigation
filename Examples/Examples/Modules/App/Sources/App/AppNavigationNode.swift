@@ -4,9 +4,7 @@ import ExamplesNavigation
 import UserRepository
 import Combine
 import Start
-import ModuleA
-import Settings
-import CommandsGallery
+import MainTabs
 
 public final class AppNavigationNode: SwitchedNavigationNode {
 
@@ -43,40 +41,10 @@ public final class AppNavigationNode: SwitchedNavigationNode {
     }
 
     private var loggedNode: NavigationNode {
-        let homeTab = DefaultTabNode(
-            image: Image(systemName: "square.grid.2x2"),
-            title: "Gallery",
-            navigationNode: StackRootNavigationNode(
-                stackNodes: [
-                    StackNavigationNode(
-                        destination: CommandsGalleryNavigationNode(
-                            inputData: .default
-                        ),
-                        transition: nil
-                    )
-                ]
+        MainTabsNavigationNode(
+            inputData: MainTabsInputData(
+                initialTab: .commands
             )
-        )
-        let settingsTab = DefaultTabNode(
-            image: Image(systemName: "gearshape.fill"),
-            title: "Settings",
-            navigationNode: StackRootNavigationNode(
-                stackNodes: [
-                    StackNavigationNode(
-                        destination: SettingsNavigationNode(
-                            inputData: SettingsInputData()
-                        ),
-                        transition: nil
-                    )
-                ]
-            )
-        )
-        return TabsRootNavigationNode(
-            selectedTabNode: homeTab,
-            tabsNodes: [
-                homeTab,
-                settingsTab
-            ]
         )
     }
 

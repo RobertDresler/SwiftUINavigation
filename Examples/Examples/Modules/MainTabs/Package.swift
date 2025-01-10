@@ -12,11 +12,19 @@ let package = Package(
             targets: ["MainTabs"]
         ),
     ],
-    dependencies: [.package(path: "../../Navigation/ExamplesNavigation")],
+    dependencies: [
+        .package(path: "../../Navigation/ExamplesNavigation"),
+        .package(path: "../../Modules/CommandsGallery"),
+        .package(path: "../../Modules/Settings")
+    ],
     targets: [
         .target(
             name: "MainTabs",
-            dependencies: [.product(name: "ExamplesNavigation", package: "ExamplesNavigation")]
+            dependencies: [
+                .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
+                .product(name: "CommandsGallery", package: "CommandsGallery"),
+                .product(name: "Settings", package: "Settings")
+            ]
         )
     ]
 )

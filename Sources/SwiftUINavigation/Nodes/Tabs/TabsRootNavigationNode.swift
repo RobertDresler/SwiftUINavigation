@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-public final class TabsRootNavigationNode: NavigationNode {
+open class TabsRootNavigationNode: NavigationNode {
 
     @Published public internal(set) var selectedTabNode: TabNode
     @Published public internal(set) var tabsNodes: [TabNode]

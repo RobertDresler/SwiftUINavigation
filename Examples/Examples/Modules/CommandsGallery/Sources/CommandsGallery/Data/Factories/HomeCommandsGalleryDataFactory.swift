@@ -59,8 +59,19 @@ struct HomeCommandsGalleryDataFactory: CommandsGalleryDataFactory {
             ),
             .new(
                 viewModel: CommandsGalleryItemView.ViewModel(
-                    symbolName: "wrench.and.screwdriver.fill",
+                    symbolName: "rectangle.split.3x1.fill",
                     accentColor: .green,
+                    title: "Select Tabs Item",
+                    subtitle: "Use TabsSelectItemNavigationCommand with a specific ID to select the settings tab"
+                ),
+                makeCommand: {
+                    TabsSelectItemNavigationCommand(itemID: MainTabsInputData.Tab.settings)
+                }
+            ),
+            .new(
+                viewModel: CommandsGalleryItemView.ViewModel(
+                    symbolName: "wrench.and.screwdriver.fill",
+                    accentColor: .yellow,
                     title: "Custom Command (Show View and Automatically Hide After 2s)",
                     subtitle: "Easily create a custom command like ShowAndHideAfterDelayNavigationCommand to achieve this behavior"
                 ),

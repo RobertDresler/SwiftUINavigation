@@ -16,9 +16,7 @@ let package = Package(
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../Services/UserRepository"),
         .package(path: "../../Modules/Start"),
-        .package(path: "../../Modules/ModuleA"),
-        .package(path: "../../Modules/Settings"),
-        .package(path: "../../Modules/CommandsGallery")
+        .package(path: "../../Modules/MainTabs")
     ],
     targets: [
         .target(
@@ -27,9 +25,7 @@ let package = Package(
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "UserRepository", package: "UserRepository"),
                 .product(name: "Start", package: "Start"),
-                .product(name: "ModuleA", package: "ModuleA"),
-                .product(name: "Settings", package: "Settings"),
-                .product(name: "CommandsGallery", package: "CommandsGallery")
+                .product(name: "MainTabs", package: "MainTabs")
             ]
         )
     ]
