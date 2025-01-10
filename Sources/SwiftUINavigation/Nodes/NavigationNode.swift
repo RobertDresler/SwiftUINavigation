@@ -79,7 +79,11 @@ import Combine
 
     nonisolated
     public func printDebugText(_ text: String) {
-        print("\(debugPrintPrefix): \(text)")
+        let debugPrintPrefix = debugPrintPrefix
+        Task { @MainActor in
+            guard NavigationConfig.shared.isDebugPrintEnabled else { return }
+            print("\(debugPrintPrefix): \(text)")
+        }
     }
 
     public func printDebugGraph() {

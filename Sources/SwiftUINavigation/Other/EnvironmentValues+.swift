@@ -34,7 +34,7 @@ public extension EnvironmentValues {
     }
 }
 
-extension View {
+public extension View {
     func registerCustomPresentableNavigationNodes(_ nodes: [any PresentedNavigationNode.Type]) -> some View {
         environment(\.registeredCustomPresentableNavigationNodes, nodes)
     }

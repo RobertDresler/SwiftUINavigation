@@ -11,6 +11,10 @@ struct ExamplesApp: App {
 
     private let userRepository = UserRepository()
 
+    init() {
+        NavigationConfig.shared.isDebugPrintEnabled = true
+    }
+
     var body: some Scene {
         WindowGroup {
             NavigationWindow(
