@@ -14,16 +14,14 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Modules/ActionableList"),
-        .package(path: "../../Modules/Settings")
+        .package(path: "../../Modules/ActionableList")
     ],
     targets: [
         .target(
             name: "MainTabs",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "ActionableList", package: "ActionableList"),
-                .product(name: "Settings", package: "Settings")
+                .product(name: "ActionableList", package: "ActionableList")
             ]
         )
     ]

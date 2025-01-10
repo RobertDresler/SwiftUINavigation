@@ -24,9 +24,6 @@
 			membershipExceptions = (
 				Modules/App,
 				Modules/MainTabs,
-				Modules/ModuleA,
-				Modules/ModuleB,
-				Modules/Settings,
 				Modules/Start,
 				Modules/Subscription,
 				Modules/SubscriptionFreemium,

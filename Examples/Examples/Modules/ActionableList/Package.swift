@@ -14,14 +14,16 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/Shared")
+        .package(path: "../../Services/Shared"),
+        .package(path: "../../Services/UserRepository")
     ],
     targets: [
         .target(
             name: "ActionableList",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "Shared", package: "Shared")
+                .product(name: "Shared", package: "Shared"),
+                .product(name: "UserRepository", package: "UserRepository")
             ]
         )
     ]

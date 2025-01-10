@@ -5,8 +5,20 @@ import SwiftUINavigation
 
 @MainActor
 struct ActionableListItem {
+
+    enum Action {
+
+        enum CustomAction {
+            case logout(sourceID: String)
+        }
+
+        case command(makeCommand: (NavigationNode) -> NavigationCommand)
+        case custom(CustomAction)
+
+    }
+
     let identifiableViewModel: IdentifiableViewModel<String, ActionableListItemView.ViewModel>
-    let makeCommand: (NavigationNode) -> NavigationCommand
+    let action: Action
     let presentingNavigationSourceID: String?
 }
 
@@ -19,7 +31,7 @@ extension ActionableListItem {
     ) -> ActionableListItem {
         ActionableListItem(
             identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
-            makeCommand: makeCommand,
+            action: .command(makeCommand: makeCommand),
             presentingNavigationSourceID: presentingNavigationSourceID
         )
     }
@@ -32,7 +44,7 @@ extension ActionableListItem {
     ) -> ActionableListItem {
         ActionableListItem(
             identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
-            makeCommand: { _ in makeCommand() },
+            action: .command(makeCommand: { _ in makeCommand() }),
             presentingNavigationSourceID: presentingNavigationSourceID
         )
     }
@@ -45,7 +57,20 @@ extension ActionableListItem {
     ) -> ActionableListItem {
         ActionableListItem(
             identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
-            makeCommand: { _ in DefaultHandleDeepLinkNavigationCommand(deepLink: deepLink) },
+            action: .command(makeCommand: { _ in DefaultHandleDeepLinkNavigationCommand(deepLink: deepLink) }),
+            presentingNavigationSourceID: presentingNavigationSourceID
+        )
+    }
+
+    static func new(
+        id: String = UUID().uuidString,
+        viewModel: ActionableListItemView.ViewModel,
+        customAction: Action.CustomAction,
+        presentingNavigationSourceID: String? = nil
+    ) -> ActionableListItem {
+        ActionableListItem(
+            identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
+            action: .custom(customAction),
             presentingNavigationSourceID: presentingNavigationSourceID
         )
     }

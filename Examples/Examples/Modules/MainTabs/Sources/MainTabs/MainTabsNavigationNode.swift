@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
 import ActionableList
-import Settings
 
 public final class MainTabsNavigationNode: TabsRootNavigationNode {
 

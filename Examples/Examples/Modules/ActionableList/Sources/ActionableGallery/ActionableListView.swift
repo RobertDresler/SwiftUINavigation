@@ -2,11 +2,14 @@ import SwiftUI
 import ExamplesNavigation
 import SwiftUINavigation
 import Shared
+import UserRepository
 
 struct ActionableListView: View {
 
     @EnvironmentNavigationNode private var navigationNode: ActionableListNavigationNode
     @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
+    @EnvironmentObject private var userRepository: UserRepository
+
     var inputData: ActionableListInputData
     let title: String
     let subtitle: String?
@@ -117,8 +120,23 @@ struct ActionableListView: View {
     // MARK: Actions
 
     private func handleAction(for itemID: String) {
-        guard let makeCommand = items.first(where: { $0.identifiableViewModel.id == itemID })?.makeCommand else { return }
-        navigationNode.executeCommand(makeCommand(navigationNode))
+        guard let action = items.first(where: { $0.identifiableViewModel.id == itemID })?.action else { return }
+        switch action {
+        case .command(let makeCommand):
+            navigationNode.executeCommand(makeCommand(navigationNode))
+        case .custom(let customAction):
+            switch customAction {
+            case .logout(let sourceID):
+                handleLogoutAction(sourceID: sourceID)
+            }
+        }
+    }
+
+    private func handleLogoutAction(sourceID: String) {
+        Task {
+            guard await navigationNode.confirmLogout(sourceID: sourceID) else { return }
+            userRepository.isUserLogged = false
+        }
     }
 
 }

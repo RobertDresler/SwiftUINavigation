@@ -14,8 +14,24 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
 
     func makeItems() -> [ActionableListItem] {
         [
+            logoutItem,
             subscriptionItem
         ]
+    }
+
+    private var logoutItem: ActionableListItem {
+        let presentingNavigationSourceID = "logout"
+        return .new(
+            id: presentingNavigationSourceID,
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "door.left.hand.open",
+                accentColor: .indigo,
+                title: "Logout",
+                subtitle: "This flow shows how to handle logout with a confirmation alert. The switch logic is managed by AppNavigationNode, and you can easily log in again after logging out."
+            ),
+            customAction: .logout(sourceID: presentingNavigationSourceID),
+            presentingNavigationSourceID: presentingNavigationSourceID
+        )
     }
 
     private var subscriptionItem: ActionableListItem {
