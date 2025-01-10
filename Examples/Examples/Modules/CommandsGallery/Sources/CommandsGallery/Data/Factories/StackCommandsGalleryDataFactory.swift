@@ -1,5 +1,6 @@
 import SwiftUINavigation
 import ExamplesNavigation
+import Shared
 
 struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
 
@@ -121,6 +122,17 @@ struct StackCommandsGalleryDataFactory: CommandsGalleryDataFactory {
                 ),
                 makeCommand: {
                     StackDropLastNavigationCommand(k: 3)
+                }
+            ),
+            .new(
+                viewModel: CommandsGalleryItemView.ViewModel(
+                    symbolName: "arrow.trianglehead.2.clockwise.rotate.90",
+                    accentColor: .purple,
+                    title: "Reverse Path (Custom StackMap Command)",
+                    subtitle: "Explore the custom StackReverseNavigationCommand, built using the predefined StackMapNavigationCommand"
+                ),
+                makeCommand: {
+                    StackReverseNavigationCommand()
                 }
             )
         ]
