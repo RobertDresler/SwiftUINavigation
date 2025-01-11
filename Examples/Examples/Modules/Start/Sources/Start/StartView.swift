@@ -1,12 +1,12 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import UserRepository
+import FlagsRepository
 
 struct StartView: View {
 
     @EnvironmentNavigationNode private var navigationNode: StartNavigationNode
-    @EnvironmentObject private var userRepository: UserRepository
+    @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: StartInputData
 
@@ -66,7 +66,7 @@ struct StartView: View {
     }
 
     private func login() {
-        userRepository.isUserLogged = true
+        flagsRepository.isUserLogged = true
     }
 
 }

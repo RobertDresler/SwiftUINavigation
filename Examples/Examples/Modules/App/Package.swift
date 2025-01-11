@@ -14,22 +14,24 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/UserRepository"),
+        .package(path: "../../Services/FlagsRepository"),
         .package(path: "../../Services/DeepLinkForwarderService"),
         .package(path: "../../Services/OnboardingService"),
         .package(path: "../../Modules/Start"),
-        .package(path: "../../Modules/MainTabs")
+        .package(path: "../../Modules/MainTabs"),
+        .package(path: "../../Modules/LockedApp")
     ],
     targets: [
         .target(
             name: "App",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "UserRepository", package: "UserRepository"),
+                .product(name: "FlagsRepository", package: "FlagsRepository"),
                 .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
                 .product(name: "OnboardingService", package: "OnboardingService"),
                 .product(name: "Start", package: "Start"),
-                .product(name: "MainTabs", package: "MainTabs")
+                .product(name: "MainTabs", package: "MainTabs"),
+                .product(name: "LockedApp", package: "LockedApp")
             ]
         )
     ]

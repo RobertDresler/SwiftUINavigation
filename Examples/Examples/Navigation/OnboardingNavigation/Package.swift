@@ -16,7 +16,7 @@ let package = Package(
         .package(path: "../../SwiftUINavigation"),
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../Services/OnboardingService"),
-        .package(path: "../../Services/UserRepository"),
+        .package(path: "../../Services/FlagsRepository"),
         .package(path: "../../Modules/OnboardingQuestion"),
         .package(path: "../../Modules/OnboardingResult")
     ],
@@ -27,7 +27,7 @@ let package = Package(
                 .product(name: "SwiftUINavigation", package: "SwiftUINavigation"),
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "OnboardingService", package: "OnboardingService"),
-                .product(name: "UserRepository", package: "UserRepository"),
+                .product(name: "FlagsRepository", package: "FlagsRepository"),
                 .product(name: "OnboardingQuestion", package: "OnboardingQuestion"),
                 .product(name: "OnboardingResult", package: "OnboardingResult")
             ]

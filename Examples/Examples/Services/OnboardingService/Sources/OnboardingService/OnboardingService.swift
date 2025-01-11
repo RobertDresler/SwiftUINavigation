@@ -1,7 +1,7 @@
 import SwiftUI
 import ExamplesNavigation
 import SwiftUINavigation
-import UserRepository
+import FlagsRepository
 
 public final class OnboardingService: ObservableObject {
 
@@ -27,7 +27,7 @@ public final class OnboardingService: ObservableObject {
         }
         return OnboardingService(
             onboardingNavigationCommandFactory: StubOnboardingNavigationCommandFactory(),
-            userRepository: UserRepository()
+            flagsRepository: FlagsRepository()
         )
     }
 
@@ -56,7 +56,7 @@ public final class OnboardingService: ObservableObject {
     }
 
     public func finishOnboarding() {
-        userRepository.isUserLogged = true
+        flagsRepository.isUserLogged = true
     }
 
     @MainActor
@@ -70,14 +70,14 @@ public final class OnboardingService: ObservableObject {
     @Published public var state = State()
 
     private let onboardingNavigationCommandFactory: OnboardingNavigationCommandFactory
-    private let userRepository: UserRepository
+    private let flagsRepository: FlagsRepository
 
     public init(
         onboardingNavigationCommandFactory: OnboardingNavigationCommandFactory,
-        userRepository: UserRepository
+        flagsRepository: FlagsRepository
     ) {
         self.onboardingNavigationCommandFactory = onboardingNavigationCommandFactory
-        self.userRepository = userRepository
+        self.flagsRepository = flagsRepository
     }
 
 }

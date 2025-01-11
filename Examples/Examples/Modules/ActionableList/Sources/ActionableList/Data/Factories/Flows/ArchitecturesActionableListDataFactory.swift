@@ -13,7 +13,7 @@ struct ArchitecturesActionableListDataFactory: ActionableListDataFactory {
     }
 
     func makeSubtitle() -> String? {
-        "These examples show how SwiftUINavigation can be used in different architectures. However, you have the freedom to choose any architecture you prefer. SwiftUINavigation simply handles navigation between screens (nodes); the architectural approach is entirely up to you."
+        "These examples show how SwiftUINavigation can be used in different architectures. However, you have the freedom to choose any architecture you prefer. SwiftUINavigation simply handles navigation between screens (nodes); the architectural approach is entirely up to you. You don’t even have to pass input data to each node if you prefer."
     }
 
     func makeItems() -> [ActionableListItem] {

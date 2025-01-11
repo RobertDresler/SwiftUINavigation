@@ -3,7 +3,8 @@ import SwiftUI
 struct NavigationNodeResolvedView: View {
 
     @ObservedObject private var node: NavigationNode
-    @Environment(\.openURL) private var openURL
+    @Environment(\.self) private var environment
+    @Environment(\.navigationEnvironmentTriggerHandler) private var environmentTriggerHandler
 
     init(node: NavigationNode) {
         self.node = node
@@ -12,7 +13,7 @@ struct NavigationNodeResolvedView: View {
     var body: some View {
         node.view
             .presentingNavigationSource(id: nil)
-            .onReceive(node.urlToOpen) { openURL($0) }
+            .onReceive(node.navigationEnvironmentTrigger) { environmentTriggerHandler.handleTrigger($0, in: environment) }
             .environmentObject(node)
     }
 

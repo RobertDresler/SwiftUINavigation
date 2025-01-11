@@ -1,18 +1,16 @@
 public struct DismissNavigationCommand: NavigationCommand {
 
     public func execute(on node: NavigationNode) {
-        if node.presentedNode != nil {
-            perform(
-                animated: animated,
-                action: { node.presentedNode = nil }
-            )
-        } else if let parent = node.parent {
-            execute(on: parent)
-        }
+        guard let nearestNodeWhichCanPresent = node.nearestNodeWhichCanPresent else { return }
+        perform(
+            animated: animated,
+            action: { nearestNodeWhichCanPresent.parent?.presentedNode = nil }
+        )
     }
 
     public func canExecute(on node: NavigationNode) -> Bool {
-        node.predecessorsIncludingSelf.contains(where: { $0.presentedNode != nil })
+        let nearestNodeWhichCanPresent = node.nearestNodeWhichCanPresent
+        return nearestNodeWhichCanPresent?.parent?.presentedNode?.node === nearestNodeWhichCanPresent
     }
 
     private let animated: Bool

@@ -1,14 +1,14 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import UserRepository
+import FlagsRepository
 import Shared
 import OnboardingService
 
 struct OnboardingQuestionView: View {
 
     @EnvironmentNavigationNode private var navigationNode: OnboardingQuestionNavigationNode
-    @EnvironmentObject private var userRepository: UserRepository
+    @EnvironmentObject private var flagsRepository: FlagsRepository
     @EnvironmentObject private var onboardingService: OnboardingService
     @State private var selectedAnswer: OnboardingService.State.QuestionAnswer?
 
@@ -109,5 +109,5 @@ struct OnboardingQuestionView: View {
         onboardingService: OnboardingService.makeStub()
     )
         .view
-        .environmentObject(UserRepository())
+        .environmentObject(FlagsRepository())
 }

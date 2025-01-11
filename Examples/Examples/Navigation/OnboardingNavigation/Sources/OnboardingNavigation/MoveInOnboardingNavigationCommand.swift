@@ -1,7 +1,7 @@
 import SwiftUINavigation
 import Foundation
 import OnboardingService
-import UserRepository
+import FlagsRepository
 import OnboardingQuestion
 import OnboardingResult
 

@@ -1,13 +1,13 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import UserRepository
+import FlagsRepository
 import Shared
 
 struct SubscriptionFreemiumView: View {
 
     @EnvironmentNavigationNode private var navigationNode: SubscriptionFreemiumNavigationNode
-    @EnvironmentObject private var userRepository: UserRepository
+    @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: SubscriptionFreemiumInputData
 
@@ -55,7 +55,7 @@ struct SubscriptionFreemiumView: View {
     // MARK: Actions
 
     private func subscribe() {
-        userRepository.isUserPremium = true
+        flagsRepository.isUserPremium = true
     }
 
 }
@@ -63,5 +63,5 @@ struct SubscriptionFreemiumView: View {
 #Preview {
     SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
         .view
-        .environmentObject(UserRepository())
+        .environmentObject(FlagsRepository())
 }

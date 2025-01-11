@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/UserRepository"),
+        .package(path: "../../Services/FlagsRepository"),
         .package(path: "../../SwiftUINavigation"),
         .package(path: "../../Services/OnboardingService")
     ],
@@ -23,7 +23,7 @@ let package = Package(
             name: "Start",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "UserRepository", package: "UserRepository"),
+                .product(name: "FlagsRepository", package: "FlagsRepository"),
                 .product(name: "SwiftUINavigation", package: "SwiftUINavigation"),
                 .product(name: "OnboardingService", package: "OnboardingService")
             ]

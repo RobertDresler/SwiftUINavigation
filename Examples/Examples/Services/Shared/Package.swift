@@ -12,10 +12,16 @@ let package = Package(
             targets: ["Shared"]
         )
     ],
+    dependencies: [
+        .package(path: "../../SwiftUINavigation")
+    ],
     targets: [
         .target(
             name: "Shared",
-            resources: [.process("Resources")]
+            dependencies: [
+                .product(name: "SwiftUINavigation", package: "SwiftUINavigation")
+            ]
         )
+
     ]
 )

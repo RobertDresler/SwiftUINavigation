@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../SwiftUINavigation"),
-        .package(path: "../../Services/UserRepository")
+        .package(path: "../../Services/FlagsRepository")
     ],
     targets: [
         .target(
@@ -23,7 +23,7 @@ let package = Package(
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "SwiftUINavigation", package: "SwiftUINavigation"),
-                .product(name: "UserRepository", package: "UserRepository")
+                .product(name: "FlagsRepository", package: "FlagsRepository")
             ],
             resources: [.process("Resources")]
         )

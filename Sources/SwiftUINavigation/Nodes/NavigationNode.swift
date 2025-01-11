@@ -55,11 +55,11 @@ import Combine
     }
 
     public var canPresentIfWouldnt: Bool {
-        parent?.isWrapperNode == false
+        parent?.isWrapperNode == false || parent?.presentedNode?.node === self
     }
 
     public var nearestNodeWhichCanPresent: NavigationNode? {
-        nearestNodeWhichCanPresentFromParent?.topPresented ?? nearestChildrenNodeWhichCanPresent
+        nearestChildrenNodeWhichCanPresent ?? nearestNodeWhichCanPresentFromParent?.topPresented
     }
 
     public var topPresented: NavigationNode {
@@ -91,9 +91,13 @@ import Combine
         sendMessage(RemovalNavigationMessage())
     }
 
+    public func sendEnvironmentTrigger(_ trigger: NavigationEnvironmentTrigger) {
+        navigationEnvironmentTrigger.send(trigger)
+    }
+
     // MARK: Internal
 
-    let urlToOpen = PassthroughSubject<URL, Never>()
+    let navigationEnvironmentTrigger = PassthroughSubject<NavigationEnvironmentTrigger, Never>()
     var cancellables = Set<AnyCancellable>()
 
     var defaultDeepLinkHandler: NavigationDeepLinkHandler? {

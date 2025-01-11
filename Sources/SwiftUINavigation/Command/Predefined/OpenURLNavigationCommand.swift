@@ -3,7 +3,7 @@ import Foundation
 public struct OpenURLNavigationCommand: NavigationCommand {
 
     public func execute(on node: NavigationNode) {
-        node.urlToOpen.send(url)
+        node.sendEnvironmentTrigger(OpenURLNavigationEnvironmentTrigger(url: url))
     }
 
     public func canExecute(on node: NavigationNode) -> Bool {

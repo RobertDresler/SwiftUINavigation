@@ -14,6 +14,8 @@ struct ActionableListItem {
             case logoutWithCustomConfirmationDialog
             case logoutWithConfirmation
             case printDebugGraph
+            case lockApp
+            case openWaitingWindow
         }
 
         case command(makeCommand: (NavigationNode) -> NavigationCommand)

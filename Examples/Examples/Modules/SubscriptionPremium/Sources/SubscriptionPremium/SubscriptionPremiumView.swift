@@ -1,12 +1,12 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import UserRepository
+import FlagsRepository
 
 struct SubscriptionPremiumView: View {
 
     @EnvironmentNavigationNode private var navigationNode: SubscriptionPremiumNavigationNode
-    @EnvironmentObject private var userRepository: UserRepository
+    @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: SubscriptionPremiumInputData
 
@@ -75,7 +75,7 @@ struct SubscriptionPremiumView: View {
     }
 
     private func unsubscribe() {
-        userRepository.isUserPremium = false
+        flagsRepository.isUserPremium = false
     }
 
 }
@@ -84,6 +84,6 @@ struct SubscriptionPremiumView: View {
     NavigationStack(root: {
         SubscriptionPremiumNavigationNode(inputData: SubscriptionPremiumInputData())
             .view
-            .environmentObject(UserRepository())
+            .environmentObject(FlagsRepository())
     })
 }

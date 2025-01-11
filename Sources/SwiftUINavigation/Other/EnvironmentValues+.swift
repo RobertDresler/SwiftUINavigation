@@ -39,3 +39,20 @@ public extension View {
         environment(\.registeredCustomPresentableNavigationNodes, nodes)
     }
 }
+
+private struct NavigationEnvironmentTriggerHandler: EnvironmentKey {
+    static let defaultValue: DefaultNavigationEnvironmentTriggerHandler = DefaultNavigationEnvironmentTriggerHandler()
+}
+
+public extension EnvironmentValues {
+    var navigationEnvironmentTriggerHandler: DefaultNavigationEnvironmentTriggerHandler {
+        get { self[NavigationEnvironmentTriggerHandler.self] }
+        set { self[NavigationEnvironmentTriggerHandler.self] = newValue }
+    }
+}
+
+public extension View {
+    func navigationEnvironmentTriggerHandler(_ handler: DefaultNavigationEnvironmentTriggerHandler) -> some View {
+        environment(\.navigationEnvironmentTriggerHandler, handler)
+    }
+}

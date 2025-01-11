@@ -21,6 +21,9 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             sendNotificationItem,
             architecturesItem,
             subscriptionItem,
+            windowsItem,
+            lockAppItem,
+            // TODO: -RD- implement rateAppItem,
             navigationNodeRelationshipsItem
         ]
     }
@@ -105,6 +108,43 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             deepLink: ExamplesNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
         )
     }
+
+    private var lockAppItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "lock.fill",
+                accentColor: .pink,
+                title: "Lock App",
+                subtitle: "This flow presents a lock screen over the whole app, a common pattern in many apps"
+            ),
+            customAction: .lockApp
+        )
+    }
+
+    private var windowsItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "macwindow.on.rectangle",
+                accentColor: .orange,
+                title: "Window (iPad only)",
+                subtitle: "This flow presents a second separate window, managed by AppNavigationNode using NavigationEnvironmentTriggers"
+            ),
+            customAction: .openWaitingWindow
+        )
+    }
+
+    // TODO: -RD- rateApp
+    /*private var rateAppItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "macwindow.on.rectangle",
+                accentColor: .orange,
+                title: "Window",
+                subtitle: "This flow presents a locked screen in a separate window, a common pattern in many apps, managed by AppNavigationNode using NavigationEnvironmentTriggers"
+            ),
+            customAction: .lockUser
+        )
+    }*/
 
     private var navigationNodeRelationshipsItem: ActionableListItem {
         .new(

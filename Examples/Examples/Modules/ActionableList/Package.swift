@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../Services/Shared"),
-        .package(path: "../../Services/UserRepository"),
+        .package(path: "../../Services/FlagsRepository"),
         .package(path: "../../Services/NotificationsService"),
         .package(path: "../../Services/DeepLinkForwarderService"),
         .package(path: "../../Modules/CustomConfirmationDialog"),
@@ -29,7 +29,7 @@ let package = Package(
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "Shared", package: "Shared"),
-                .product(name: "UserRepository", package: "UserRepository"),
+                .product(name: "FlagsRepository", package: "FlagsRepository"),
                 .product(name: "NotificationsService", package: "NotificationsService"),
                 .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
                 .product(name: "CustomConfirmationDialog", package: "CustomConfirmationDialog"),

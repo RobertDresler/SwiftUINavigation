@@ -3,30 +3,31 @@ import SwiftData
 import SwiftUINavigation
 import ExamplesNavigation
 import ExamplesNavigationDeepLinkHandler
-import UserRepository
+import FlagsRepository
 import App
 import Shared
 import NotificationsService
 import DeepLinkForwarderService
 import OnboardingService
 import OnboardingNavigation
+import Waiting
 
 @main
 struct ExamplesApp: App {
 
     // MARK: Dependencies
 
+    @MainActor
     final class Dependencies {
-
-        let userRepository = UserRepository()
+        let flagsRepository = FlagsRepository()
         let notificationCenter = UNUserNotificationCenter.current()
         lazy var notificationsService = NotificationsService(notificationCenter: notificationCenter)
         let deepLinkForwarderService = DeepLinkForwarderService()
         lazy var onboardingService = OnboardingService(
             onboardingNavigationCommandFactory: DefaultOnboardingNavigationCommandFactory(),
-            userRepository: userRepository
+            flagsRepository: flagsRepository
         )
-
+        lazy var defaultDeepLinkHandler = ExamplesNavigationDeepLinkHandler(flagsRepository: flagsRepository)
     }
 
     private let dependencies: Dependencies
@@ -48,19 +49,26 @@ struct ExamplesApp: App {
         WindowGroup {
             NavigationWindow(
                 rootNode: AppNavigationNode(
-                    userRepository: dependencies.userRepository,
+                    flagsRepository: dependencies.flagsRepository,
                     deepLinkForwarderService: dependencies.deepLinkForwarderService,
                     onboardingService: dependencies.onboardingService
                 ),
-                defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler(
-                    userRepository: dependencies.userRepository
-                )
+                defaultDeepLinkHandler: dependencies.defaultDeepLinkHandler
             )
                 .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])
-                .environmentObject(dependencies.userRepository)
+                .environmentObject(dependencies.flagsRepository)
                 .environmentObject(dependencies.notificationsService)
                 .environmentObject(dependencies.deepLinkForwarderService)
                 .environmentObject(dependencies.onboardingService)
+        }
+        WindowGroup(id: WindowID.waiting.rawValue) {
+            NavigationWindow(
+                rootNode: WaitingNavigationNode(
+                    inputData: WaitingInputData(),
+                    flagsRepository: dependencies.flagsRepository
+                ),
+                defaultDeepLinkHandler: dependencies.defaultDeepLinkHandler
+            )
         }
     }
 

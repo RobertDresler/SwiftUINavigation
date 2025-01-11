@@ -2,7 +2,7 @@ import SwiftUI
 import ExamplesNavigation
 import SwiftUINavigation
 import Shared
-import UserRepository
+import FlagsRepository
 import NotificationsService
 import DeepLinkForwarderService
 
@@ -10,7 +10,7 @@ struct ActionableListView: View {
 
     @EnvironmentNavigationNode private var navigationNode: ActionableListNavigationNode
     @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
-    @EnvironmentObject private var userRepository: UserRepository
+    @EnvironmentObject private var flagsRepository: FlagsRepository
     @EnvironmentObject private var notificationsService: NotificationsService
     @EnvironmentObject private var deepLinkForwarderService: DeepLinkForwarderService
 
@@ -137,6 +137,10 @@ struct ActionableListView: View {
                 logout()
             case .printDebugGraph:
                 printDebugGraph()
+            case .lockApp:
+                lockApp()
+            case .openWaitingWindow:
+                openWaitingWindow()
             }
         }
     }
@@ -149,7 +153,7 @@ struct ActionableListView: View {
     }
 
     private func logout() {
-        userRepository.isUserLogged = false
+        flagsRepository.isUserLogged = false
     }
 
     private func handleSendNotificationAction() {
@@ -198,6 +202,14 @@ struct ActionableListView: View {
 
     private func printDebugGraph() {
         navigationNode.printDebugGraph()
+    }
+
+    private func lockApp() {
+        flagsRepository.isAppLocked = true
+    }
+
+    private func openWaitingWindow() {
+        flagsRepository.isWaitingWindowOpen = true
     }
 
 }

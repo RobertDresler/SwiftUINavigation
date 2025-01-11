@@ -2,14 +2,14 @@ import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
 import Subscription
-import UserRepository
+import FlagsRepository
 
 public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler {
 
-    private let userRepository: UserRepository
+    private let flagsRepository: FlagsRepository
 
-    public init(userRepository: UserRepository) {
-        self.userRepository = userRepository
+    public init(flagsRepository: FlagsRepository) {
+        self.flagsRepository = flagsRepository
     }
 
     public func handleDeepLink(
@@ -22,7 +22,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
         case .subscription(let inputData):
             let subscriptionNode = SubscriptionNavigationNode(
                 inputData: inputData,
-                userRepository: userRepository
+                flagsRepository: flagsRepository
             )
             subscriptionNode.addMessageListener(messageListener)
             node.executeCommand(

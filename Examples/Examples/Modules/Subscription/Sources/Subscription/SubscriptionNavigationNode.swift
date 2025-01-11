@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import UserRepository
+import FlagsRepository
 import Combine
 import SubscriptionPremium
 import SubscriptionFreemium
@@ -9,18 +9,18 @@ import SubscriptionFreemium
 public final class SubscriptionNavigationNode: SwitchedNavigationNode {
 
     private let inputData: SubscriptionInputData
-    private let userRepository: UserRepository
+    private let flagsRepository: FlagsRepository
     private var cancellables = Set<AnyCancellable>()
 
-    public init(inputData: SubscriptionInputData, userRepository: UserRepository) {
+    public init(inputData: SubscriptionInputData, flagsRepository: FlagsRepository) {
         self.inputData = inputData
-        self.userRepository = userRepository
+        self.flagsRepository = flagsRepository
         super.init()
         bind()
     }
 
     private func bind() {
-        userRepository.$isUserPremium
+        flagsRepository.$isUserPremium
             .sink { [weak self] in self?.setNode(isUserPremium: $0) }
             .store(in: &cancellables)
     }
