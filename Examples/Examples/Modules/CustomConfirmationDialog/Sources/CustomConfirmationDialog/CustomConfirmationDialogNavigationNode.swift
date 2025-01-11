@@ -19,4 +19,8 @@ public final class CustomConfirmationDialogNavigationNode: NavigationNode {
         sendMessage(CustomConfirmationDialogConfirmationNavigationMessage())
     }
 
+    func dismiss() {
+        executeCommand(DismissNavigationCommand())
+    }
+
 }

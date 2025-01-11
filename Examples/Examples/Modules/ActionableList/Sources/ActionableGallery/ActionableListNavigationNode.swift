@@ -76,5 +76,13 @@ public final class ActionableListNavigationNode: NavigationNode {
         return CustomConfirmationDialogNavigationNode(inputData: inputData)
     }
 
+    var canDismiss: Bool {
+        canExecuteCommand(DismissJustFromPresentedNavigationCommand())
+    }
+
+    func dismiss() {
+        executeCommand(DismissNavigationCommand())
+    }
+
 }
 

@@ -3,7 +3,7 @@ import SwiftUI
 struct StackRootNavigationNodeView: View {
 
     @Namespace private var namespace
-    @EnvironmentNavigationNode private var node: StackRootNavigationNode
+    @EnvironmentNavigationNode private var navigationNode: StackRootNavigationNode
 
     // MARK: Getters
 
@@ -22,7 +22,7 @@ struct StackRootNavigationNodeView: View {
 
     private var navigationStackResolvedRoot: some View {
         Group {
-            if let rootNode = node.stackNodes.first?.destination {
+            if let rootNode = navigationNode.stackNodes.first?.destination {
                 NavigationNodeResolvedView(node: rootNode)
                     .connectingNavigationDestinationLogic(
                         nodeForNodeID: { node(for: $0) },
@@ -53,20 +53,13 @@ struct StackRootNavigationNodeView: View {
     }
 
     private var stackNodes: [StackNavigationNode] {
-        node.stackNodes
+        navigationNode.stackNodes
     }
 
     // MARK: Methods
 
     private func setNewPath(_ newPath: NavigationPath) {
-        node.executeCommand(
-            StackMapNavigationCommand(
-                animated: false,
-                transform: { nodes in
-                    Array(nodes.prefix(newPath.count + 1))
-                }
-            )
-        )
+        navigationNode.setNewPath(newPath)
     }
 
 }

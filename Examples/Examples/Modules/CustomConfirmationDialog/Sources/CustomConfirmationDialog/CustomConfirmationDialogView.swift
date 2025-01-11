@@ -59,7 +59,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private func dismiss() {
-        navigationNode.executeCommand(DismissNavigationCommand())
+        navigationNode.dismiss()
     }
 
 }

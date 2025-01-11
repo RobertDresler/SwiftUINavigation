@@ -46,7 +46,7 @@ struct ActionableListView: View {
         scrollView
             .navigationTitle(title)
             .toolbar {
-                if navigationNode.canExecuteCommand(DismissJustFromPresentedNavigationCommand()) {
+                if navigationNode.canDismiss {
                     ToolbarItem(placement: .topBarTrailing) {
                         dismissButton
                     }
@@ -56,7 +56,7 @@ struct ActionableListView: View {
     }
 
     private var dismissButton: some View {
-        DismissButton(action: { navigationNode.executeCommand(DismissNavigationCommand()) })
+        DismissButton(action: { navigationNode.dismiss() })
     }
 
     private var scrollView: some View {

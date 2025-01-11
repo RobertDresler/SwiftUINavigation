@@ -25,4 +25,15 @@ public final class StackRootNavigationNode: NavigationNode {
         super.init()
     }
 
+    func setNewPath(_ newPath: NavigationPath) {
+        executeCommand(
+            StackMapNavigationCommand(
+                animated: false,
+                transform: { nodes in
+                    Array(nodes.prefix(newPath.count + 1))
+                }
+            )
+        )
+    }
+
 }

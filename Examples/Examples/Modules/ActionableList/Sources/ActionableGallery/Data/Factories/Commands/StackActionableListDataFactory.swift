@@ -2,6 +2,7 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
+/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
 struct StackActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
