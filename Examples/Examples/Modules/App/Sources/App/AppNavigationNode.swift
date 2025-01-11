@@ -15,17 +15,15 @@ public final class AppNavigationNode: SwitchedNavigationNode {
     private let onboardingService: OnboardingService
     private var cancellables = Set<AnyCancellable>()
 
-    // TODO: -RD- maybe make root node which requires handler?
     public init(
         userRepository: UserRepository,
         deepLinkForwarderService: DeepLinkForwarderService,
-        onboardingService: OnboardingService,
-        defaultDeepLinkHandler: NavigationDeepLinkHandler
+        onboardingService: OnboardingService
     ) {
         self.userRepository = userRepository
         self.deepLinkForwarderService = deepLinkForwarderService
         self.onboardingService = onboardingService
-        super.init(defaultDeepLinkHandler: defaultDeepLinkHandler)
+        super.init()
         bind()
     }
 

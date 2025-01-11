@@ -96,20 +96,24 @@ import Combine
     let urlToOpen = PassthroughSubject<URL, Never>()
     var cancellables = Set<AnyCancellable>()
 
-    // MARK: Private
-
     var defaultDeepLinkHandler: NavigationDeepLinkHandler? {
         _defaultDeepLinkHandler ?? parent?.defaultDeepLinkHandler
     }
+
+    func setDefaultDeepLinkHandler(_ handler: NavigationDeepLinkHandler?) {
+        _defaultDeepLinkHandler = handler
+    }
+
+    // MARK: Private
+
     private var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
     private var _childrenPublisher = CurrentValueSubject<[NavigationNode], Never>([])
     private let debugPrintPrefix: String
     private var messageListeners = [MessageListener]()
 
     @MainActor
-    public init(defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
+    public init() {
         self.id = UUID().uuidString
-        _defaultDeepLinkHandler = defaultDeepLinkHandler
         debugPrintPrefix = "[\(type(of: self)) \(id.prefix(3))...]"
         printDebugText("Init")
         bind()

@@ -50,10 +50,10 @@ struct ExamplesApp: App {
                 rootNode: AppNavigationNode(
                     userRepository: dependencies.userRepository,
                     deepLinkForwarderService: dependencies.deepLinkForwarderService,
-                    onboardingService: dependencies.onboardingService,
-                    defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler(
-                        userRepository: dependencies.userRepository
-                    )
+                    onboardingService: dependencies.onboardingService
+                ),
+                defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler(
+                    userRepository: dependencies.userRepository
                 )
             )
                 .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])

@@ -6,8 +6,9 @@ public struct NavigationWindow: View {
 
     // MARK: Init
 
-    public init(rootNode: NavigationNode) {
+    public init(rootNode: NavigationNode, defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
         self.rootNode = rootNode
+        rootNode.setDefaultDeepLinkHandler(defaultDeepLinkHandler)
     }
 
     public var body: some View {
