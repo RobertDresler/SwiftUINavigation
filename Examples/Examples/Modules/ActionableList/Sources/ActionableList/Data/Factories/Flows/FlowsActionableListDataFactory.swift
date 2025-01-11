@@ -19,6 +19,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             onboardingItem,
             messagingBetweenNodesItem,
             sendNotificationItem,
+            architecturesItem,
             subscriptionItem,
             navigationNodeRelationshipsItem
         ]
@@ -72,6 +73,24 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Sends a notification that redirects to a deep link when tapped, called by DeepLinkForwarderService in AppDelegate and handled in AppNavigationNode."
             ),
             customAction: .sendNotification
+        )
+    }
+
+    private var architecturesItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "cube.fill",
+                accentColor: .purple,
+                title: "Architectures",
+                subtitle: "How SwiftUINavigation works with architectures like MVVM or Composable, helping you envision your code structure"
+            ),
+            makeCommand: {
+                StackAppendNavigationCommand(
+                    appendedNode: ActionableListNavigationNode(
+                        inputData: ActionableListInputData(id: .architectures)
+                    )
+                )
+            }
         )
     }
 

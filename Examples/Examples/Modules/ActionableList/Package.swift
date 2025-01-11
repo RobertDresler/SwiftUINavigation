@@ -18,7 +18,10 @@ let package = Package(
         .package(path: "../../Services/UserRepository"),
         .package(path: "../../Services/NotificationsService"),
         .package(path: "../../Services/DeepLinkForwarderService"),
-        .package(path: "../../Modules/CustomConfirmationDialog")
+        .package(path: "../../Modules/CustomConfirmationDialog"),
+        .package(path: "../../Modules/ArchitectureViewOnly"),
+        .package(path: "../../Modules/ArchitectureMVVM"),
+        .package(path: "../../Modules/ArchitectureComposable")
     ],
     targets: [
         .target(
@@ -29,7 +32,10 @@ let package = Package(
                 .product(name: "UserRepository", package: "UserRepository"),
                 .product(name: "NotificationsService", package: "NotificationsService"),
                 .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
-                .product(name: "CustomConfirmationDialog", package: "CustomConfirmationDialog")
+                .product(name: "CustomConfirmationDialog", package: "CustomConfirmationDialog"),
+                .product(name: "ArchitectureViewOnly", package: "ArchitectureViewOnly"),
+                .product(name: "ArchitectureMVVM", package: "ArchitectureMVVM"),
+                .product(name: "ArchitectureComposable", package: "ArchitectureComposable")
             ]
         )
     ]

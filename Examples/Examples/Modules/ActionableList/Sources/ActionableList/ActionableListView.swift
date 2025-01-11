@@ -35,6 +35,8 @@ struct ActionableListView: View {
                 URLHandlingActionableListDataFactory()
             case .flows:
                 FlowsActionableListDataFactory()
+            case .architectures:
+                ArchitecturesActionableListDataFactory()
             }
         }()
         self.title = factory.makeTitle()

@@ -1,0 +1,3 @@
+enum ArchitectureComposableViewEvent {
+    case hide
+}
