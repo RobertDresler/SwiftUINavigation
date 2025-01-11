@@ -1,7 +1,7 @@
 import SwiftUI
 
 @MainActor
-public protocol PresentedNavigationNode: AnyObject {
+public protocol PresentedNavigationNode {
     associatedtype Body: View
     var node: NavigationNode { get }
     var sourceID: String? { get }

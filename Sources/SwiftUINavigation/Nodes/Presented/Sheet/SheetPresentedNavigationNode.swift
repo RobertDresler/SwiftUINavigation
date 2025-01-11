@@ -1,6 +1,6 @@
 import SwiftUI
 
-public final class SheetPresentedNavigationNode: PresentedNavigationNode {
+public struct SheetPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Getters
 

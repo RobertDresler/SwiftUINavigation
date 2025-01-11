@@ -76,7 +76,8 @@ import Combine
             ?? childrenNodesWhichCanPresent.last
     }
 
-    public func addMessageListener(_ listener: @escaping MessageListener) {
+    public func addMessageListener(_ listener: MessageListener?) {
+        guard let listener else { return }
         messageListeners.append(listener)
     }
 

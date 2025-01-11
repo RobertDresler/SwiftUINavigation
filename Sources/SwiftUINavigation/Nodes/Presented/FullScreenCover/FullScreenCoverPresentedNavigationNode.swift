@@ -1,6 +1,6 @@
 import SwiftUI
 
-public final class FullScreenCoverPresentedNavigationNode: PresentedNavigationNode {
+public struct FullScreenCoverPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Getters
 

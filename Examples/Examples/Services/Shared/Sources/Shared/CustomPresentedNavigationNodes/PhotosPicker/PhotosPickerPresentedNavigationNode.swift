@@ -2,7 +2,7 @@ import SwiftUI
 import PhotosUI
 import SwiftUINavigation
 
-public final class PhotosPickerPresentedNavigationNode: PresentedNavigationNode {
+public struct PhotosPickerPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Other
 

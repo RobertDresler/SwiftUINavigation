@@ -1,6 +1,6 @@
 import SwiftUI
 
-public final class ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode {
+public struct ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode {
 
     public let node: NavigationNode
     public let sourceID: String?
