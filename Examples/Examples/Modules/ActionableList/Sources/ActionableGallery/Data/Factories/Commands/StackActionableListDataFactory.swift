@@ -32,9 +32,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 StackAppendNavigationCommand(
-                    appendedNode: StackNavigationNode(
-                        destination: ActionableListNavigationNode(inputData: .default)
-                    )
+                    appendedNode: ActionableListNavigationNode(inputData: .default)
                 )
             }
         )
@@ -50,9 +48,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 StackAppendNavigationCommand(
-                    appendedNode: StackNavigationNode(
-                        destination: ActionableListNavigationNode(inputData: .default)
-                    ),
+                    appendedNode: ActionableListNavigationNode(inputData: .default),
                     animated: false
                 )
             }

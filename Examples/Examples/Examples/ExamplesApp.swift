@@ -8,6 +8,8 @@ import App
 import Shared
 import NotificationsService
 import DeepLinkForwarderService
+import OnboardingService
+import OnboardingNavigation
 
 @main
 struct ExamplesApp: App {
@@ -20,6 +22,10 @@ struct ExamplesApp: App {
         let notificationCenter = UNUserNotificationCenter.current()
         lazy var notificationsService = NotificationsService(notificationCenter: notificationCenter)
         let deepLinkForwarderService = DeepLinkForwarderService()
+        lazy var onboardingService = OnboardingService(
+            onboardingNavigationCommandFactory: DefaultOnboardingNavigationCommandFactory(),
+            userRepository: userRepository
+        )
 
     }
 
@@ -44,6 +50,7 @@ struct ExamplesApp: App {
                 rootNode: AppNavigationNode(
                     userRepository: dependencies.userRepository,
                     deepLinkForwarderService: dependencies.deepLinkForwarderService,
+                    onboardingService: dependencies.onboardingService,
                     defaultDeepLinkHandler: ExamplesNavigationDeepLinkHandler(
                         userRepository: dependencies.userRepository
                     )
@@ -53,6 +60,7 @@ struct ExamplesApp: App {
                 .environmentObject(dependencies.userRepository)
                 .environmentObject(dependencies.notificationsService)
                 .environmentObject(dependencies.deepLinkForwarderService)
+                .environmentObject(dependencies.onboardingService)
         }
     }
 

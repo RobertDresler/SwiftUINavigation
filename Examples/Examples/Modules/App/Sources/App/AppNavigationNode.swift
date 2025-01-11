@@ -6,21 +6,24 @@ import Combine
 import Start
 import MainTabs
 import DeepLinkForwarderService
-
+import OnboardingService
 public final class AppNavigationNode: SwitchedNavigationNode {
 
     private let userRepository: UserRepository
     private let deepLinkForwarderService: DeepLinkForwarderService
+    private let onboardingService: OnboardingService
     private var cancellables = Set<AnyCancellable>()
 
     // TODO: -RD- maybe make root node which requires handler?
     public init(
         userRepository: UserRepository,
         deepLinkForwarderService: DeepLinkForwarderService,
+        onboardingService: OnboardingService,
         defaultDeepLinkHandler: NavigationDeepLinkHandler
     ) {
         self.userRepository = userRepository
         self.deepLinkForwarderService = deepLinkForwarderService
+        self.onboardingService = onboardingService
         super.init(defaultDeepLinkHandler: defaultDeepLinkHandler)
         bind()
     }
@@ -33,7 +36,11 @@ public final class AppNavigationNode: SwitchedNavigationNode {
     }
 
     private var notLoggedNode: NavigationNode {
-        StartNavigationNode(inputData: StartInputData())
+        StackRootNavigationNode(
+            stackNodes: [
+                StartNavigationNode(inputData: StartInputData(), onboardingService: onboardingService)
+            ]
+        )
     }
 
     private var loggedNode: NavigationNode {

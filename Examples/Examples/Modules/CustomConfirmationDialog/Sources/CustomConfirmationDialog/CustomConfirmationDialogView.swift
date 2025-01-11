@@ -48,16 +48,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var confirmButton: some View {
-        Button(action: { sendConfirmationMessage() }) {
-            Text(inputData.confirmButtonTitle)
-                .font(.title3)
-                .bold()
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(.blue)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 24))
-        }
+        PrimaryButton(title: inputData.confirmButtonTitle, action: { sendConfirmationMessage() })
     }
 
     // MARK: Actions

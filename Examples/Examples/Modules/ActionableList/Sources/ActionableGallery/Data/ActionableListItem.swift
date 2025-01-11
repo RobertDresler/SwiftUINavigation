@@ -12,6 +12,7 @@ struct ActionableListItem {
             case logout(sourceID: String)
             case sendNotification
             case logoutWithCustomConfirmationDialog
+            case logoutWithConfirmation
         }
 
         case command(makeCommand: (NavigationNode) -> NavigationCommand)

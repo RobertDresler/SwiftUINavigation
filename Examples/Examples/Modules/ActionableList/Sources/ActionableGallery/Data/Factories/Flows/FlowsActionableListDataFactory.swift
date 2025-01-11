@@ -15,6 +15,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
     func makeItems() -> [ActionableListItem] {
         [
             logoutItem,
+            onboardingItem,
             messagingBetweenNodesItem,
             sendNotificationItem,
             subscriptionItem
@@ -33,6 +34,18 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             ),
             customAction: .logout(sourceID: presentingNavigationSourceID),
             presentingNavigationSourceID: presentingNavigationSourceID
+        )
+    }
+
+    private var onboardingItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "hand.wave.fill",
+                accentColor: .green,
+                title: "Onboarding",
+                subtitle: "This flow leads to the start screen, where onboarding begins. It demonstrates a form-like flow with data storage using OnboardingService and step-by-step navigation."
+            ),
+            customAction: .logoutWithConfirmation
         )
     }
 

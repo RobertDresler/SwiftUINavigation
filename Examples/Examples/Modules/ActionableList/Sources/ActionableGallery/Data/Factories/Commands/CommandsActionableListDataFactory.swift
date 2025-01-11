@@ -135,10 +135,8 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
     private func makeAppendActionableListCommand(for id: ActionableListInputData.ID) -> () -> NavigationCommand {
         {
             StackAppendNavigationCommand(
-                appendedNode: StackNavigationNode(
-                    destination: ActionableListNavigationNode(
-                        inputData: ActionableListInputData(id: id)
-                    )
+                appendedNode: ActionableListNavigationNode(
+                    inputData: ActionableListInputData(id: id)
                 )
             )
         }

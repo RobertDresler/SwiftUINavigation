@@ -16,6 +16,7 @@ let package = Package(
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../Services/UserRepository"),
         .package(path: "../../Services/DeepLinkForwarderService"),
+        .package(path: "../../Services/OnboardingService"),
         .package(path: "../../Modules/Start"),
         .package(path: "../../Modules/MainTabs")
     ],
@@ -26,6 +27,7 @@ let package = Package(
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "UserRepository", package: "UserRepository"),
                 .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
+                .product(name: "OnboardingService", package: "OnboardingService"),
                 .product(name: "Start", package: "Start"),
                 .product(name: "MainTabs", package: "MainTabs")
             ]

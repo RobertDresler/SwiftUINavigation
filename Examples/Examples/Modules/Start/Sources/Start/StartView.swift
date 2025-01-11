@@ -62,17 +62,11 @@ struct StartView: View {
     // MARK: Actions
 
     private func createAccount() {
-        // TODO: -RD- implement
+        navigationNode.startOnboarding()
     }
 
     private func login() {
         userRepository.isUserLogged = true
     }
 
-}
-
-#Preview {
-    StartNavigationNode(inputData: StartInputData())
-        .view
-        .environmentObject(UserRepository())
 }

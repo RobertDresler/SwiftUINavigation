@@ -20,4 +20,9 @@ public final class StackRootNavigationNode: NavigationNode {
         super.init()
     }
 
+    public init(stackNodes: [NavigationNode]) {
+        self.stackNodes = stackNodes.map { StackNavigationNode(destination: $0) }
+        super.init()
+    }
+
 }

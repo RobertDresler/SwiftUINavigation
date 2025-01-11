@@ -4,27 +4,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "SubscriptionFreemium",
+    name: "OnboardingResult",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "SubscriptionFreemium",
-            targets: ["SubscriptionFreemium"]
+            name: "OnboardingResult",
+            targets: ["OnboardingResult"]
         ),
     ],
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../SwiftUINavigation"),
-        .package(path: "../../Services/UserRepository"),
+        .package(path: "../../Services/OnboardingService"),
         .package(path: "../../Services/Shared")
     ],
     targets: [
         .target(
-            name: "SubscriptionFreemium",
+            name: "OnboardingResult",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "SwiftUINavigation", package: "SwiftUINavigation"),
-                .product(name: "UserRepository", package: "UserRepository"),
+                .product(name: "OnboardingService", package: "OnboardingService"),
                 .product(name: "Shared", package: "Shared")
             ]
         )

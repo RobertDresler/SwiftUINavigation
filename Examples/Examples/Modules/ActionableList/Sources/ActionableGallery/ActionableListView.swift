@@ -131,6 +131,8 @@ struct ActionableListView: View {
                 handleSendNotificationAction()
             case .logoutWithCustomConfirmationDialog:
                 handleLogoutWithCustomConfirmationDialog()
+            case .logoutWithConfirmation:
+                logout()
             }
         }
     }

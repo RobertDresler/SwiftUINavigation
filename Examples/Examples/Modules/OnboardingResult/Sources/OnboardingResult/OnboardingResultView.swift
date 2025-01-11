@@ -3,65 +3,68 @@ import SwiftUINavigation
 import ExamplesNavigation
 import UserRepository
 import Shared
+import OnboardingService
 
-struct SubscriptionFreemiumView: View {
+struct OnboardingResultView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: SubscriptionFreemiumNavigationNode
+    @EnvironmentNavigationNode private var navigationNode: OnboardingResultNavigationNode
     @EnvironmentObject private var userRepository: UserRepository
 
-    var inputData: SubscriptionFreemiumInputData
+    var inputData: OnboardingResultInputData
 
     var body: some View {
         VStack(spacing: 0) {
             title
             Spacer()
             VStack(spacing: 24) {
-                star
+                image
                 description
             }
             Spacer()
-            subscribeButton
+            continueButton
         }
             .padding()
-            .padding(.top, 48)
     }
 
     private var title: some View {
-        Text("Get Subscription!")
+        Text("The end")
             .font(.largeTitle)
             .bold()
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var star: some View {
-        Image(systemName: "star.circle.fill")
+    private var image: some View {
+        Image(systemName: "flag.pattern.checkered.2.crossed")
             .font(.system(size: 100))
             .symbolRenderingMode(.hierarchical)
-            .foregroundStyle(.yellow)
+            .foregroundStyle(.black)
     }
 
     private var description: some View {
-        Text("This is just a simulation of a subscription screen. No actual payments here!")
+        Text("Well done! You’ve admitted it – it’s all your fault. But hey, at least you’re honest!")
             .font(.title2)
             .frame(maxWidth: .infinity, alignment: .center)
             .multilineTextAlignment(.center)
             .foregroundColor(SharedColor.grayscalePrimary)
     }
 
-    private var subscribeButton: some View {
-        PrimaryButton(title: "Simulate Purchase", action: { subscribe() })
+    private var continueButton: some View {
+        PrimaryButton(title: "Finish onboarding", action: { continueInOnboarding() })
     }
 
     // MARK: Actions
 
-    private func subscribe() {
-        userRepository.isUserPremium = true
+    private func continueInOnboarding() {
+        navigationNode.continueInOnboarding()
     }
 
 }
 
 #Preview {
-    SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
+    OnboardingResultNavigationNode(
+        inputData: OnboardingResultInputData(),
+        onboardingService: OnboardingService.makeStub()
+    )
         .view
         .environmentObject(UserRepository())
 }

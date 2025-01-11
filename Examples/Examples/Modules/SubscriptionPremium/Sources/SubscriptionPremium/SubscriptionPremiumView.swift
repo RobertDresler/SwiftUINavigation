@@ -12,8 +12,10 @@ struct SubscriptionPremiumView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            title
+            Spacer()
             VStack(spacing: 24) {
-                title
+                image
                 description
             }
             Spacer()
@@ -40,8 +42,8 @@ struct SubscriptionPremiumView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var star: some View {
-        Image(systemName: "star.circle.fill")
+    private var image: some View {
+        Image(systemName: "hands.and.sparkles.fill")
             .font(.system(size: 100))
             .symbolRenderingMode(.hierarchical)
             .foregroundStyle(.yellow)
@@ -51,6 +53,7 @@ struct SubscriptionPremiumView: View {
         Text("You’re now a premium user.\n\nIf you'd like to support me further, you can buy me a coffee. The link is at the very bottom of the GitHub README, or feel free to give a star to the repository on GitHub!")
             .font(.title2)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .minimumScaleFactor(0.5)
     }
 
     private var buyMeCoffeeButton: some View {

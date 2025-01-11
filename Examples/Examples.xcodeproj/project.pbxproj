@@ -10,6 +10,8 @@
 		D04318D32CC8D85E0077101C /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D04318D22CC8D85E0077101C /* SwiftUINavigation */; };
 		D04319512CC8EB380077101C /* ExamplesNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D04319502CC8EB380077101C /* ExamplesNavigation */; };
 		D0746C752CCA68BD00D26F9F /* UserRepository in Frameworks */ = {isa = PBXBuildFile; productRef = D0746C742CCA68BD00D26F9F /* UserRepository */; };
+		D09DB4482D32BB4F0050E44C /* OnboardingService in Frameworks */ = {isa = PBXBuildFile; productRef = D09DB4472D32BB4F0050E44C /* OnboardingService */; };
+		D09DB44B2D32BB570050E44C /* OnboardingNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D09DB44A2D32BB570050E44C /* OnboardingNavigation */; };
 		D0EB4DC22CD6420D0052F1AC /* App in Frameworks */ = {isa = PBXBuildFile; productRef = D0EB4DC12CD6420D0052F1AC /* App */; };
 		D0EB4E3F2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler in Frameworks */ = {isa = PBXBuildFile; productRef = D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */; };
 		D0FC8E372D3162C60041253F /* NotificationsService in Frameworks */ = {isa = PBXBuildFile; productRef = D0FC8E362D3162C60041253F /* NotificationsService */; };
@@ -28,13 +30,16 @@
 				Modules/App,
 				Modules/CustomConfirmationDialog,
 				Modules/MainTabs,
+				Modules/OnboardingQuestion,
 				Modules/Start,
 				Modules/Subscription,
 				Modules/SubscriptionFreemium,
 				Modules/SubscriptionPremium,
 				Navigation/ExamplesNavigation,
+				Navigation/OnboardingNavigation,
 				Services/DeepLinkForwarderService,
 				Services/NotificationsService,
+				Services/OnboardingService,
 				Services/Shared,
 				Services/UserRepository,
 			);
@@ -61,8 +66,10 @@
 				D0EB4DC22CD6420D0052F1AC /* App in Frameworks */,
 				D04319512CC8EB380077101C /* ExamplesNavigation in Frameworks */,
 				D0746C752CCA68BD00D26F9F /* UserRepository in Frameworks */,
+				D09DB44B2D32BB570050E44C /* OnboardingNavigation in Frameworks */,
 				D0FC8E372D3162C60041253F /* NotificationsService in Frameworks */,
 				D0EB4E3F2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler in Frameworks */,
+				D09DB4482D32BB4F0050E44C /* OnboardingService in Frameworks */,
 				D0FC8E3B2D3167040041253F /* DeepLinkForwarderService in Frameworks */,
 				D04318D32CC8D85E0077101C /* SwiftUINavigation in Frameworks */,
 			);
@@ -114,6 +121,8 @@
 				D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */,
 				D0FC8E362D3162C60041253F /* NotificationsService */,
 				D0FC8E3A2D3167040041253F /* DeepLinkForwarderService */,
+				D09DB4472D32BB4F0050E44C /* OnboardingService */,
+				D09DB44A2D32BB570050E44C /* OnboardingNavigation */,
 			);
 			productName = Examples;
 			productReference = D04318B22CC8D7430077101C /* Examples.app */;
@@ -151,6 +160,8 @@
 				D0EB4E3D2CD783F50052F1AC /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigationDeepLinkHandler" */,
 				D0FC8E352D3162C60041253F /* XCLocalSwiftPackageReference "Examples/Services/NotificationsService" */,
 				D0FC8E392D3167040041253F /* XCLocalSwiftPackageReference "Examples/Services/DeepLinkForwarderService" */,
+				D09DB4462D32BB4F0050E44C /* XCLocalSwiftPackageReference "Examples/Services/OnboardingService" */,
+				D09DB4492D32BB570050E44C /* XCLocalSwiftPackageReference "Examples/Navigation/OnboardingNavigation" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D04318B32CC8D7430077101C /* Products */;
@@ -400,6 +411,14 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Examples/Services/UserRepository;
 		};
+		D09DB4462D32BB4F0050E44C /* XCLocalSwiftPackageReference "Examples/Services/OnboardingService" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Examples/Services/OnboardingService;
+		};
+		D09DB4492D32BB570050E44C /* XCLocalSwiftPackageReference "Examples/Navigation/OnboardingNavigation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Examples/Navigation/OnboardingNavigation;
+		};
 		D0EB4DC02CD6420D0052F1AC /* XCLocalSwiftPackageReference "Examples/Modules/App" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Examples/Modules/App;
@@ -430,6 +449,14 @@
 		D0746C742CCA68BD00D26F9F /* UserRepository */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = UserRepository;
+		};
+		D09DB4472D32BB4F0050E44C /* OnboardingService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OnboardingService;
+		};
+		D09DB44A2D32BB570050E44C /* OnboardingNavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OnboardingNavigation;
 		};
 		D0EB4DC12CD6420D0052F1AC /* App */ = {
 			isa = XCSwiftPackageProductDependency;

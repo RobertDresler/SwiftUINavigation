@@ -16,6 +16,11 @@ public struct StackAppendNavigationCommand: NavigationCommand {
         self.animated = animated
     }
 
+    public init(appendedNode: NavigationNode, animated: Bool = true) {
+        self.appendedNode = StackNavigationNode(destination: appendedNode)
+        self.animated = animated
+    }
+
     private func stackMapCommand(for node: NavigationNode) -> NavigationCommand {
         StackMapNavigationCommand(
             animated: animated,
