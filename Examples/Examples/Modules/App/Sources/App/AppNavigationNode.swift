@@ -7,6 +7,7 @@ import Start
 import MainTabs
 import DeepLinkForwarderService
 import OnboardingService
+
 public final class AppNavigationNode: SwitchedNavigationNode {
 
     private let userRepository: UserRepository

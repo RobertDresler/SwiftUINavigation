@@ -18,7 +18,8 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             onboardingItem,
             messagingBetweenNodesItem,
             sendNotificationItem,
-            subscriptionItem
+            subscriptionItem,
+            navigationNodeRelationshipsItem
         ]
     }
 
@@ -82,6 +83,18 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "This flow shows a node based on a changing state—premium or freemium screen depending on the user's status"
             ),
             deepLink: ExamplesNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
+        )
+    }
+
+    private var navigationNodeRelationshipsItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "point.3.filled.connected.trianglepath.dotted",
+                accentColor: .blue,
+                title: "NavigationNode Relationships",
+                subtitle: "Navigation nodes create a graph with parent-child relationships, making it easy to track the flow. Shake your phone or use the simulator (Device -> Shake) to print the node hierarchy from the Root (AppNavigationNode) into the terminal."
+            ),
+            customAction: .printDebugGraph
         )
     }
 
