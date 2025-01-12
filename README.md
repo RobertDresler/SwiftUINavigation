@@ -1,6 +1,6 @@
 # SwiftUINavigation
 
-Simplifying Navigation in SwiftUI with Clean, Effortless Solutions
+Making SwiftUI Navigation Simple, Clean, Intuitive, and Elegant.
 
 
 ![](READMEAssets/appIcon.png)
