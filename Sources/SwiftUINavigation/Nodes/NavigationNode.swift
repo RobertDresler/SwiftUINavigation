@@ -55,7 +55,7 @@ import Combine
     }
 
     public var canPresentIfWouldnt: Bool {
-        parent?.isWrapperNode == false || parent?.presentedNode?.node === self
+        parent == nil || parent?.isWrapperNode == false || parent?.presentedNode?.node === self
     }
 
     public var nearestNodeWhichCanPresent: NavigationNode? {
