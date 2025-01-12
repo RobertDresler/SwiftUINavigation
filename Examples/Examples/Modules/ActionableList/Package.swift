@@ -22,7 +22,8 @@ let package = Package(
         .package(path: "../../Modules/ArchitectureViewOnly"),
         .package(path: "../../Modules/ArchitectureMVVM"),
         .package(path: "../../Modules/ArchitectureComposable"),
-        .package(path: "../../Modules/SegmentedTabs")
+        .package(path: "../../Modules/SegmentedTabs"),
+        .package(path: "../../Modules/CustomNavigationBar")
     ],
     targets: [
         .target(
@@ -37,7 +38,8 @@ let package = Package(
                 .product(name: "ArchitectureViewOnly", package: "ArchitectureViewOnly"),
                 .product(name: "ArchitectureMVVM", package: "ArchitectureMVVM"),
                 .product(name: "ArchitectureComposable", package: "ArchitectureComposable"),
-                .product(name: "SegmentedTabs", package: "SegmentedTabs")
+                .product(name: "SegmentedTabs", package: "SegmentedTabs"),
+                .product(name: "CustomNavigationBar", package: "CustomNavigationBar")
             ]
         )
     ]

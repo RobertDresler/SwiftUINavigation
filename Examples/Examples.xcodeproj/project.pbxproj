@@ -33,6 +33,7 @@
 				Modules/ArchitectureMVVM,
 				Modules/ArchitectureViewOnly,
 				Modules/CustomConfirmationDialog,
+				Modules/CustomNavigationBar,
 				Modules/LockedApp,
 				Modules/MainTabs,
 				Modules/OnboardingQuestion,

@@ -5,6 +5,7 @@ import SegmentedTabs
 import ArchitectureViewOnly
 import ArchitectureMVVM
 import ArchitectureComposable
+import CustomNavigationBar
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
 struct FlowsActionableListDataFactory: ActionableListDataFactory {
@@ -27,6 +28,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             subscriptionItem,
             windowsItem,
             requestReviewItem,
+            navigationBarCustomizationItem,
             lockAppItem,
             customWrapperItem,
             navigationNodeRelationshipsItem
@@ -147,6 +149,22 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "You can create a custom NavigationEnvironmentTrigger to invoke an EnvironmentValues action, such as requestReview. Due to SwiftUI limitations, this action must be proxied (see AppWindow for reference). Similarly, actions like openURL or openWindow follow the same pattern."
             ),
             makeCommand: { RequestReviewNavigationCommand() }
+        )
+    }
+
+    private var navigationBarCustomizationItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "menubar.rectangle",
+                accentColor: .mint,
+                title: "Navigation Bar Customization",
+                subtitle: "The best way to customize the navigation bar is by creating your own"
+            ),
+            makeCommand: {
+                StackAppendNavigationCommand(
+                    appendedNode: CustomNavigationBarNavigationNode(inputData: CustomNavigationBarInputData())
+                )
+            }
         )
     }
 
