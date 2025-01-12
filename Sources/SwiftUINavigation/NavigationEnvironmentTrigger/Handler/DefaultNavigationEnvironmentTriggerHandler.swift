@@ -1,8 +1,8 @@
 import SwiftUI
 
-@MainActor
-open class DefaultNavigationEnvironmentTriggerHandler {
+open class DefaultNavigationEnvironmentTriggerHandler: @unchecked Sendable {
 
+    @MainActor
     open func handleTrigger(_ trigger: NavigationEnvironmentTrigger, in environment: EnvironmentValues) {
         if let openURLTrigger = trigger as? OpenURLNavigationEnvironmentTrigger {
             environment.openURL(openURLTrigger.url)
@@ -10,11 +10,13 @@ open class DefaultNavigationEnvironmentTriggerHandler {
             environment.openWindow(id: openWindowTrigger.id)
         } else if #available(iOS 17, *), let dismissWindowTrigger = trigger as? DismissWindowNavigationEnvironmentTrigger {
             environment.dismissWindow(id: dismissWindowTrigger.id)
-        } else if let dismissTrigger = trigger as? DismissNavigationEnvironmentTrigger {
+        } else if trigger is DismissNavigationEnvironmentTrigger {
             environment.dismiss()
         } else {
             print("Unknown trigger: \(trigger)")
         }
     }
+
+    public init() {}
 
 }

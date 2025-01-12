@@ -22,8 +22,8 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             architecturesItem,
             subscriptionItem,
             windowsItem,
+            requestReviewItem,
             lockAppItem,
-            // TODO: -RD- implement rateAppItem,
             navigationNodeRelationshipsItem
         ]
     }
@@ -133,24 +133,23 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
         )
     }
 
-    // TODO: -RD- rateApp
-    /*private var rateAppItem: ActionableListItem {
+    private var requestReviewItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
-                symbolName: "macwindow.on.rectangle",
-                accentColor: .orange,
-                title: "Window",
-                subtitle: "This flow presents a locked screen in a separate window, a common pattern in many apps, managed by AppNavigationNode using NavigationEnvironmentTriggers"
+                symbolName: "star.bubble.fill",
+                accentColor: .blue,
+                title: "Request Review",
+                subtitle: "You can create a custom NavigationEnvironmentTrigger to invoke an EnvironmentValues action, such as requestReview. Due to SwiftUI limitations, this action must be proxied (see AppWindow for reference). Similarly, actions like openURL or openWindow follow the same pattern."
             ),
-            customAction: .lockUser
+            makeCommand: { RequestReviewNavigationCommand() }
         )
-    }*/
+    }
 
     private var navigationNodeRelationshipsItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
                 symbolName: "point.3.filled.connected.trianglepath.dotted",
-                accentColor: .blue,
+                accentColor: .gray,
                 title: "NavigationNode Relationships",
                 subtitle: "Navigation nodes create a graph with parent-child relationships, making it easy to track the flow. Shake your phone or use the simulator (Device -> Shake) to print the node hierarchy from the Root (AppNavigationNode) into the terminal."
             ),

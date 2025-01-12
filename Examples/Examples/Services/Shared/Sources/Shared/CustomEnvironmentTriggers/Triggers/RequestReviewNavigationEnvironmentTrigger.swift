@@ -1,0 +1,3 @@
+import SwiftUINavigation
+
+public struct RequestReviewNavigationEnvironmentTrigger: NavigationEnvironmentTrigger {}
