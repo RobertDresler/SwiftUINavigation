@@ -1,5 +1,4 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
 
 public final class ActivityNavigationNode: NavigationNode {
