@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SFSafariInputData: Hashable {
+public struct SFSafariInputData {
 
     let url: URL
 

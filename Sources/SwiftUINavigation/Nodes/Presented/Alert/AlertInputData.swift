@@ -1,8 +1,8 @@
 import Foundation
 
-public struct AlertInputData: Hashable {
+public struct AlertInputData {
 
-    public struct Action: Hashable {
+    public struct Action {
 
         public enum Role {
             case cancel
@@ -19,14 +19,6 @@ public struct AlertInputData: Hashable {
             self.title = title
             self.role = role
             self.handler = handler
-        }
-
-        public static func == (lhs: Action, rhs: Action) -> Bool {
-            lhs.id == rhs.id
-        }
-
-        public func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
         }
 
     }

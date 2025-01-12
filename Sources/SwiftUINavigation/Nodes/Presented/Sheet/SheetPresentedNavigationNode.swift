@@ -4,25 +4,27 @@ public struct SheetPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Getters
 
-    public static func standalone(node: NavigationNode) -> SheetPresentedNavigationNode {
-        SheetPresentedNavigationNode(node: node)
+    public static func standalone(node: NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
+        SheetPresentedNavigationNode(node: node, sourceID: sourceID)
     }
 
-    public static func stacked(node: NavigationNode) -> SheetPresentedNavigationNode {
+    public static func stacked(node: NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
         SheetPresentedNavigationNode(
             node: StackRootNavigationNode(
                 stackNodes: [StackNavigationNode(destination: node, transition: nil)]
-            )
+            ),
+            sourceID: sourceID
         )
     }
 
     // MARK: Other
 
     public let node: NavigationNode
-    public let sourceID: String? = nil
+    public let sourceID: String?
 
-    init(node: NavigationNode) {
+    init(node: NavigationNode, sourceID: String?) {
         self.node = node
+        self.sourceID = sourceID
     }
 
     public static func presenterResolvedViewModifier(

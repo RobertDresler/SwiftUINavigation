@@ -13,7 +13,8 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
         [
             showAlertItem,
             showConfirmationDialogItem,
-            showPhotosPickerItem
+            showPhotosPickerItem,
+            shareAppItem
         ]
     }
 
@@ -111,6 +112,28 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 )
             },
             presentingNavigationSourceID: presentingNavigationSourceID
+        )
+    }
+
+    private var shareAppItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "square.and.arrow.up.fill",
+                accentColor: .red,
+                title: "Share this App",
+                subtitle: "This command demonstrates how to present a UIViewControllerRepresentable"
+            ),
+            makeCommand: {
+                PresentNavigationCommand(
+                    presentedNode: SheetPresentedNavigationNode.standalone(
+                        node: ActivityNavigationNode(
+                            inputData: ActivityInputData(
+                                activityItems: ["Just came across this and had to share it with you! 🔥"]
+                            )
+                        )
+                    )
+                )
+            }
         )
     }
 

@@ -44,7 +44,7 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
                 symbolName: "exclamationmark.bubble.fill",
                 accentColor: .pink,
                 title: "Modals - Special",
-                subtitle: "Alert, Confirmation Dialog, PhotoPicker"
+                subtitle: "Alert, Confirmation Dialog, PhotoPicker, UIViewControllerRepresentable"
             ),
             makeCommand: makeAppendActionableListCommand(for: .modalsSpecial)
         )
