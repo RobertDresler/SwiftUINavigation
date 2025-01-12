@@ -1,6 +1,10 @@
 import SwiftUINavigation
 import ExamplesNavigation
 import Shared
+import SegmentedTabs
+import ArchitectureViewOnly
+import ArchitectureMVVM
+import ArchitectureComposable
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
 struct FlowsActionableListDataFactory: ActionableListDataFactory {
@@ -24,6 +28,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             windowsItem,
             requestReviewItem,
             lockAppItem,
+            customWrapperItem,
             navigationNodeRelationshipsItem
         ]
     }
@@ -142,6 +147,37 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "You can create a custom NavigationEnvironmentTrigger to invoke an EnvironmentValues action, such as requestReview. Due to SwiftUI limitations, this action must be proxied (see AppWindow for reference). Similarly, actions like openURL or openWindow follow the same pattern."
             ),
             makeCommand: { RequestReviewNavigationCommand() }
+        )
+    }
+
+    private var customWrapperItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "circle.grid.2x1.left.filled",
+                accentColor: .brown,
+                title: "Segmented Tabs",
+                subtitle: "You can create custom wrapper view just like StackRootNavigationNode or TabsRootNavigationNode"
+            ),
+            makeCommand: {
+                StackAppendNavigationCommand(
+                    appendedNode: SegmentedTabsNavigationNode(
+                        tabs: [
+                            SegmentedTab(
+                                name: "View Only",
+                                node: ArchitectureViewOnlyNavigationNode(inputData: ArchitectureViewOnlyInputData(initialName: "Anna"))
+                            ),
+                            SegmentedTab(
+                                name: "MVVM",
+                                node: ArchitectureMVVMNavigationNode(inputData: ArchitectureMVVMInputData(initialName: "Robert"))
+                            ),
+                            SegmentedTab(
+                                name: "Composable",
+                                node: ArchitectureComposableNavigationNode(inputData: ArchitectureComposableInputData(initialName: "Thomas"))
+                            )
+                        ]
+                    )
+                )
+            }
         )
     }
 

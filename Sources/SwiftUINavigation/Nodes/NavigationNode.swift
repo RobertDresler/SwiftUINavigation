@@ -9,7 +9,7 @@ import Combine
         AnyView(EmptyView())
     }
 
-    open var isWrapperNode: Bool { false }
+    open var isWrapperNode: Bool { true }
     open var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
         let presentedNodePublisher = $presentedNode.map { [$0?.node] }
             .map { $0.compactMap { $0 } }

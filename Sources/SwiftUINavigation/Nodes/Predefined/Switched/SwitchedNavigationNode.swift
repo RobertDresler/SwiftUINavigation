@@ -4,6 +4,7 @@ import Combine
 open class SwitchedNavigationNode: NavigationNode {
 
     @Published public internal(set) var switchedNode: NavigationNode?
+    public override var isWrapperNode: Bool { false }
 
     public override var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
         super.childrenPublishers

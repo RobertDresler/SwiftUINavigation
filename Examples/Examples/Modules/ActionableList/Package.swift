@@ -21,7 +21,8 @@ let package = Package(
         .package(path: "../../Modules/CustomConfirmationDialog"),
         .package(path: "../../Modules/ArchitectureViewOnly"),
         .package(path: "../../Modules/ArchitectureMVVM"),
-        .package(path: "../../Modules/ArchitectureComposable")
+        .package(path: "../../Modules/ArchitectureComposable"),
+        .package(path: "../../Modules/SegmentedTabs")
     ],
     targets: [
         .target(
@@ -35,7 +36,8 @@ let package = Package(
                 .product(name: "CustomConfirmationDialog", package: "CustomConfirmationDialog"),
                 .product(name: "ArchitectureViewOnly", package: "ArchitectureViewOnly"),
                 .product(name: "ArchitectureMVVM", package: "ArchitectureMVVM"),
-                .product(name: "ArchitectureComposable", package: "ArchitectureComposable")
+                .product(name: "ArchitectureComposable", package: "ArchitectureComposable"),
+                .product(name: "SegmentedTabs", package: "SegmentedTabs")
             ]
         )
     ]

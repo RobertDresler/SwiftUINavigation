@@ -10,7 +10,7 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
     }
 
     func makeSubtitle() -> String? {
-        "Explore various commands like Present, Append, and more. For flows like Onboarding, Login/Logout or Notifications, check the 'Flows' tab."
+        "Explore various commands like Present, Append, and more. For flows like Onboarding, Login/Logout and more, check the 'Flows' tab."
     }
 
     func makeItems() -> [ActionableListItem] {

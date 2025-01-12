@@ -5,7 +5,6 @@ open class TabsRootNavigationNode: NavigationNode {
 
     @Published public internal(set) var selectedTabNode: TabNode
     @Published public internal(set) var tabsNodes: [TabNode]
-    public override var isWrapperNode: Bool { true }
 
     public override var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
         super.childrenPublishers
