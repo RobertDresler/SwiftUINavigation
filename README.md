@@ -7,23 +7,34 @@ Making SwiftUI Navigation Simple, Clean, Intuitive, and Elegant.
 
 If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
 
---
+## Features
 
-## How It Works
+- ✅ Handles both simple concepts, like presenting/stack navigation, and complex concepts, such as content-driven (deep linking) and step-by-step navigation ([See Examples app](#Explore-Examples-App))
+- ✅ Built on native SwiftUI components, leveraging state-driven architecture in the background
+- ✅ Clearly separates the navigation and presentation layers
+- ✅ Perfect for everything from simple apps to large-scale projects
+- ✅ Manages navigation while leaving the presentation layer architecture entirely up to you—even compatible with TCA ([See Examples app](#Explore-Examples-App))
+- ✅ Fully customizable to fit your specific needs
+- ✅ Inspired by the well-known Coordinator pattern but without the hassle of manually managing parent-child relationships
+- ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
+- ✅ Supports multiple windows  
+- ✅ Enables calling environment actions, such as `requestReview`
+
+![](READMEAssets/commands.png)
+
+![](READMEAssets/flows.png)
+
+## Simple Idea
 
 The main idea of this framework is that the navigation graph consists of `NavigationNode`s, which are connected by different relationships—such as stack, tab, or presented. This graph is then interpreted and displayed on the screen, as each node has its representation as a `View`. You can modify the graph using `NavigationCommand`s.
 
-If you started with an app as shown in the [Explore by Yourself](#Explore-on-Your-Own) example, your graph would look something like this:
-
-![](READMEAssets/relationships.png)
-
-For full or more detailed documentation, see the [Documentation](#Documentation) or check the code of the `Examples` app.
+I recommend starting with the [Examples app](#Explore-Examples-App) to get a feel for the framework. Then, you can explore it further [on your own](#Explore-on-Your-Own). For more comprehensive details, refer to the [Documentation](#Documentation).
 
 ## Getting Started
 
 ### Explore Examples App
 
-I highly recommend starting by exploring the Examples app.
+I highly recommend starting by exploring the Examples app. The app features many commands that you can use to handle navigation, as well as showcases common flows found in many apps. It includes everything from easy login/logout flows to custom navigation bars with multiple windows.
 
 1. Get the repo
 
@@ -38,12 +49,6 @@ I highly recommend starting by exploring the Examples app.
     - On a real device (set your development team)
 
 4. Explore the app
-
-The app features many commands that you can use to handle navigation, as well as showcases common flows found in many apps. It includes everything from easy login/logout flows to custom navigation bars with multiple windows.
-
-![](READMEAssets/commands.png)
-
-![](READMEAssets/flows.png)
 
 
 ### Explore on Your Own
