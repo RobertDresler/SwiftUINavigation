@@ -19,8 +19,9 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 - ✅ Fully customizable to fit your specific needs
 - ✅ Inspired by the well-known Coordinator pattern but without the hassle of manually managing parent-child relationships
 - ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
-- ✅ Supports multiple windows  
+- ✅ Supports iPad as well – optimized for multi-window experiences 
 - ✅ Enables calling environment actions, such as `requestReview`
+- ✅ Supports backward compatibility with UIKit via `UIViewRepresentable` and `UIViewControllerRepresentable` – easily present `SFSafariViewController` or `UIActivityViewController`
 
 ![](READMEAssets/commands.png)
 
