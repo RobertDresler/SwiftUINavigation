@@ -22,6 +22,7 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 - ✅ Supports iPad as well – optimized for multi-window experiences 
 - ✅ Enables calling environment actions, such as `requestReview`
 - ✅ Supports backward compatibility with UIKit via `UIViewRepresentable` and `UIViewControllerRepresentable` – easily present `SFSafariViewController` or `UIActivityViewController`
+- ✅ Supports Swift 6 and is concurrency safe
 
 ![](READMEAssets/commands.png)
 
