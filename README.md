@@ -9,7 +9,7 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 
 ---------
 
-## Features
+## Features
 
 - ✅ Handles both simple concepts, like presenting/stack navigation, and complex concepts, such as content-driven (deep linking) and step-by-step navigation ([See Examples app](#Explore-Examples-App))
 - ✅ Built on native SwiftUI components, leveraging state-driven architecture in the background
