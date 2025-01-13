@@ -7,6 +7,7 @@ Making SwiftUI Navigation Simple, Clean, Intuitive, and Elegant.
 
 If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
 
+---------
 
 ## Features
 
