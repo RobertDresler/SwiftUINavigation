@@ -1,6 +1,6 @@
 # SwiftUINavigation
 
-Making SwiftUI Navigation Simple, Clean, Intuitive, and Elegant.
+Framework for Implementing Clean Navigation in SwiftUI
 
 
 ![](READMEAssets/appIcon.png)
@@ -90,7 +90,9 @@ final class HomeNavigationNode: NavigationNode {
     func showDetail() {
         executeCommand(
             PresentNavigationCommand(
-                presentedNode: SheetPresentedNavigationNode.stacked(node: DetailNavigationNode())
+                presentedNode: SheetPresentedNavigationNode.stacked(
+                    node: DetailNavigationNode()
+		)
             )
         )
     }
@@ -102,10 +104,12 @@ struct HomeView: View {
     @EnvironmentNavigationNode private var navigationNode: HomeNavigationNode
 
     var body: some View {
-        Text("Hello world from Home!")
-        Button(action: { navigationNode.showDetail() }) {
-            Text("Go to Detail")
-        }
+	VStack {
+            Text("Hello world from Home!")
+            Button(action: { navigationNode.showDetail() }) {
+            	Text("Go to Detail")
+	    }
+	}
     }
 
 }
@@ -247,7 +251,7 @@ If you want to present a node, you use `PresentedNavigationNode` (which holds yo
 
 #### Predefined PresentedNavigationNodes
 - **`FullScreenCoverPresentedNavigationNode`**  
-  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. It's preferable to create it using `stack(node:)` if you want to add it to a new stack, or `standalone(node:)` if you don't want to wrap it in a stack.
+  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. It's preferable to create it using `stack(node:)` if you want to add it to a new stack, or `standalone(node:)` if you don't want to wrap it in a stack
 - **`SheetPresentedNavigationNode`**  
   Displays a sheet, similar to `sheet` in SwiftUI (you can adjust the detents to show it as a bottom sheet). It's preferable to create it using `stack(node:)` if you want to add it to a new stack, or `standalone(node:)` if you don't want to wrap it in a stack
 - **`AlertPresentedNavigationNode`**  
@@ -267,10 +271,10 @@ Then, when presenting it, pass the
 
 ```swift
 PresentNavigationCommand(
-	presentedNode: ConfirmationDialogPresentedNavigationNode(
-		inputData: ...,
-		sourceID: "logoutButton"
-	)
+    presentedNode: ConfirmationDialogPresentedNavigationNode(
+        inputData: ...,
+	sourceID: "logoutButton"
+    )
 )
 ```
 
