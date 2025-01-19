@@ -5,14 +5,20 @@ import ExamplesNavigation
 
 struct WaitingWindow: View {
 
+    @ObservedObject private var rootNode: NavigationNode
     var dependencies: Dependencies
+
+    init(dependencies: Dependencies) {
+        self.dependencies = dependencies
+        self.rootNode = WaitingNavigationNode(
+            inputData: WaitingInputData(),
+            flagsRepository: dependencies.flagsRepository
+        )
+    }
 
     var body: some View {
         NavigationWindow(
-            rootNode: WaitingNavigationNode(
-                inputData: WaitingInputData(),
-                flagsRepository: dependencies.flagsRepository
-            ),
+            rootNode: rootNode,
             defaultDeepLinkHandler: dependencies.defaultDeepLinkHandler
         )
     }

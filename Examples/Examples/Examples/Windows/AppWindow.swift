@@ -7,16 +7,22 @@ import Shared
 struct AppWindow: View {
 
     @Environment(\.requestReview) private var requestReview
+    @ObservedObject private var rootNode: NavigationNode
 
     var dependencies: Dependencies
 
+    init(dependencies: Dependencies) {
+        self.dependencies = dependencies
+        self.rootNode = AppNavigationNode(
+            flagsRepository: dependencies.flagsRepository,
+            deepLinkForwarderService: dependencies.deepLinkForwarderService,
+            onboardingService: dependencies.onboardingService
+        )
+    }
+
     var body: some View {
         NavigationWindow(
-            rootNode: AppNavigationNode(
-                flagsRepository: dependencies.flagsRepository,
-                deepLinkForwarderService: dependencies.deepLinkForwarderService,
-                onboardingService: dependencies.onboardingService
-            ),
+            rootNode: rootNode,
             defaultDeepLinkHandler: dependencies.defaultDeepLinkHandler
         )
             .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])
