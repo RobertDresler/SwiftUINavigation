@@ -134,6 +134,12 @@ struct DetailView: View {
 
 ```
 
+## FAQ
+
+**Q: Does using `AnyView` cause performance issues?**  
+
+A: Based on my findings, it shouldn't. `AnyView` is used only at the top of the navigation layer, and it doesn't get redrawn unless there's a navigation operation. This behavior is the same whether or not you use `AnyView`. Interestingly, it appears that Apple also uses `AnyView` at the top level for managing navigation internally.
+
 ## Documentation
 
 To see the framework in action, check out the code in the [Examples App](#Explore-Examples-App). If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
