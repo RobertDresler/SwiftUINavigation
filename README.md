@@ -21,18 +21,24 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 - ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
 - ✅ Supports iPad as well – optimized for multi-window experiences 
 - ✅ Enables calling environment actions, such as `requestReview`
-- ✅ Supports backward compatibility with UIKit via `UIViewRepresentable` and `UIViewControllerRepresentable` – easily present `SFSafariViewController` or `UIActivityViewController`
+- ✅ Supports backward compatibility with UIKit via `UIViewControllerRepresentable` – easily present `SFSafariViewController` or `UIActivityViewController`
 - ✅ Supports Swift 6 and is concurrency safe
 
 ![](READMEAssets/commands.png)
 
 ![](READMEAssets/flows.png)
 
-## Simple Idea
+## Core Concepts
 
-The main idea of this framework is that the navigation graph consists of `NavigationNode`s, which are connected by different relationships—such as stack, tab, or presented. This graph is then interpreted and displayed on the screen, as each node has its representation as a `View`. You can modify the graph using `NavigationCommand`s.
+The framework consists of three key components: `NavigationNode`, `NavigationCommand` and `PresentedNavigationNode`.
 
-I recommend starting with the [Examples app](#Explore-Examples-App) to get a feel for the framework. Then, you can explore it further [on your own](#Explore-on-Your-Own). For more comprehensive details, refer to the [Documentation](#Documentation).
+- **NavigationNode**: Think of it as a screen/module or what you might know as a coordinator. These `NavigationNode`s form a navigation graph, which acts as the state. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedNode`, the new node is presented.
+  
+- **NavigationCommand**: This represents an operation that modifies the navigation graph of `NavigationNode`s. For example, a `PresentNavigationCommand` sets the `presentedNode`. These operations can include actions like push (newly append), pop (newly dropLast), present, dismiss, or openURL.
+
+- **PresentedNavigationNode**: Since presenting views using native mechanisms requires separate view modifiers, I introduced the concept of `PresentedNavigationNode`. Instead of presenting the `NavigationNode` directly, you present the `PresentedNavigationNode`, which holds your `NavigationNode` (e.g., `DetailNavigationNode`). There are specific implementations like `FullScreenCoverPresentedNavigationNode`, `SheetPresentedNavigationNode`, and `AlertPresentedNavigationNode`. This approach also allows you to create custom implementations, such as a photo picker.
+
+To get started, I recommend exploring the [Examples app](#Explore-Examples-App) to get a feel for the framework. Afterward, you can dive deeper [on your own](#Explore-on-Your-Own). For more detailed information, check out the [Documentation](#Documentation).
 
 ## Getting Started
 
