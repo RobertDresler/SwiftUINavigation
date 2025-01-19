@@ -259,7 +259,25 @@ The framework is designed to allow you to easily create your own commands as wel
 
 ### PresentedNavigationNode
 
-If you want to present a node, you use `PresentedNavigationNode` (which holds your `NavigationNode`) in combination with `PresentNavigationCommand`.
+Since presenting views using native mechanisms requires separate view modifiers, I introduced the concept of `PresentedNavigationNode`. Instead of presenting the `NavigationNode` directly, you present the `PresentedNavigationNode`, which holds your `NavigationNode` (e.g., `DetailNavigationNode`). This approach also allows you to create custom implementations, such as a photo picker. If you want to present a node, you execute `PresentNavigationCommand` with the `PresentedNavigationNode`.
+
+```swift
+final class HomeNavigationNode: NavigationNode {
+
+    ...
+
+    func showDetail() {
+        executeCommand(
+            PresentNavigationCommand(
+                presentedNode: SheetPresentedNavigationNode.stacked(
+                    node: DetailNavigationNode()
+		)
+            )
+        )
+    }
+
+}
+```
 
 #### Predefined PresentedNavigationNodes
 - **`FullScreenCoverPresentedNavigationNode`**  
