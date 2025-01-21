@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../../Navigation/ExamplesNavigation"),
         .package(path: "../../Services/FlagsRepository"),
-        .package(path: "../SwiftUINavigation"),
+        .package(path: "../../../SwiftUINavigation"),
         .package(path: "../../Services/OnboardingService")
     ],
     targets: [
