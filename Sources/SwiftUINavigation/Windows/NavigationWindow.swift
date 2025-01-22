@@ -1,14 +1,15 @@
 import SwiftUI
 
-public struct NavigationWindow: View {
+public struct NavigationWindow<Node: NavigationNode>: View {
 
-    @ObservedObject private var rootNode: NavigationNode
+    @ObservedObject private var rootNode: Node
 
     // MARK: Init
 
-    public init(rootNode: NavigationNode, defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
+    public init(rootNode: Node, defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
         self.rootNode = rootNode
-        rootNode.setDefaultDeepLinkHandler(defaultDeepLinkHandler)
+        rootNode.startIfNeeded()
+        rootNode.state.setDefaultDeepLinkHandler(defaultDeepLinkHandler)
     }
 
     public var body: some View {

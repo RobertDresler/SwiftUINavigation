@@ -2,11 +2,11 @@ import Foundation
 
 public struct OpenURLNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         node.sendEnvironmentTrigger(OpenURLNavigationEnvironmentTrigger(url: url))
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         true
     }
 

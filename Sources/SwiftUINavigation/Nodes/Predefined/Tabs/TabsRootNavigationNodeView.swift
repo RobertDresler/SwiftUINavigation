@@ -1,15 +1,14 @@
 import SwiftUI
 
-struct TabsRootNavigationNodeView: View {
+public struct TabsRootNavigationNodeView: View {
 
-    @Namespace private var namespace
-    @EnvironmentNavigationNode private var node: TabsRootNavigationNode
+    @EnvironmentNavigationNodeState private var navigationNodeState: TabsRootNavigationNodeState
 
-    // MARK: Getters
+    public init() {}
 
-    var body: some View {
+    public var body: some View {
         TabView(selection: selection) {
-            ForEach(node.tabsNodes, id: \.navigationNode.id) { node in
+            ForEach(navigationNodeState.tabsNodes, id: \.navigationNode.id) { node in
                 node.resolvedView
             }
         }
@@ -17,10 +16,10 @@ struct TabsRootNavigationNodeView: View {
 
     private var selection: Binding<String> {
         Binding(
-            get: { node.selectedTabNode.navigationNode.id },
+            get: { navigationNodeState.selectedTabNode.navigationNode.id },
             set: { id in
-                guard let selectedTabNode = node.tabsNodes.first(where: { $0.navigationNode.id == id }) else { return }
-                node.selectedTabNode = selectedTabNode
+                guard let selectedTabNode = navigationNodeState.tabsNodes.first(where: { $0.navigationNode.id == id }) else { return }
+                navigationNodeState.selectedTabNode = selectedTabNode
             }
         )
     }

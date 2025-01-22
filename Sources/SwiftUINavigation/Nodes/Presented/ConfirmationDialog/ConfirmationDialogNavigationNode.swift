@@ -1,4 +1,11 @@
-public final class ConfirmationDialogNavigationNode: NavigationNode {
+import SwiftUI
+
+@NavigationNode
+final class ConfirmationDialogNavigationNode {
+
+    var body: EmptyView {
+        EmptyView()
+    }
 
     let inputData: ConfirmationDialogInputData
 

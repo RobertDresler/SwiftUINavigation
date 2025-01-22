@@ -4,11 +4,11 @@ public struct SheetPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Getters
 
-    public static func standalone(node: NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
+    public static func standalone(node: any NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
         SheetPresentedNavigationNode(node: node, sourceID: sourceID)
     }
 
-    public static func stacked(node: NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
+    public static func stacked(node: any NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
         SheetPresentedNavigationNode(
             node: StackRootNavigationNode(
                 stackNodes: [StackNavigationNode(destination: node, transition: nil)]
@@ -19,10 +19,10 @@ public struct SheetPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Other
 
-    public let node: NavigationNode
+    public let node: any NavigationNode
     public let sourceID: String?
 
-    init(node: NavigationNode, sourceID: String?) {
+    init(node: any NavigationNode, sourceID: String?) {
         self.node = node
         self.sourceID = sourceID
     }

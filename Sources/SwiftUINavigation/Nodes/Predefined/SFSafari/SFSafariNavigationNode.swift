@@ -1,16 +1,16 @@
 import SwiftUI
 
-public final class SFSafariNavigationNode: NavigationNode {
+@NavigationNode
+public final class SFSafariNavigationNode {
 
     private let inputData: SFSafariInputData
 
     public init(inputData: SFSafariInputData) {
         self.inputData = inputData
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(SFSafariView(inputData: inputData))
+    public var body: some View {
+        SFSafariView(inputData: inputData)
     }
 
 }

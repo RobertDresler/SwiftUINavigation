@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode {
 
-    public let node: NavigationNode
+    public let node: any NavigationNode
     public let sourceID: String?
 
     public init(inputData: ConfirmationDialogInputData, sourceID: String? = nil) {
@@ -24,7 +24,7 @@ public struct ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode
             )
     }
 
-    private static func actions(for node: NavigationNode?) -> some View {
+    private static func actions(for node: (any NavigationNode)?) -> some View {
         Group {
             if let node = node as? ConfirmationDialogNavigationNode {
                 ForEach((node as? ConfirmationDialogNavigationNode)?.inputData.actions ?? [], id: \.id) { action in
@@ -47,7 +47,7 @@ public struct ConfirmationDialogPresentedNavigationNode: PresentedNavigationNode
         }
     }
 
-    private static func message(for node: NavigationNode?) -> some View {
+    private static func message(for node: (any NavigationNode)?) -> some View {
         Group {
             if let message = (node as? ConfirmationDialogNavigationNode)?.inputData.message {
                 Text(message)

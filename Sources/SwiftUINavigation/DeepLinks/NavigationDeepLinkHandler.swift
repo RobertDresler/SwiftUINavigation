@@ -2,7 +2,7 @@
 public protocol NavigationDeepLinkHandler {
     func handleDeepLink(
         _ deepLink: NavigationDeepLink,
-        on node: NavigationNode,
-        messageListener: NavigationNode.MessageListener?
+        on node: any NavigationNode,
+        messageListener: NavigationMessageListener?
     )
 }

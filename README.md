@@ -32,7 +32,7 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 
 The framework consists of three key components: `NavigationNode`, `NavigationCommand` and `PresentedNavigationNode`.
 
-- **NavigationNode**: Think of it as a screen/module or what you might know as a coordinator. These `NavigationNode`s form a navigation graph, which acts as the state. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedNode`, the new node is presented.
+- **NavigationNode**: Think of it as a screen/module or what you might know as a coordinator. These `NavigationNode`s form a navigation graph. Each node stores its state in `NavigationNodeState`. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedNode`, the new node is presented.
   
 - **NavigationCommand**: This represents an operation that modifies the navigation graph of `NavigationNode`s. For example, a `PresentNavigationCommand` sets the `presentedNode`. These operations can include actions like push (newly append), pop (newly dropLast), present, dismiss, or openURL.
 
@@ -65,8 +65,8 @@ I highly recommend starting by exploring the Examples app. The app features many
 
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.0.3`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.0.3")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.1.0`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.1.0")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
@@ -87,10 +87,11 @@ struct YourApp: App {
     }
 }
 
-final class HomeNavigationNode: NavigationNode {
+@NavigationNode
+final class HomeNavigationNode {
 
-    override var view: AnyView {
-        AnyView(HomeView())
+    var body: some View {
+        HomeView()
     }
 
     func showDetail() {
@@ -98,7 +99,7 @@ final class HomeNavigationNode: NavigationNode {
             PresentNavigationCommand(
                 presentedNode: SheetPresentedNavigationNode.stacked(
                     node: DetailNavigationNode()
-		)
+                )
             )
         )
     }
@@ -110,20 +111,21 @@ struct HomeView: View {
     @EnvironmentNavigationNode private var navigationNode: HomeNavigationNode
 
     var body: some View {
-	VStack {
+        VStack {
             Text("Hello world from Home!")
             Button(action: { navigationNode.showDetail() }) {
-            	Text("Go to Detail")
-	    }
-	}
+                Text("Go to Detail")
+            }
+        }
     }
 
 }
 
-final class DetailNavigationNode: NavigationNode {
+@NavigationNode
+final class DetailNavigationNode {
 
-    override var view: AnyView {
-        AnyView(DetailView())
+    var body: some View {
+        DetailView()
     }
 
 }
@@ -140,12 +142,6 @@ struct DetailView: View {
 
 ```
 
-## FAQ
-
-**Q: Does using `AnyView` cause performance issues?**  
-
-A: Based on my findings, it shouldn't. `AnyView` is used only at the top of the navigation layer, and it doesn't get redrawn unless there's a navigation operation. This behavior is the same whether or not you use `AnyView`. Interestingly, it appears that Apple also uses `AnyView` at the top level for managing navigation internally.
-
 ## Documentation
 
 To see the framework in action, check out the code in the [Examples App](#Explore-Examples-App). If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
@@ -156,19 +152,20 @@ The `NavigationWindow` is the top-level hierarchy element. It is placed inside a
 
 ### NavigationNode
 
-A `NavigationNode` represents a single node in the navigation graph, similar to what you might know as a Coordinator or Router. The best practice is to have one `NavigationNode` for each module or screen. A `NavigationNode` manages the navigation layer of your app. To use it, simply subclass any `NavigationNode`.
+A `NavigationNode` represents a single node in the navigation graph, similar to what you might know as a Coordinator or Router. The best practice is to have one `NavigationNode` for each module or screen. A `NavigationNode` manages the navigation layer of your app. To use it, use one of the predefined macros like this.
 
 ```swift
-final class HomeNavigationNode: NavigationNode {
+@NavigationNode
+final class HomeNavigationNode {
     
-    override var view: AnyView {
-        AnyView(HomeView())
+    var body: some View {
+        HomeView()
     }
     
 }
 ```
 
-It is represented by an overridden `view` property. The code within the `view` can be written using any architecture (MVVM, Composable, or any other of your choice — see [Examples App](#Check-Examples-App)).
+It is represented by a `body` property. The code within the `body` can be written using any architecture (MVVM, Composable, or any other of your choice — see [Examples App](#Check-Examples-App)).
 
 You can access the `NavigationNode` from your `View` using the following:
 
@@ -176,20 +173,34 @@ You can access the `NavigationNode` from your `View` using the following:
 @EnvironmentNavigationNode private var navigationNode: YourNavigationNode
 ```
 
-The framework provides several predefined `NavigationNode` types:
+#### Predefined Macros:
 
-#### Predefined Nodes:
-- **`StackRootNavigationNode`**  
+- **`@NavigationNode`**  
+  The simplest node you’ll use most of the time, especially if your screen doesn’t require any tabs or switch logic.
+  
+- **`@StackRootNavigationNode`**  
   Represents what you would typically associate with a `NavigationStack` or `UINavigationController`.
 
-- **`TabsRootNavigationNode`**  
+- **`@TabsRootNavigationNode`**  
   Represents what you would typically associate with a `TabView` or `UITabBarController`.
 
-- **`SwitchedNavigationNode`**  
+- **`@SwitchedNavigationNode`**  
   A node that can dynamically switch between different child nodes. For example, it can display a tab bar node when the user is logged in or a welcome screen node when the user is not logged in.
+
+#### Predefined Nodes:
 
 - **`SFSafariNavigationNode`**  
   A node that opens a URL in an in-app browser.
+  
+### NavigationNodeState
+
+Each node maintains its state in the `state: NavigationNodeState` property. This state holds the node’s stored data, such as which node is currently presented or which nodes are in the stack (as in the StackRootNavigationNodeState subclass). The navigation hierarchy is then resolved based on this state.
+
+You can access the `NavigationNodeState` from your `View` using the following:
+
+```swift
+@EnvironmentNavigationNodeState private var navigationNodeState: YourNavigationNodeState
+```
 
 ### NavigationCommand
 
@@ -198,7 +209,8 @@ To perform common navigation actions like append, present, or dismiss, you need 
 A command is executed in a `NavigationNode` using the `execute(on:)` method:
 
 ```swift
-final class HomeNavigationNode: NavigationNode {
+@NavigationNode
+final class HomeNavigationNode {
 
     ...
 
@@ -262,7 +274,8 @@ The framework is designed to allow you to easily create your own commands as wel
 Since presenting views using native mechanisms requires separate view modifiers, I introduced the concept of `PresentedNavigationNode`. Instead of presenting the `NavigationNode` directly, you present the `PresentedNavigationNode`, which holds your `NavigationNode` (e.g., `DetailNavigationNode`). This approach also allows you to create custom implementations, such as a photo picker. If you want to present a node, you execute `PresentNavigationCommand` with the `PresentedNavigationNode`.
 
 ```swift
-final class HomeNavigationNode: NavigationNode {
+@NavigationNode
+final class HomeNavigationNode {
 
     ...
 
@@ -271,7 +284,7 @@ final class HomeNavigationNode: NavigationNode {
             PresentNavigationCommand(
                 presentedNode: SheetPresentedNavigationNode.stacked(
                     node: DetailNavigationNode()
-		)
+                )
             )
         )
     }
@@ -303,7 +316,7 @@ Then, when presenting it, pass the
 PresentNavigationCommand(
     presentedNode: ConfirmationDialogPresentedNavigationNode(
         inputData: ...,
-	sourceID: "logoutButton"
+        sourceID: "logoutButton"
     )
 )
 ```
@@ -376,6 +389,12 @@ You can also print the debug graph from a given `NavigationNode` and its success
 ### Relationships
 
 You can explore the graph using different relationships. It's important to know that the parent/child relationship is handled automatically, so you only need to call commands. This is true unless you're implementing a custom container, in which case you can simply override `childrenPublishers` (see [SegmentedTabsNavigationNode in Examples App](#Explore-Examples-App)).
+
+## FAQ
+
+**Q: Does using `AnyView` cause performance issues?**  
+
+A: Based on my findings, it shouldn't. `AnyView` is used only at the top of the navigation layer, and it doesn't get redrawn unless there's a navigation operation. This behavior is the same whether or not you use `AnyView`.
 
 ## Contribution, Issues, & Feature Requests
 

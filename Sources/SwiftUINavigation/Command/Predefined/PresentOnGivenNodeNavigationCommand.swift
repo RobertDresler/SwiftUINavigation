@@ -1,13 +1,13 @@
 public struct PresentOnGivenNodeNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         perform(
             animated: animated,
-            action: { node.presentedNode = presentedNode }
+            action: { node.state.presentedNode = presentedNode }
         )
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         true
     }
 

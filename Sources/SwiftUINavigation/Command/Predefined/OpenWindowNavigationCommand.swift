@@ -2,11 +2,11 @@ import Foundation
 
 public struct OpenWindowNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         node.sendEnvironmentTrigger(OpenWindowNavigationEnvironmentTrigger(id: id))
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         true
     }
 

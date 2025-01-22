@@ -3,7 +3,7 @@ import SwiftUI
 @MainActor
 public protocol PresentedNavigationNode {
     associatedtype Body: View
-    var node: NavigationNode { get }
+    var node: any NavigationNode { get }
     var sourceID: String? { get }
     static func presenterResolvedViewModifier(
         presentedNode: (any PresentedNavigationNode)?,
@@ -28,7 +28,7 @@ public extension PresentedNavigationNode {
             },
             set: { isPresented in
                 guard !isPresented else { return }
-                presentedNode?.node.parent?.presentedNode = nil
+                presentedNode?.node.parent?.state.presentedNode = nil
             }
         )
     }

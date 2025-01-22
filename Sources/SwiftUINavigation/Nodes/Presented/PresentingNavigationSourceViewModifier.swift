@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct PresentingNavigationSourceViewModifier: ViewModifier {
 
-    @EnvironmentNavigationNode private var navigationNode
+    @EnvironmentObject private var navigationNode: AnyNavigationNode
     @Environment(\.registeredCustomPresentableNavigationNodes) private var registeredCustomPresentableNavigationNodes
 
     private let sourceID: String?
@@ -19,7 +19,7 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
         registeredPresentableNavigationNodes.reduce(AnyView(view)) { resolvedView, modifier in
             AnyView(
                 modifier.presenterResolvedViewModifier(
-                    presentedNode: navigationNode.presentedNode,
+                    presentedNode: navigationNode.state.presentedNode,
                     content: resolvedView,
                     sourceID: sourceID
                 )

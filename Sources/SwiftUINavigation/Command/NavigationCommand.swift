@@ -2,8 +2,8 @@ import SwiftUI
 
 @MainActor
 public protocol NavigationCommand {
-    func execute(on node: NavigationNode)
-    func canExecute(on node: NavigationNode) -> Bool
+    func execute(on node: any NavigationNode)
+    func canExecute(on node: any NavigationNode) -> Bool
 }
 
 public extension NavigationCommand {

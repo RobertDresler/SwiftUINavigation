@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct AlertPresentedNavigationNode: PresentedNavigationNode {
 
-    public let node: NavigationNode
+    public let node: any NavigationNode
     public let sourceID: String?
 
     public init(inputData: AlertInputData, sourceID: String? = nil) {
@@ -24,11 +24,11 @@ public struct AlertPresentedNavigationNode: PresentedNavigationNode {
             )
     }
 
-    private static func title(for node: NavigationNode?) -> Text {
+    private static func title(for node: (any NavigationNode)?) -> Text {
         Text((node as? AlertNavigationNode)?.inputData.title ?? "")
     }
 
-    private static func actions(for node: NavigationNode?) -> some View {
+    private static func actions(for node: (any NavigationNode)?) -> some View {
         Group {
             if let node = node as? AlertNavigationNode {
                 ForEach((node as? AlertNavigationNode)?.inputData.actions ?? [], id: \.id) { action in
@@ -51,7 +51,7 @@ public struct AlertPresentedNavigationNode: PresentedNavigationNode {
         }
     }
 
-    private static func message(for node: NavigationNode?) -> some View {
+    private static func message(for node: (any NavigationNode)?) -> some View {
         Group {
             if let message = (node as? AlertNavigationNode)?.inputData.message {
                 Text(message)
