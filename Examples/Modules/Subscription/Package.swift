@@ -17,7 +17,7 @@ let package = Package(
         .package(path: "../../Services/FlagsRepository"),
         .package(path: "../../Modules/SubscriptionPremium"),
         .package(path: "../../Modules/SubscriptionFreemium"),
-        .package(path: "../../../SwiftUINavigation")
+        .package(path: "../../../../SwiftUINavigation")
     ],
     targets: [
         .target(

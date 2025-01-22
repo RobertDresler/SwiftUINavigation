@@ -6,7 +6,8 @@ import Combine
 import SubscriptionPremium
 import SubscriptionFreemium
 
-public final class SubscriptionNavigationNode: SwitchedNavigationNode {
+@SwitchedNavigationNode
+public final class SubscriptionNavigationNode {
 
     private let inputData: SubscriptionInputData
     private let flagsRepository: FlagsRepository
@@ -15,7 +16,6 @@ public final class SubscriptionNavigationNode: SwitchedNavigationNode {
     public init(inputData: SubscriptionInputData, flagsRepository: FlagsRepository) {
         self.inputData = inputData
         self.flagsRepository = flagsRepository
-        super.init()
         bind()
     }
 
@@ -30,11 +30,11 @@ public final class SubscriptionNavigationNode: SwitchedNavigationNode {
         executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
     }
 
-    private var premiumNode: NavigationNode {
+    private var premiumNode: any NavigationNode {
         SubscriptionPremiumNavigationNode(inputData: SubscriptionPremiumInputData())
     }
 
-    private var freemiumNode: NavigationNode {
+    private var freemiumNode: any NavigationNode {
         SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
     }
 

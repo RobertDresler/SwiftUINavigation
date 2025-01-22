@@ -5,9 +5,9 @@ public struct SegmentedTab: Hashable, Identifiable {
 
     public let id: String
     let name: String
-    let node: NavigationNode
+    let node: any NavigationNode
 
-    public init(id: String = UUID().uuidString, name: String, node: NavigationNode) {
+    public init(id: String = UUID().uuidString, name: String, node: any NavigationNode) {
         self.id = id
         self.name = name
         self.node = node

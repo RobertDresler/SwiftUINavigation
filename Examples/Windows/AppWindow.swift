@@ -7,7 +7,7 @@ import Shared
 struct AppWindow: View {
 
     @Environment(\.requestReview) private var requestReview
-    @ObservedObject private var rootNode: NavigationNode
+    @ObservedObject private var rootNode: AppNavigationNode
 
     var dependencies: Dependencies
 
@@ -32,6 +32,7 @@ struct AppWindow: View {
             .environmentObject(dependencies.notificationsService)
             .environmentObject(dependencies.deepLinkForwarderService)
             .environmentObject(dependencies.onboardingService)
+            .onShake { rootNode.printDebugGraph() }
     }
 
 }

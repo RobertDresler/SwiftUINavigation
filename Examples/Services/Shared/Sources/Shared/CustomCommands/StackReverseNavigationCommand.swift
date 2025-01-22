@@ -2,11 +2,11 @@ import SwiftUINavigation
 
 public struct StackReverseNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         stackMapCommand(for: node).execute(on: node)
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         stackMapCommand(for: node).canExecute(on: node)
     }
 
@@ -16,7 +16,7 @@ public struct StackReverseNavigationCommand: NavigationCommand {
         self.animated = animated
     }
 
-    private func stackMapCommand(for node: NavigationNode) -> NavigationCommand {
+    private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
         StackMapNavigationCommand(
             animated: animated,
             transform: { nodes in

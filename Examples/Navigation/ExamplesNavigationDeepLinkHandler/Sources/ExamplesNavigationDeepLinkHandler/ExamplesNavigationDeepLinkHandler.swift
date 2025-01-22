@@ -14,8 +14,8 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
 
     public func handleDeepLink(
         _ deepLink: NavigationDeepLink,
-        on node: NavigationNode,
-        messageListener: NavigationNode.MessageListener?
+        on node: any NavigationNode,
+        messageListener: NavigationMessageListener?
     ) {
         guard let deepLink = deepLink as? ExamplesNavigationDeepLink else { return }
         switch deepLink.destination {

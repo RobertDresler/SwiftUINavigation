@@ -4,25 +4,14 @@ import SwiftUINavigation
 
 public final class SegmentedTabsNavigationNode: NavigationNode {
 
-    @Published var tabs = [SegmentedTab]()
-    @Published var selectedTab: SegmentedTab
+    public let state: SegmentedTabsNavigationNodeState
 
-    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
-        super.childrenPublishers
-        + [$tabs.map { $0.map { $0.node } }]
-    }
-
-    public override var view: AnyView {
-        AnyView(SegmentedTabsView())
+    public var body: some View {
+        SegmentedTabsView()
     }
 
     public init(tabs: [SegmentedTab]) {
-        guard let firstTab = tabs.first else {
-            fatalError("SegmentedTabsNavigationNode requires at least one tab")
-        }
-        self.tabs = tabs
-        self.selectedTab = firstTab
-        super.init()
+        state = SegmentedTabsNavigationNodeState(tabs: tabs)
     }
 
 }

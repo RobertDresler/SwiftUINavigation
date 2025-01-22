@@ -5,7 +5,7 @@ import ExamplesNavigation
 
 struct WaitingWindow: View {
 
-    @ObservedObject private var rootNode: NavigationNode
+    @ObservedObject private var rootNode: WaitingNavigationNode
     var dependencies: Dependencies
 
     init(dependencies: Dependencies) {

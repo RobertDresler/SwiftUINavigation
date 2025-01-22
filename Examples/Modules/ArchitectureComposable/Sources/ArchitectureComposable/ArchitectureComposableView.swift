@@ -34,5 +34,5 @@ struct ArchitectureComposableView: View {
 }
 
 #Preview {
-    ArchitectureComposableNavigationNode(inputData: ArchitectureComposableInputData(initialName: "Anna")).view
+    ArchitectureComposableNavigationNode(inputData: ArchitectureComposableInputData(initialName: "Anna")).body
 }

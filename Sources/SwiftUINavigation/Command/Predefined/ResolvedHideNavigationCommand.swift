@@ -1,10 +1,10 @@
 public struct ResolvedHideNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         resolvedCommand(on: node).execute(on: node)
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         resolvedCommand(on: node).canExecute(on: node)
     }
 
@@ -14,8 +14,8 @@ public struct ResolvedHideNavigationCommand: NavigationCommand {
         self.animated = animated
     }
 
-    private func resolvedCommand(on node: NavigationNode) -> NavigationCommand {
-        if (node.parent as? StackRootNavigationNode)?.stackNodes.first?.destination === node {
+    private func resolvedCommand(on node: any NavigationNode) -> NavigationCommand {
+        if (node.parent?.state as? StackRootNavigationNodeState)?.stackNodes.first?.destination === node {
             DismissNavigationCommand(animated: animated)
         } else {
             StackDropLastNavigationCommand(animated: animated)

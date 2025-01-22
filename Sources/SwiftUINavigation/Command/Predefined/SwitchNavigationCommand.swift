@@ -1,17 +1,17 @@
 public struct SwitchNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
-        guard let node = node as? SwitchedNavigationNode else { return }
-        node.switchedNode = switchedNode
+    public func execute(on node: any NavigationNode) {
+        guard let state = node.state as? SwitchedNavigationNodeState else { return }
+        state.switchedNode = switchedNode
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
-        node is SwitchedNavigationNode
+    public func canExecute(on node: any NavigationNode) -> Bool {
+        node.state is SwitchedNavigationNodeState
     }
 
-    private let switchedNode: NavigationNode
+    private let switchedNode: any NavigationNode
 
-    public init(switchedNode: NavigationNode) {
+    public init(switchedNode: any NavigationNode) {
         self.switchedNode = switchedNode
     }
 

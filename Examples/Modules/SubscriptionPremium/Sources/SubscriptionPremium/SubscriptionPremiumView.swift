@@ -83,7 +83,7 @@ struct SubscriptionPremiumView: View {
 #Preview {
     NavigationStack(root: {
         SubscriptionPremiumNavigationNode(inputData: SubscriptionPremiumInputData())
-            .view
+            .body
             .environmentObject(FlagsRepository())
     })
 }

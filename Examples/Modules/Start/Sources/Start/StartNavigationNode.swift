@@ -3,7 +3,8 @@ import ExamplesNavigation
 import SwiftUI
 import OnboardingService
 
-public final class StartNavigationNode: NavigationNode {
+@NavigationNode
+public final class StartNavigationNode {
 
     private let inputData: StartInputData
     private let onboardingService: OnboardingService
@@ -11,11 +12,10 @@ public final class StartNavigationNode: NavigationNode {
     public init(inputData: StartInputData, onboardingService: OnboardingService) {
         self.inputData = inputData
         self.onboardingService = onboardingService
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(StartView(inputData: inputData))
+    public var body: some View {
+        StartView(inputData: inputData)
     }
 
     func startOnboarding() {

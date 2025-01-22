@@ -2,17 +2,17 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 
-public final class SubscriptionPremiumNavigationNode: NavigationNode {
+@NavigationNode
+public final class SubscriptionPremiumNavigationNode {
 
     private let inputData: SubscriptionPremiumInputData
 
     public init(inputData: SubscriptionPremiumInputData) {
         self.inputData = inputData
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(SubscriptionPremiumView(inputData: inputData))
+    public var body: some View {
+        SubscriptionPremiumView(inputData: inputData)
     }
 
     func buyMeCoffee() {

@@ -3,7 +3,8 @@ import SwiftUINavigation
 import ExamplesNavigation
 import ActionableList
 
-public final class MainTabsNavigationNode: TabsRootNavigationNode {
+@TabsRootNavigationNode
+public final class MainTabsNavigationNode {
 
     public init(inputData: MainTabsInputData) {
         let commandsTab = DefaultTabNode(
@@ -40,7 +41,7 @@ public final class MainTabsNavigationNode: TabsRootNavigationNode {
             commandsTab,
             flowsTab
         ]
-        super.init(
+        state = TabsRootNavigationNodeState(
             selectedTabNode: tabsNodes.first(where: { $0.id == inputData.initialTab }) ?? commandsTab,
             tabsNodes: tabsNodes
         )

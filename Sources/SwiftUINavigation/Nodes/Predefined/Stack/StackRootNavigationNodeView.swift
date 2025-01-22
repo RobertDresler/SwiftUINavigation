@@ -1,13 +1,15 @@
 import SwiftUI
 
-struct StackRootNavigationNodeView: View {
+public struct StackRootNavigationNodeView: View {
 
     @Namespace private var namespace
-    @EnvironmentNavigationNode private var navigationNode: StackRootNavigationNode
+    @EnvironmentNavigationNodeState private var navigationNodeState: StackRootNavigationNodeState
 
     // MARK: Getters
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         NavigationStack(path: path) {
             navigationStackResolvedRoot
         }.stackNavigationNamespace(namespace)
@@ -22,7 +24,7 @@ struct StackRootNavigationNodeView: View {
 
     private var navigationStackResolvedRoot: some View {
         Group {
-            if let rootNode = navigationNode.stackNodes.first?.destination {
+            if let rootNode = navigationNodeState.stackNodes.first?.destination {
                 NavigationNodeResolvedView(node: rootNode)
                     .connectingNavigationDestinationLogic(
                         nodeForNodeID: { node(for: $0) },
@@ -32,7 +34,7 @@ struct StackRootNavigationNodeView: View {
         }
     }
 
-    private func node(for nodeID: String) -> NavigationNode? {
+    private func node(for nodeID: String) -> (any NavigationNode)? {
         stackNodes.first(where: { node in
             nodeID == node.destination.id
         })?.destination
@@ -53,13 +55,13 @@ struct StackRootNavigationNodeView: View {
     }
 
     private var stackNodes: [StackNavigationNode] {
-        navigationNode.stackNodes
+        navigationNodeState.stackNodes
     }
 
     // MARK: Methods
 
     private func setNewPath(_ newPath: NavigationPath) {
-        navigationNode.setNewPath(newPath)
+        navigationNodeState.setNewPath(newPath)
     }
 
 }
@@ -68,7 +70,7 @@ struct StackRootNavigationNodeView: View {
 
 fileprivate extension View {
     func connectingNavigationDestinationLogic(
-        nodeForNodeID: @escaping (String) -> NavigationNode?,
+        nodeForNodeID: @escaping (String) -> (any NavigationNode)?,
         namespace: Namespace.ID?
     ) -> some View {
         navigationDestination(for: StackNavigationDestination.self) { data in

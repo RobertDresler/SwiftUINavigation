@@ -3,7 +3,8 @@ import ExamplesNavigation
 import SwiftUI
 import FlagsRepository
 
-public final class WaitingNavigationNode: NavigationNode {
+@NavigationNode
+public final class WaitingNavigationNode {
 
     private let inputData: WaitingInputData
     private let flagsRepository: FlagsRepository
@@ -11,11 +12,10 @@ public final class WaitingNavigationNode: NavigationNode {
     public init(inputData: WaitingInputData, flagsRepository: FlagsRepository) {
         self.inputData = inputData
         self.flagsRepository = flagsRepository
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(WaitingView(inputData: inputData))
+    public var body: some View {
+        WaitingView(inputData: inputData)
     }
 
     func close() {

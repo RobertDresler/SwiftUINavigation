@@ -108,6 +108,6 @@ struct OnboardingQuestionView: View {
         inputData: OnboardingQuestionInputData(usage: .start),
         onboardingService: OnboardingService.makeStub()
     )
-        .view
+        .body
         .environmentObject(FlagsRepository())
 }

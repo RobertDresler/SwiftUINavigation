@@ -4,11 +4,11 @@ public struct FullScreenCoverPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Getters
 
-    public static func standalone(node: NavigationNode) -> FullScreenCoverPresentedNavigationNode {
+    public static func standalone(node: any NavigationNode) -> FullScreenCoverPresentedNavigationNode {
         FullScreenCoverPresentedNavigationNode(node: node)
     }
 
-    public static func stacked(node: NavigationNode) -> FullScreenCoverPresentedNavigationNode {
+    public static func stacked(node: any NavigationNode) -> FullScreenCoverPresentedNavigationNode {
         FullScreenCoverPresentedNavigationNode(
             node: StackRootNavigationNode(
                 stackNodes: [StackNavigationNode(destination: node, transition: nil)]
@@ -18,10 +18,10 @@ public struct FullScreenCoverPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Other
 
-    public let node: NavigationNode
+    public let node: any NavigationNode
     public let sourceID: String? = nil
 
-    init(node: NavigationNode) {
+    init(node: any NavigationNode) {
         self.node = node
     }
 

@@ -1,7 +1,13 @@
 import SwiftUINavigation
+import SwiftUI
 
-public final class PhotosPickerNavigationNode: NavigationNode {
+@NavigationNode
+final class PhotosPickerNavigationNode {
 
+    var body: EmptyView {
+        EmptyView()
+    }
+    
     let inputData: PhotosPickerInputData
 
     init(inputData: PhotosPickerInputData) {

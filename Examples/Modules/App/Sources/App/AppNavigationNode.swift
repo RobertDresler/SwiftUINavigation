@@ -9,7 +9,8 @@ import DeepLinkForwarderService
 import OnboardingService
 import LockedApp
 
-public final class AppNavigationNode: SwitchedNavigationNode {
+@SwitchedNavigationNode
+public final class AppNavigationNode {
 
     private let flagsRepository: FlagsRepository
     private let deepLinkForwarderService: DeepLinkForwarderService
@@ -24,18 +25,10 @@ public final class AppNavigationNode: SwitchedNavigationNode {
         self.flagsRepository = flagsRepository
         self.deepLinkForwarderService = deepLinkForwarderService
         self.onboardingService = onboardingService
-        super.init()
         bind()
     }
 
-    public override var view: AnyView {
-        AnyView(
-            super.view
-                .onShake { [weak self] in self?.printDebugGraph() }
-        )
-    }
-
-    private var notLoggedNode: NavigationNode {
+    private var notLoggedNode: any NavigationNode {
         StackRootNavigationNode(
             stackNodes: [
                 StartNavigationNode(inputData: StartInputData(), onboardingService: onboardingService)
@@ -43,7 +36,7 @@ public final class AppNavigationNode: SwitchedNavigationNode {
         )
     }
 
-    private var loggedNode: NavigationNode {
+    private var loggedNode: any NavigationNode {
         MainTabsNavigationNode(
             inputData: MainTabsInputData(
                 initialTab: .commands

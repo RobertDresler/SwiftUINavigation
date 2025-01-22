@@ -1,12 +1,14 @@
 import SwiftUI
 
-struct SwitchedNavigationNodeView: View {
+public struct SwitchedNavigationNodeView: View {
 
-    @EnvironmentNavigationNode private var node: SwitchedNavigationNode
+    @EnvironmentNavigationNodeState private var navigationNodeState: SwitchedNavigationNodeState
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         Group {
-            if let switchedNode = node.switchedNode {
+            if let switchedNode = navigationNodeState.switchedNode {
                 NavigationNodeResolvedView(node: switchedNode)
                     .id(switchedNode.id)
             } else {

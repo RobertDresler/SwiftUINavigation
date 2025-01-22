@@ -6,9 +6,9 @@ public struct DefaultTabNode: TabNode {
     public let id: AnyHashable
     private let image: Image
     private let title: String
-    public let navigationNode: NavigationNode
+    public let navigationNode: any NavigationNode
 
-    public init(id: AnyHashable, image: Image, title: String, navigationNode: NavigationNode) {
+    public init(id: AnyHashable, image: Image, title: String, navigationNode: any NavigationNode) {
         self.id = id
         self.image = image
         self.title = title

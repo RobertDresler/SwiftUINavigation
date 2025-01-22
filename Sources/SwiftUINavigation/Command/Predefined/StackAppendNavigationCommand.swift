@@ -1,10 +1,10 @@
 public struct StackAppendNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         stackMapCommand(for: node).execute(on: node)
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         stackMapCommand(for: node).canExecute(on: node)
     }
 
@@ -16,12 +16,12 @@ public struct StackAppendNavigationCommand: NavigationCommand {
         self.animated = animated
     }
 
-    public init(appendedNode: NavigationNode, animated: Bool = true) {
+    public init(appendedNode: any NavigationNode, animated: Bool = true) {
         self.appendedNode = StackNavigationNode(destination: appendedNode)
         self.animated = animated
     }
 
-    private func stackMapCommand(for node: NavigationNode) -> NavigationCommand {
+    private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
         StackMapNavigationCommand(
             animated: animated,
             transform: { nodes in

@@ -215,5 +215,5 @@ struct ActionableListView: View {
 }
 
 #Preview {
-    ActionableListNavigationNode(inputData: .default).view
+    ActionableListNavigationNode(inputData: .default).body
 }

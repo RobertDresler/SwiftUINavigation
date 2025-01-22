@@ -34,5 +34,5 @@ struct ArchitectureMVVMView: View {
 }
 
 #Preview {
-    ArchitectureMVVMNavigationNode(inputData: ArchitectureMVVMInputData(initialName: "Anna")).view
+    ArchitectureMVVMNavigationNode(inputData: ArchitectureMVVMInputData(initialName: "Anna")).body
 }

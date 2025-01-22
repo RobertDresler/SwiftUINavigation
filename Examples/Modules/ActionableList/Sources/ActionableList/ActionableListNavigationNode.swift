@@ -3,17 +3,17 @@ import ExamplesNavigation
 import SwiftUI
 import CustomConfirmationDialog
 
-public final class ActionableListNavigationNode: NavigationNode {
+@NavigationNode
+public final class ActionableListNavigationNode {
 
     private let inputData: ActionableListInputData
 
     public init(inputData: ActionableListInputData) {
         self.inputData = inputData
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(ActionableListView(inputData: inputData))
+    public var body: some View {
+        ActionableListView(inputData: inputData)
     }
 
     func confirmLogout(sourceID: String) async -> Bool {

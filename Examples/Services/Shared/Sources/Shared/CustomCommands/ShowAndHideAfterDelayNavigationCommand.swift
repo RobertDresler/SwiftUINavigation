@@ -3,7 +3,7 @@ import Foundation
 
 public struct ShowAndHideAfterDelayNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         executablePresentCommand(on: node).execute(on: node)
         let hideDelay = hideDelay
         let animated = animated
@@ -16,7 +16,7 @@ public struct ShowAndHideAfterDelayNavigationCommand: NavigationCommand {
         }
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         executablePresentCommand(on: node).canExecute(on: node)
     }
 
@@ -30,7 +30,7 @@ public struct ShowAndHideAfterDelayNavigationCommand: NavigationCommand {
         self.animated = animated
     }
 
-    private func executablePresentCommand(on node: NavigationNode) -> NavigationCommand {
+    private func executablePresentCommand(on node: any NavigationNode) -> NavigationCommand {
         PresentNavigationCommand(presentedNode: presentedNode, animated: animated)
     }
 

@@ -42,5 +42,5 @@ struct ArchitectureViewOnlyView: View {
 }
 
 #Preview {
-    ArchitectureViewOnlyNavigationNode(inputData: ArchitectureViewOnlyInputData(initialName: "Anna")).view
+    ArchitectureViewOnlyNavigationNode(inputData: ArchitectureViewOnlyInputData(initialName: "Anna")).body
 }

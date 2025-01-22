@@ -1,20 +1,18 @@
 import SwiftUINavigation
 import SwiftUI
 
-public final class ActivityNavigationNode: NavigationNode {
+@NavigationNode
+public final class ActivityNavigationNode {
 
     private let inputData: ActivityInputData
 
     public init(inputData: ActivityInputData) {
         self.inputData = inputData
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(
-            ActivityView(inputData: inputData)
-                .presentationDetents([.medium])
-        )
+    public var body: some View {
+        ActivityView(inputData: inputData)
+            .presentationDetents([.medium])
     }
 
 }

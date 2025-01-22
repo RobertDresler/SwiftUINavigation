@@ -6,7 +6,7 @@ public struct PhotosPickerPresentedNavigationNode: PresentedNavigationNode {
 
     // MARK: Other
 
-    public let node: NavigationNode
+    public let node: any NavigationNode
     public let sourceID: String?
 
     public init(inputData: PhotosPickerInputData, sourceID: String? = nil) {

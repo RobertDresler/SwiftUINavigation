@@ -71,5 +71,5 @@ struct CustomConfirmationDialogView: View {
             message: "Are you sure you want to log out? You can easily log in again anytime.",
             confirmButtonTitle: "Log Out"
         )
-    ).view
+    ).body
 }

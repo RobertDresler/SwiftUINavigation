@@ -65,6 +65,6 @@ struct OnboardingResultView: View {
         inputData: OnboardingResultInputData(),
         onboardingService: OnboardingService.makeStub()
     )
-        .view
+        .body
         .environmentObject(FlagsRepository())
 }

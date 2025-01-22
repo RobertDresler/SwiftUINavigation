@@ -2,17 +2,17 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 
-public final class CustomNavigationBarNavigationNode: NavigationNode {
+@NavigationNode
+public final class CustomNavigationBarNavigationNode {
 
     private let inputData: CustomNavigationBarInputData
 
     public init(inputData: CustomNavigationBarInputData) {
         self.inputData = inputData
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(CustomNavigationBarView(inputData: inputData))
+    public var body: some View {
+        CustomNavigationBarView(inputData: inputData)
     }
 
     func dropLast() {

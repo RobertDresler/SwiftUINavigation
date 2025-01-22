@@ -18,7 +18,7 @@ struct ActionableListItem {
             case openWaitingWindow
         }
 
-        case command(makeCommand: (NavigationNode) -> NavigationCommand)
+        case command(makeCommand: (any NavigationNode) -> NavigationCommand)
         case custom(CustomAction)
 
     }
@@ -32,7 +32,7 @@ extension ActionableListItem {
     static func new(
         id: String = UUID().uuidString,
         viewModel: ActionableListItemView.ViewModel,
-        makeCommand: @escaping (NavigationNode) -> NavigationCommand,
+        makeCommand: @escaping (any NavigationNode) -> NavigationCommand,
         presentingNavigationSourceID: String? = nil
     ) -> ActionableListItem {
         ActionableListItem(

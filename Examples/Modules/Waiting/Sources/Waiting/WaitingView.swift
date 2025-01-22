@@ -59,5 +59,5 @@ struct WaitingView: View {
 }
 
 #Preview {
-    WaitingNavigationNode(inputData: WaitingInputData(), flagsRepository: FlagsRepository()).view
+    WaitingNavigationNode(inputData: WaitingInputData(), flagsRepository: FlagsRepository()).body
 }

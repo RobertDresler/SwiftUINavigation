@@ -62,6 +62,6 @@ struct SubscriptionFreemiumView: View {
 
 #Preview {
     SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
-        .view
+        .body
         .environmentObject(FlagsRepository())
 }

@@ -61,5 +61,5 @@ struct LockedAppView: View {
 }
 
 #Preview {
-    LockedAppNavigationNode(inputData: LockedAppInputData()).view
+    LockedAppNavigationNode(inputData: LockedAppInputData()).body
 }

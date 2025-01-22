@@ -7,7 +7,7 @@ import OnboardingResult
 
 public struct MoveInOnboardingNavigationCommand: NavigationCommand {
 
-    public func execute(on node: NavigationNode) {
+    public func execute(on node: any NavigationNode) {
         if previousStepID == nil {
             onboardingService.startOnboarding()
         }
@@ -31,7 +31,7 @@ public struct MoveInOnboardingNavigationCommand: NavigationCommand {
         }
     }
 
-    public func canExecute(on node: NavigationNode) -> Bool {
+    public func canExecute(on node: any NavigationNode) -> Bool {
         true
     }
 

@@ -2,17 +2,17 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 
-public final class LockedAppNavigationNode: NavigationNode {
+@NavigationNode
+public final class LockedAppNavigationNode {
 
     private let inputData: LockedAppInputData
 
     public init(inputData: LockedAppInputData) {
         self.inputData = inputData
-        super.init()
     }
 
-    public override var view: AnyView {
-        AnyView(LockedAppView(inputData: inputData))
+    public var body: some View {
+        LockedAppView(inputData: inputData)
     }
 
 }

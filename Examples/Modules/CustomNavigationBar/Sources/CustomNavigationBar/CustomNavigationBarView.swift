@@ -75,6 +75,6 @@ struct CustomNavigationBarView: View {
 
 #Preview {
     CustomNavigationBarNavigationNode(inputData: CustomNavigationBarInputData())
-        .view
+        .body
         .environmentObject(FlagsRepository())
 }
