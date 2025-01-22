@@ -7,9 +7,9 @@ public final class SegmentedTabsNavigationNode: NavigationNode {
     @Published var tabs = [SegmentedTab]()
     @Published var selectedTab: SegmentedTab
 
-    public override var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
+    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
         super.childrenPublishers
-        + [$tabs.map { $0.map { $0.node } }.eraseToAnyPublisher()]
+        + [$tabs.map { $0.map { $0.node } }]
     }
 
     public override var view: AnyView {

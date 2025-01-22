@@ -6,9 +6,9 @@ open class TabsRootNavigationNode: NavigationNode {
     @Published public internal(set) var selectedTabNode: TabNode
     @Published public internal(set) var tabsNodes: [TabNode]
 
-    public override var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
+    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
         super.childrenPublishers
-        + [$tabsNodes.map { $0.map { $0.navigationNode } }.eraseToAnyPublisher()]
+        + [$tabsNodes.map { $0.map { $0.navigationNode } }]
     }
 
     public override var view: AnyView {

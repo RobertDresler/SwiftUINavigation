@@ -10,10 +10,9 @@ import Combine
     }
 
     open var isWrapperNode: Bool { true }
-    open var childrenPublishers: [AnyPublisher<[NavigationNode], Never>] {
+    open var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
         let presentedNodePublisher = $presentedNode.map { [$0?.node] }
             .map { $0.compactMap { $0 } }
-            .eraseToAnyPublisher()
         return [presentedNodePublisher]
     }
 
@@ -187,8 +186,8 @@ private extension NavigationNode {
         guard let firstPublisher = childrenPublishers.first else {
             return Just([]).eraseToAnyPublisher()
         }
-        return childrenPublishers.dropFirst().reduce(firstPublisher) { combinedPublisher, nextPublisher in
-            combinedPublisher.combineLatest(nextPublisher)
+        return childrenPublishers.dropFirst().reduce(firstPublisher.eraseToAnyPublisher()) { combinedPublisher, nextPublisher in
+            combinedPublisher.combineLatest(nextPublisher.eraseToAnyPublisher())
                 .map { $0 + $1 }
                 .eraseToAnyPublisher()
         }
