@@ -189,6 +189,17 @@ You can access the `NavigationNode` from your `View` using the following:
 
 #### Predefined Nodes:
 
+- **`StackRootNavigationNode`**  
+  A generic `@StackRootNavigationNode` that you can use in most cases without needing to create your own, for example:
+
+  ```swift
+  NavigationWindow(
+      rootNode: StackRootNavigationNode(
+          stackNodes: [HomeNavigationNode()]
+      )
+  )
+  ```
+  
 - **`SFSafariNavigationNode`**  
   A node that opens a URL in an in-app browser.
   
