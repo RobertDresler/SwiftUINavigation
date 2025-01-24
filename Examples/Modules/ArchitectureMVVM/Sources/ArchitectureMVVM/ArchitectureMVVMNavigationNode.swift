@@ -26,7 +26,7 @@ public final class ArchitectureMVVMNavigationNode {
     }
 
     private func hide() {
-        executeCommand(ResolvedHideNavigationCommand())
+        execute(.hide())
     }
 
 }

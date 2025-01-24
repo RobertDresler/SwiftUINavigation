@@ -16,7 +16,7 @@ public final class ArchitectureViewOnlyNavigationNode {
     }
 
     func hide() {
-        executeCommand(ResolvedHideNavigationCommand())
+        execute(.hide())
     }
 
 }

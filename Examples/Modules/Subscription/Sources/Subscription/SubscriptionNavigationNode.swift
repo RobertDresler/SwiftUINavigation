@@ -27,7 +27,7 @@ public final class SubscriptionNavigationNode {
 
     private func setNode(isUserPremium: Bool) {
         let switchedNode = isUserPremium ? premiumNode : freemiumNode
-        executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
+        execute(.switchNode(switchedNode))
     }
 
     private var premiumNode: any NavigationNode {

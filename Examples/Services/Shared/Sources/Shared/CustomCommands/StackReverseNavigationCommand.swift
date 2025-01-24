@@ -17,11 +17,11 @@ public struct StackReverseNavigationCommand: NavigationCommand {
     }
 
     private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
-        StackMapNavigationCommand(
-            animated: animated,
-            transform: { nodes in
+        .stackMap(
+            { nodes in
                 nodes.reversed()
-            }
+            },
+            animated: animated
         )
     }
 

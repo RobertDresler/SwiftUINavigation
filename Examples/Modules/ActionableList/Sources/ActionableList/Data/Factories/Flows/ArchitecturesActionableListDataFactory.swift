@@ -33,8 +33,8 @@ struct ArchitecturesActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Architecture where everything is handled within the View"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: ArchitectureViewOnlyNavigationNode(
+                .stackAppend(
+                    ArchitectureViewOnlyNavigationNode(
                         inputData: ArchitectureViewOnlyInputData(
                             initialName: "Anna"
                         )
@@ -53,8 +53,8 @@ struct ArchitecturesActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "A pattern that separates the UI (View) from the business logic (ViewModel), and events are sent to NavigationNode using eventHandler"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: ArchitectureMVVMNavigationNode(
+                .stackAppend(
+                    ArchitectureMVVMNavigationNode(
                         inputData: ArchitectureMVVMInputData(
                             initialName: "Anna"
                         )
@@ -73,8 +73,8 @@ struct ArchitecturesActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Architecture where state is modified by actions, and the UI updates based on the state changes, and events are sent to NavigationNode using eventHandler"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: ArchitectureComposableNavigationNode(
+                .stackAppend(
+                    ArchitectureComposableNavigationNode(
                         inputData: ArchitectureComposableInputData(
                             initialName: "Anna"
                         )

@@ -8,7 +8,7 @@ public struct ShowAndHideAfterDelayNavigationCommand: NavigationCommand {
         let hideDelay = hideDelay
         let animated = animated
         let hidePresentedNode = { @MainActor [weak presentedNode = presentedNode.node] in
-            presentedNode?.executeCommand(DismissNavigationCommand(animated: animated))
+            presentedNode?.execute(.dismiss(animated: animated))
         }
         Task {
             try? await Task.sleep(nanoseconds: UInt64(hideDelay * 1_000_000_000))
@@ -31,7 +31,7 @@ public struct ShowAndHideAfterDelayNavigationCommand: NavigationCommand {
     }
 
     private func executablePresentCommand(on node: any NavigationNode) -> NavigationCommand {
-        PresentNavigationCommand(presentedNode: presentedNode, animated: animated)
+        .present(presentedNode, animated: animated)
     }
 
 }

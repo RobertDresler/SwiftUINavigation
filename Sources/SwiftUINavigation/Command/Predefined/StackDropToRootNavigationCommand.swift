@@ -15,11 +15,11 @@ public struct StackDropToRootNavigationCommand: NavigationCommand {
     }
 
     private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
-        StackMapNavigationCommand(
-            animated: animated,
-            transform: { nodes in
+        .stackMap(
+            { nodes in
                 Array(nodes.prefix(1))
-            }
+            },
+            animated: animated
         )
     }
 

@@ -25,13 +25,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
                 flagsRepository: flagsRepository
             )
             subscriptionNode.addMessageListener(messageListener)
-            node.executeCommand(
-                PresentNavigationCommand(
-                    presentedNode: SheetPresentedNavigationNode.stacked(
-                        node: subscriptionNode
-                    )
-                )
-            )
+            node.execute(.present(.sheet(.stacked(subscriptionNode))))
         }
     }
 

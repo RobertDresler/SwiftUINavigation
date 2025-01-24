@@ -26,9 +26,9 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 title: "Show Alert"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: AlertPresentedNavigationNode(
-                        inputData: AlertInputData(
+                .present(
+                    .alert(
+                        AlertInputData(
                             title: "Oops, Something Went Wrong!",
                             message: "We tried to make it work, but it seems like everything fell apart. Should we try again, or just give up?",
                             actions: [
@@ -63,9 +63,9 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Note that by using the sourceID and presentingNavigationSource(_:), it is presented as a popover from the card on iPadOS"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: ConfirmationDialogPresentedNavigationNode(
-                        inputData: ConfirmationDialogInputData(
+                .present(
+                    .confirmationDialog(
+                        ConfirmationDialogInputData(
                             message: "Are you sure you want to delete all your hard work? You can always undo, but who has time for that, right?",
                             actions: [
                                 ConfirmationDialogInputData.Action(
@@ -101,8 +101,8 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Since the Photos Picker is a custom PresentedNavigationNode, it must be registered using registerCustomPresentableNavigationNodes(_:) on the NavigationWindow"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: PhotosPickerPresentedNavigationNode(
+                .present(
+                    PhotosPickerPresentedNavigationNode(
                         inputData: PhotosPickerInputData(
                             maxSelectionCount: 3,
                             photosPickerItem: []
@@ -124,9 +124,9 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "This command demonstrates how to present a UIViewControllerRepresentable"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: SheetPresentedNavigationNode.standalone(
-                        node: ActivityNavigationNode(
+                .present(
+                    .sheet(
+                        ActivityNavigationNode(
                             inputData: ActivityInputData(
                                 activityItems: ["Just came across this and had to share it with you! 🔥"]
                             )

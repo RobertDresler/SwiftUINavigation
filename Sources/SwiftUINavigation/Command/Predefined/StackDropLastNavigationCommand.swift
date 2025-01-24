@@ -17,11 +17,11 @@ public struct StackDropLastNavigationCommand: NavigationCommand {
     }
 
     private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
-        StackMapNavigationCommand(
-            animated: animated,
-            transform: { nodes in
+        .stackMap(
+            { nodes in
                 nodes.dropLast(min(Int(k), nodes.count - 1))
-            }
+            },
+            animated: animated
         )
     }
 

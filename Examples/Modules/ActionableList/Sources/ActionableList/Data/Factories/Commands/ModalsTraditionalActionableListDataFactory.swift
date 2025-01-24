@@ -26,11 +26,7 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 title: "Present Full Screen Cover"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
-                        node: ActionableListNavigationNode(inputData: .default)
-                    )
-                )
+                .present(.fullScreenCover(.stacked(ActionableListNavigationNode(inputData: .default))))
             }
         )
     }
@@ -44,12 +40,7 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Without Animation"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
-                        node: ActionableListNavigationNode(inputData: .default)
-                    ),
-                    animated: false
-                )
+                .present(.fullScreenCover(.stacked(ActionableListNavigationNode(inputData: .default))), animated: false)
             }
         )
     }
@@ -62,11 +53,7 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 title: "Present Sheet"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: SheetPresentedNavigationNode.stacked(
-                        node: ActionableListNavigationNode(inputData: .default)
-                    )
-                )
+                .present(.sheet(.stacked(ActionableListNavigationNode(inputData: .default))))
             }
         )
     }
@@ -80,12 +67,14 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "...with Medium detent (Bottom Sheet)"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: SheetPresentedNavigationNode.stacked(
-                        node: ActionableListNavigationNode(
-                            inputData: ActionableListInputData(
-                                id: .commands,
-                                addPresentationDetents: true
+                .present(
+                    .sheet(
+                        .stacked(
+                            ActionableListNavigationNode(
+                                inputData: ActionableListInputData(
+                                    id: .commands,
+                                    addPresentationDetents: true
+                                )
                             )
                         )
                     )
@@ -102,7 +91,7 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 title: "Dismiss"
             ),
             makeCommand: {
-                DismissNavigationCommand()
+                .dismiss()
             }
         )
     }

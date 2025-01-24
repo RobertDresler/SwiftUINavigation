@@ -16,26 +16,21 @@ public final class SubscriptionPremiumNavigationNode {
     }
 
     func buyMeCoffee() {
-        executeCommand(
-            PresentNavigationCommand(
-                presentedNode: AlertPresentedNavigationNode(
-                    inputData: AlertInputData(
-                        title: "Support Me with a Coffee!",
-                        message: "If you'd like to support me further, please go to the very bottom of the GitHub README and find the 'Buy me a coffee' link.",
-                        actions: [
-                            AlertInputData.Action(
-                                id: "cancel",
-                                title: "Cancel"
-                            ),
-                            AlertInputData.Action(
-                                id: "buyCoffee",
-                                title: "Got it!"
-                            )
-                        ]
-                    )
+        let alertInputData = AlertInputData(
+            title: "Support Me with a Coffee!",
+            message: "If you'd like to support me further, please go to the very bottom of the GitHub README and find the 'Buy me a coffee' link.",
+            actions: [
+                AlertInputData.Action(
+                    id: "cancel",
+                    title: "Cancel"
+                ),
+                AlertInputData.Action(
+                    id: "buyCoffee",
+                    title: "Got it!"
                 )
-            )
+            ]
         )
+        execute(.present(.alert(alertInputData)))
     }
 
 }

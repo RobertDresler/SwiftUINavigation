@@ -16,7 +16,7 @@ public final class CustomNavigationBarNavigationNode {
     }
 
     func dropLast() {
-        executeCommand(StackDropLastNavigationCommand())
+        execute(.stackDropLast())
     }
 
 }
