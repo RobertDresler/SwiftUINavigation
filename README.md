@@ -51,7 +51,7 @@ I highly recommend starting by exploring the Examples app. The app features many
     - Clone the repo: `git clone https://github.com/RobertDresler/SwiftUINavigation`
     - Download the repo (don't forget to **rename** the downloaded folder to `SwiftUINavigation`)
 
-2. Open the app at path `SwiftUINavigation/Examples/Examples.xcodeproj`
+2. Open the app at path `SwiftUINavigation/Examples.xcodeproj`
 
 3. Run the app
 
