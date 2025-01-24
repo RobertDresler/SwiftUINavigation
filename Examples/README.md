@@ -4,7 +4,7 @@
 
 1. Have you downloaded the repo? Make sure to **rename** the downloaded folder to `SwiftUINavigation`
 
-2. Open the app at path `SwiftUINavigation/Examples/Examples.xcodeproj`
+2. Open the app at path `SwiftUINavigation/Examples.xcodeproj`
 
 3. Run the app
 
