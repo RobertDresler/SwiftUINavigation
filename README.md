@@ -271,7 +271,7 @@ final class HomeNavigationNode {
     ...
 
     func showDetail() {
-	     // Present fullScreenCover
+	// Present fullScreenCover
         execute(.present(.fullScreenCover(.stacked(DetailNavigationNode()))))
         // Present sheet
         execute(.present(.sheet(.stacked(DetailNavigationNode()))))
