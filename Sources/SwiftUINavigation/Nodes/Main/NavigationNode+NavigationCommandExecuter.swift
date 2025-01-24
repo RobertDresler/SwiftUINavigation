@@ -2,11 +2,11 @@
 
 @MainActor
 public extension NavigationNode {
-    func executeCommand(_ command: NavigationCommand) {
+    func execute(_ command: NavigationCommand) {
         command.execute(on: self)
     }
 
-    func canExecuteCommand(_ command: NavigationCommand) -> Bool {
+    func canExecute(_ command: NavigationCommand) -> Bool {
         command.canExecute(on: self)
     }
 }

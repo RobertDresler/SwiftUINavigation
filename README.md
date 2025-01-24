@@ -30,13 +30,11 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 
 ## Core Concepts
 
-The framework consists of three key components: `NavigationNode`, `NavigationCommand` and `PresentedNavigationNode`.
+The framework consists of two key components: `NavigationNode`, and `NavigationCommand`.
 
 - **NavigationNode**: Think of it as a screen/module or what you might know as a coordinator. These `NavigationNode`s form a navigation graph. Each node stores its state in `NavigationNodeState`. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedNode`, the new node is presented.
   
-- **NavigationCommand**: This represents an operation that modifies the navigation graph of `NavigationNode`s. For example, a `PresentNavigationCommand` sets the `presentedNode`. These operations can include actions like push (newly append), pop (newly dropLast), present, dismiss, or openURL.
-
-- **PresentedNavigationNode**: Since presenting views using native mechanisms requires separate view modifiers, I introduced the concept of `PresentedNavigationNode`. Instead of presenting the `NavigationNode` directly, you present the `PresentedNavigationNode`, which holds your `NavigationNode` (e.g., `DetailNavigationNode`). There are specific implementations like `FullScreenCoverPresentedNavigationNode`, `SheetPresentedNavigationNode`, and `AlertPresentedNavigationNode`. This approach also allows you to create custom implementations, such as a photo picker.
+- **NavigationCommand**: This represents an operation that modifies the navigation state of `NavigationNode`. For example, a `PresentNavigationCommand ` sets the `presentedNode`. These operations can include actions like `.stackAppend(_:animated:)` (push), `.stackDropLast(_:animated:)` (pop), `.present(_:animated:)`, `.dismiss(animated:)`, `.openURL(_)` and more.
 
 To get started, I recommend exploring the [Examples app](#Explore-Examples-App) to get a feel for the framework. Afterward, you can dive deeper [on your own](#Explore-on-Your-Own). For more detailed information, check out the [Documentation](#Documentation).
 
@@ -78,11 +76,7 @@ import SwiftUINavigation
 struct YourApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationWindow(
-                rootNode: StackRootNavigationNode(
-                    stackNodes: [HomeNavigationNode()]
-                )
-            )
+            NavigationWindow(rootNode: .stacked(HomeNavigationNode()))
         }
     }
 }
@@ -95,13 +89,7 @@ final class HomeNavigationNode {
     }
 
     func showDetail() {
-        executeCommand(
-            PresentNavigationCommand(
-                presentedNode: SheetPresentedNavigationNode.stacked(
-                    node: DetailNavigationNode()
-                )
-            )
-        )
+        execute(.present(.sheet(.stacked(DetailNavigationNode()))))
     }
 
 }
@@ -189,15 +177,11 @@ You can access the `NavigationNode` from your `View` using the following:
 
 #### Predefined Nodes:
 
-- **`StackRootNavigationNode`**  
-  A generic `@StackRootNavigationNode` that you can use in most cases without needing to create your own, for example:
+- **`.stacked`/`StackRootNavigationNode`**  
+  A generic `@StackRootNavigationNode` that you can use in most cases without needing to create your own. You can create it using static `.stacked` getters.
 
   ```swift
-  NavigationWindow(
-      rootNode: StackRootNavigationNode(
-          stackNodes: [HomeNavigationNode()]
-      )
-  )
+  NavigationWindow(rootNode: .stacked(HomeNavigationNode()))
   ```
   
 - **`SFSafariNavigationNode`**  
@@ -215,9 +199,9 @@ You can access the `NavigationNodeState` from your `View` using the following:
 
 ### NavigationCommand
 
-To perform common navigation actions like append, present, or dismiss, you need to modify the navigation graph. In the framework, this is handled using `NavigationCommand`s. These commands allow you to dynamically update the graph to reflect the desired navigation flow. Many commands are already predefined within the framework (see [Examples App](#Explore-Examples-App)).
+To perform common navigation actions like append, present, or dismiss, you need to modify the navigation state. In the framework, this is handled using `NavigationCommand`s. These commands allow you to dynamically update the state to reflect the desired navigation flow. Many commands are already predefined within the framework (see [Examples App](#Explore-Examples-App)).
 
-A command is executed in a `NavigationNode` using the `execute(on:)` method:
+A command is executed on a `NavigationNode` using the `execute(_:)` method:
 
 ```swift
 @NavigationNode
@@ -226,11 +210,7 @@ final class HomeNavigationNode {
     ...
 
     func showDetail() {
-        executeCommand(
-            PresentNavigationCommand(
-                presentedNode: SheetPresentedNavigationNode.stacked(node: DetailNavigationNode())
-            )
-        )
+        execute(.present(.sheet(.stacked(DetailNavigationNode()))))
     }
 
 }
@@ -239,43 +219,43 @@ final class HomeNavigationNode {
 #### Predefined Commands
 
 ##### Stack Commands
-- **`StackAppendNavigationCommand`**  
+- **`.stackAppend`/`StackAppendNavigationCommand`**  
   Adds a new node to the stack - you can think of it as a push
-- **`StackDropLastNavigationCommand`**  
+- **`.stackDropLast`/`StackDropLastNavigationCommand`**  
   Hides the last `k` nodes in the stack - you can think of it as a pop
-- **`StackDropToRootNavigationCommand`**  
+- **`.stackDropToRoot`/`StackDropToRootNavigationCommand`**  
   Leaves only the first node in the stack - you can think of it as a pop to root
-- **`StackSetRootNavigationCommand`**  
+- **`.stackSetRoot`/`StackSetRootNavigationCommand`**  
   Replaces the root node in the stack
-- **`StackMapNavigationCommand`**  
+- **`.stackMap`/`StackMapNavigationCommand`**  
   Changes the stack - you can create your own command using this one
 
 ##### Presentation Commands
-- **`PresentNavigationCommand`**  
+- **`.present`/`PresentNavigationCommand`**  
   Presents a node on the highest node that can present
 - **`PresentOnGivenNodeNavigationCommand`**  
   Presents a node on the specified node
 
 ##### Dismiss Commands
-- **`DismissNavigationCommand`**  
+- **`.dismiss`/`DismissNavigationCommand`**  
   Dismisses the highest presented node
 - **`DismissJustFromPresentedNavigationCommand`**  
   Dismisses the node on which it is called, if it is the highest presented node
 
 ##### Other Commands
-- **`ResolvedHideNavigationCommand`**  
+- **`.hide`/`ResolvedHideNavigationCommand`**  
   Dismisses the node if possible, otherwise drops the last node in the stack
-- **`TabsSelectItemNavigationCommand`**  
+- **`.tabsSelectItem`/`TabsSelectItemNavigationCommand`**  
   Changes the selected tab in the nearest tab bar
-- **`SwitchNavigationCommand`**  
+- **`.switchNode`/`SwitchNavigationCommand`**  
   If the called node is a `SwitchedNavigationNode`, it switches its `switchedNode`
-- **`OpenWindowNavigationCommand`**  
+- **`.openWindow`/`OpenWindowNavigationCommand`**  
   Opens a new window with ID
-- **`DismissWindowNavigationCommand`**  
+- **`.dismissWindow`/`DismissWindowNavigationCommand`**  
   Closes the window with ID
-- **`DefaultHandleDeepLinkNavigationCommand`**  
+- **`.handleDeepLink`/`DefaultHandleDeepLinkNavigationCommand`**  
   Handles a deep link on the most appropriate node (see [NavigationDeepLink](#NavigationDeepLink))
-- **`OpenURLNavigationCommand`**  
+- **`.openURL`/`OpenURLNavigationCommand`**  
   Opens a URL using `NavigationEnvironmentTrigger` (see [NavigationEnvironmentTrigger](#NavigationEnvironmentTrigger))
 
 The framework is designed to allow you to easily create your own commands as well (see [Examples App](#Explore-Examples-App)).
@@ -291,26 +271,27 @@ final class HomeNavigationNode {
     ...
 
     func showDetail() {
-        executeCommand(
-            PresentNavigationCommand(
-                presentedNode: SheetPresentedNavigationNode.stacked(
-                    node: DetailNavigationNode()
-                )
-            )
-        )
+	     // Present fullScreenCover
+        execute(.present(.fullScreenCover(.stacked(DetailNavigationNode()))))
+        // Present sheet
+        execute(.present(.sheet(.stacked(DetailNavigationNode()))))
+        // Present sheet with detail and pushed detail editor
+        execute(.present(.sheet(.stacked([DetailNavigationNode(), DetailEditorNavigationNode()])))
+        // Present not wrapped in stack
+        execute(.present(.sheet(SFSafariNavigationNode(...))))
     }
 
 }
 ```
 
 #### Predefined PresentedNavigationNodes
-- **`FullScreenCoverPresentedNavigationNode`**  
-  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. It's preferable to create it using `stack(node:)` if you want to add it to a new stack, or `standalone(node:)` if you don't want to wrap it in a stack
-- **`SheetPresentedNavigationNode`**  
-  Displays a sheet, similar to `sheet` in SwiftUI (you can adjust the detents to show it as a bottom sheet). It's preferable to create it using `stack(node:)` if you want to add it to a new stack, or `standalone(node:)` if you don't want to wrap it in a stack
-- **`AlertPresentedNavigationNode`**  
+- **`.fullScreenCover`/`FullScreenCoverPresentedNavigationNode`**  
+  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. If you want to wrap a newly presented node into a stack node, use `.stacked` or `StackRootNavigationNode`.
+- **`.sheet`/`SheetPresentedNavigationNode`**  
+  Displays a sheet, similar to `sheet` in SwiftUI (you can adjust the detents to show it as a bottom sheet). If you want to wrap a newly presented node into a stack node, use `.stacked` or `StackRootNavigationNode`.
+- **`.alert`/`AlertPresentedNavigationNode`**  
   Presents a standard `alert`
-- **`ConfirmationDialogPresentedNavigationNode`**  
+- **`.confirmationDialog`/`ConfirmationDialogPresentedNavigationNode`**  
   Presents an alert as `actionSheet`
 
 When presenting nodes like `ConfirmationDialogPresentedNavigationNode`, you may want to present it from a specific view, so that on iPad, it appears as a popover originating from that view. To do this, use the `presentingNavigationSource(_:)` modifier to modify the view:

@@ -26,7 +26,7 @@ public final class ArchitectureComposableNavigationNode {
     }
 
     private func hide() {
-        executeCommand(ResolvedHideNavigationCommand())
+        execute(.hide())
     }
 
 }

@@ -124,7 +124,7 @@ struct ActionableListView: View {
         guard let action = items.first(where: { $0.identifiableViewModel.id == itemID })?.action else { return }
         switch action {
         case .command(let makeCommand):
-            navigationNode.executeCommand(makeCommand(navigationNode))
+            navigationNode.execute(makeCommand(navigationNode))
         case .custom(let customAction):
             switch customAction {
             case .logout(let sourceID):

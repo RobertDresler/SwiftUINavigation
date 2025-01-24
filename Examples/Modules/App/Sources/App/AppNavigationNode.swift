@@ -29,11 +29,7 @@ public final class AppNavigationNode {
     }
 
     private var notLoggedNode: any NavigationNode {
-        StackRootNavigationNode(
-            stackNodes: [
-                StartNavigationNode(inputData: StartInputData(), onboardingService: onboardingService)
-            ]
-        )
+        .stacked(StartNavigationNode(inputData: StartInputData(), onboardingService: onboardingService))
     }
 
     private var loggedNode: any NavigationNode {
@@ -66,34 +62,32 @@ public final class AppNavigationNode {
 
     private func setNode(isUserLogged: Bool) {
         let switchedNode = isUserLogged ? loggedNode : notLoggedNode
-        executeCommand(SwitchNavigationCommand(switchedNode: switchedNode))
+        execute(.switchNode(switchedNode))
     }
 
     private func handleDeepLink(_ deepLink: NavigationDeepLink) {
-        executeCommand(DefaultHandleDeepLinkNavigationCommand(deepLink: deepLink))
+        execute(.handleDeepLink(deepLink))
     }
 
     private func setLockedAppWindow(isAppLocked: Bool) {
         if isAppLocked {
-            executeCommand(
-                PresentNavigationCommand(
-                    presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
-                        node: LockedAppNavigationNode(inputData: LockedAppInputData())
-                    ),
+            execute(
+                .present(
+                    .fullScreenCover(.stacked(LockedAppNavigationNode(inputData: LockedAppInputData()))),
                     animated: false
                 )
             )
         } else {
-            executeCommand(DismissNavigationCommand(animated: false))
+            execute(.dismiss(animated: false))
         }
     }
 
     private func handleIsWaitingWindowOpen(_ isOpen: Bool) {
         if isOpen {
-            executeCommand(OpenWindowNavigationCommand(id: WindowID.waiting.rawValue))
+            execute(.openWindow(id: WindowID.waiting.rawValue))
         } else {
             if #available(iOS 17, *) {
-                executeCommand(DismissWindowNavigationCommand(id: WindowID.waiting.rawValue))
+                execute(.dismissWindow(id: WindowID.waiting.rawValue))
             } else {
                 /// On iOS 16 you have to dismiss window from window itself, see `WaitingNavigationNode`
             }

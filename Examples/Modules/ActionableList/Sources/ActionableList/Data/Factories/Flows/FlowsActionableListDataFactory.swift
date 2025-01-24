@@ -95,10 +95,8 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "How SwiftUINavigation works with architectures like MVVM or Composable, helping you envision your code structure"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: ActionableListNavigationNode(
-                        inputData: ActionableListInputData(id: .architectures)
-                    )
+                .stackAppend(
+                    ActionableListNavigationNode(inputData: ActionableListInputData(id: .architectures))
                 )
             }
         )
@@ -161,9 +159,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "The best way to customize the navigation bar is by creating your own"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: CustomNavigationBarNavigationNode(inputData: CustomNavigationBarInputData())
-                )
+                .stackAppend(CustomNavigationBarNavigationNode(inputData: CustomNavigationBarInputData()))
             }
         )
     }
@@ -177,8 +173,8 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "You can create custom wrapper view just like StackRootNavigationNode or TabsRootNavigationNode"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: SegmentedTabsNavigationNode(
+                .stackAppend(
+                    SegmentedTabsNavigationNode(
                         tabs: [
                             SegmentedTab(
                                 name: "View Only",

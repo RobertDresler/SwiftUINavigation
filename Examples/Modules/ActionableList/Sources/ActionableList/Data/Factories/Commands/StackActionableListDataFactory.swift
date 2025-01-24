@@ -32,9 +32,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Append"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: ActionableListNavigationNode(inputData: .default)
-                )
+                .stackAppend(ActionableListNavigationNode(inputData: .default))
             }
         )
     }
@@ -48,8 +46,8 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Without Animation"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: ActionableListNavigationNode(inputData: .default),
+                .stackAppend(
+                    ActionableListNavigationNode(inputData: .default),
                     animated: false
                 )
             }
@@ -67,8 +65,8 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "With Zoom Transition (iOS 18+)"
             ),
             makeCommand: {
-                StackAppendNavigationCommand(
-                    appendedNode: StackNavigationNode(
+                .stackAppend(
+                    StackNavigationNode(
                         destination: ActionableListNavigationNode(inputData: .default),
                         transition: .zoom(sourceID: transitionID)
                     )
@@ -86,7 +84,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "...and clear path"
             ),
             makeCommand: { node in
-                StackSetRootNavigationCommand(rootNode: node, clear: true)
+                .stackSetRoot(node, clear: true)
             }
         )
     }
@@ -100,8 +98,8 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "...and keep path"
             ),
             makeCommand: {
-                StackSetRootNavigationCommand(
-                    rootNode: ActionableListNavigationNode(inputData: ActionableListInputData(id: .stack)),
+                .stackSetRoot(
+                    ActionableListNavigationNode(inputData: ActionableListInputData(id: .stack)),
                     clear: false
                 )
             }
@@ -116,7 +114,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Drop Last"
             ),
             makeCommand: {
-                StackDropLastNavigationCommand()
+                .stackDropLast()
             }
         )
     }
@@ -130,7 +128,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Without Animation"
             ),
             makeCommand: {
-                StackDropLastNavigationCommand(animated: false)
+                .stackDropLast(animated: false)
             }
         )
     }
@@ -143,7 +141,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Drop To Root"
             ),
             makeCommand: {
-                StackDropToRootNavigationCommand()
+                .stackDropToRoot()
             }
         )
     }
@@ -157,7 +155,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "...or less"
             ),
             makeCommand: {
-                StackDropLastNavigationCommand(k: 3)
+                .stackDropLast(3)
             }
         )
     }

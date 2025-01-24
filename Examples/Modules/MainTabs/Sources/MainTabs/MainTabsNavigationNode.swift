@@ -11,31 +11,13 @@ public final class MainTabsNavigationNode {
             id: MainTabsInputData.Tab.commands,
             image: Image(systemName: "square.grid.2x2"),
             title: "Commands",
-            navigationNode: StackRootNavigationNode(
-                stackNodes: [
-                    StackNavigationNode(
-                        destination: ActionableListNavigationNode(
-                            inputData: .default
-                        ),
-                        transition: nil
-                    )
-                ]
-            )
+            navigationNode: .stacked(ActionableListNavigationNode(inputData: .default))
         )
         let flowsTab = DefaultTabNode(
             id: MainTabsInputData.Tab.flows,
             image: Image(systemName: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"),
             title: "Flows",
-            navigationNode: StackRootNavigationNode(
-                stackNodes: [
-                    StackNavigationNode(
-                        destination: ActionableListNavigationNode(
-                            inputData: ActionableListInputData(id: .flows)
-                        ),
-                        transition: nil
-                    )
-                ]
-            )
+            navigationNode: .stacked(ActionableListNavigationNode(inputData: ActionableListInputData(id: .flows)))
         )
         let tabsNodes = [
             commandsTab,

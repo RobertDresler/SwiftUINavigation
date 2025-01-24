@@ -26,9 +26,7 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "...and let the system take care of the rest"
             ),
             makeCommand: {
-                OpenURLNavigationCommand(
-                    url: URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")! /// Don’t unwrap this in practice — unless you’re into playing with fire.
-                )
+                .openURL(URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!) /// Don’t unwrap this in practice — unless you’re into playing with fire.
             }
         )
     }
@@ -42,9 +40,9 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "...in SFSafari (note that SFSafariNavigationNode utilizes UIViewControllerRepresentable)"
             ),
             makeCommand: {
-                PresentNavigationCommand(
-                    presentedNode: SheetPresentedNavigationNode.standalone(
-                        node: SFSafariNavigationNode(
+                .present(
+                    .sheet(
+                        SFSafariNavigationNode(
                             inputData: SFSafariInputData(url: URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!) /// Don’t unwrap this in practice — unless you’re into playing with fire.
                         )
                     )
@@ -61,9 +59,7 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
                 title: "Go to App Settings"
             ),
             makeCommand: {
-                OpenURLNavigationCommand(
-                    url: URL(string: UIApplication.openSettingsURLString)! /// Don’t unwrap this in practice — unless you’re into playing with fire.
-                )
+                .openURL(URL(string: UIApplication.openSettingsURLString)!) /// Don’t unwrap this in practice — unless you’re into playing with fire.
             }
         )
     }

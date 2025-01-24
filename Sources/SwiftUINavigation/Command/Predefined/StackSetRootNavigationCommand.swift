@@ -19,9 +19,8 @@ public struct StackSetRootNavigationCommand: NavigationCommand {
     }
 
     private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
-        StackMapNavigationCommand(
-            animated: animated,
-            transform: { nodes in
+        .stackMap(
+            { nodes in
                 let rootNodeWithStackTransition = StackNavigationNode(
                     destination: rootNode,
                     transition: nil
@@ -33,7 +32,8 @@ public struct StackSetRootNavigationCommand: NavigationCommand {
                     newNodes.removeFirst()
                     return [rootNodeWithStackTransition] + newNodes
                 }
-            }
+            },
+            animated: animated
         )
     }
 

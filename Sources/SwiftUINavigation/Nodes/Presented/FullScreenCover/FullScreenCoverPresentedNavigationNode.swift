@@ -2,22 +2,6 @@ import SwiftUI
 
 public struct FullScreenCoverPresentedNavigationNode: PresentedNavigationNode {
 
-    // MARK: Getters
-
-    public static func standalone(node: any NavigationNode) -> FullScreenCoverPresentedNavigationNode {
-        FullScreenCoverPresentedNavigationNode(node: node)
-    }
-
-    public static func stacked(node: any NavigationNode) -> FullScreenCoverPresentedNavigationNode {
-        FullScreenCoverPresentedNavigationNode(
-            node: StackRootNavigationNode(
-                stackNodes: [StackNavigationNode(destination: node, transition: nil)]
-            )
-        )
-    }
-
-    // MARK: Other
-
     public let node: any NavigationNode
     public let sourceID: String? = nil
 

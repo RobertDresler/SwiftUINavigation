@@ -19,7 +19,7 @@ public final class StartNavigationNode {
     }
 
     func startOnboarding() {
-        executeCommand(onboardingService.makeMoveInOnboardingCommand(previousStepID: nil))
+        execute(onboardingService.makeMoveInOnboardingCommand(previousStepID: nil))
     }
 
 }

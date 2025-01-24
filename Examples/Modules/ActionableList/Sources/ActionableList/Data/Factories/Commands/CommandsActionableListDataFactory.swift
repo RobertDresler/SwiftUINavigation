@@ -71,7 +71,7 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Drops the last item in the stack, or dismisses if there is nothing to drop"
             ),
             makeCommand: {
-                ResolvedHideNavigationCommand()
+                .hide()
             }
         )
     }
@@ -97,7 +97,7 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Use TabsSelectItemNavigationCommand with a specific ID to select the flows tab"
             ),
             makeCommand: {
-                TabsSelectItemNavigationCommand(itemID: MainTabsInputData.Tab.flows)
+                .tabsSelectItem(id: MainTabsInputData.Tab.flows)
             }
         )
     }
@@ -112,8 +112,8 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 ShowAndHideAfterDelayNavigationCommand(
-                    presentedNode: FullScreenCoverPresentedNavigationNode.stacked(
-                        node: ActionableListNavigationNode(inputData: .default)
+                    presentedNode: .fullScreenCover(
+                        .stacked(ActionableListNavigationNode(inputData: .default))
                     ),
                     hideDelay: 2
                 )
@@ -135,11 +135,7 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
 
     private func makeAppendActionableListCommand(for id: ActionableListInputData.ID) -> () -> NavigationCommand {
         {
-            StackAppendNavigationCommand(
-                appendedNode: ActionableListNavigationNode(
-                    inputData: ActionableListInputData(id: id)
-                )
-            )
+            .stackAppend(ActionableListNavigationNode(inputData: ActionableListInputData(id: id)))
         }
     }
 

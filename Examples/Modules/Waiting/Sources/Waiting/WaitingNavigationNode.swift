@@ -23,7 +23,7 @@ public final class WaitingNavigationNode {
         if #available(iOS 17, *) {
             /// On iOS 17 you can dismiss certain window from any window, see `AppNavigationNode`
         } else {
-            executeCommand(DismissWindowNavigationCommand(id: WindowID.waiting.rawValue))
+            execute(.dismissWindow(id: WindowID.waiting.rawValue))
         }
     }
 

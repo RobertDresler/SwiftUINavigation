@@ -35,17 +35,13 @@ public final class ActionableListNavigationNode {
                     )
                 ]
             )
-            executeCommand(
-                PresentNavigationCommand(
-                    presentedNode: ConfirmationDialogPresentedNavigationNode(inputData: inputData, sourceID: sourceID)
-                )
-            )
+            execute(.present(.confirmationDialog(inputData, sourceID: sourceID)))
         }
     }
 
     func openNotificationSettings() {
         guard let url = URL(string: UIApplication.openNotificationSettingsURLString) else { return }
-        executeCommand(OpenURLNavigationCommand(url: url))
+        execute(.openURL(url))
     }
 
     func confirmLogoutWithCustomConfirmationDialog() async -> Bool {
@@ -59,11 +55,7 @@ public final class ActionableListNavigationNode {
                     continuation.resume(returning: didConfirm)
                 }
             })
-            executeCommand(
-                PresentNavigationCommand(
-                    presentedNode: SheetPresentedNavigationNode.stacked(node: node)
-                )
-            )
+            execute(.present(.sheet(.stacked(node))))
         }
     }
 
@@ -77,11 +69,11 @@ public final class ActionableListNavigationNode {
     }
 
     var canDismiss: Bool {
-        canExecuteCommand(DismissJustFromPresentedNavigationCommand())
+        canExecute(DismissJustFromPresentedNavigationCommand())
     }
 
     func dismiss() {
-        executeCommand(DismissNavigationCommand())
+        execute(.dismiss())
     }
 
 }

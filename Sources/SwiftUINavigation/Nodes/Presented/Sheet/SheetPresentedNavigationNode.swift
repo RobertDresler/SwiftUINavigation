@@ -2,23 +2,6 @@ import SwiftUI
 
 public struct SheetPresentedNavigationNode: PresentedNavigationNode {
 
-    // MARK: Getters
-
-    public static func standalone(node: any NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
-        SheetPresentedNavigationNode(node: node, sourceID: sourceID)
-    }
-
-    public static func stacked(node: any NavigationNode, sourceID: String? = nil) -> SheetPresentedNavigationNode {
-        SheetPresentedNavigationNode(
-            node: StackRootNavigationNode(
-                stackNodes: [StackNavigationNode(destination: node, transition: nil)]
-            ),
-            sourceID: sourceID
-        )
-    }
-
-    // MARK: Other
-
     public let node: any NavigationNode
     public let sourceID: String?
 

@@ -22,11 +22,11 @@ public struct StackAppendNavigationCommand: NavigationCommand {
     }
 
     private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
-        StackMapNavigationCommand(
-            animated: animated,
-            transform: { nodes in
+        .stackMap(
+            { nodes in
                 nodes + [appendedNode]
-            }
+            },
+            animated: animated
         )
     }
 

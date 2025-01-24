@@ -20,7 +20,7 @@ public final class CustomConfirmationDialogNavigationNode {
     }
 
     func dismiss() {
-        executeCommand(DismissNavigationCommand())
+        execute(.dismiss())
     }
 
 }

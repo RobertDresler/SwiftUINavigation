@@ -63,7 +63,7 @@ extension ActionableListItem {
     ) -> ActionableListItem {
         ActionableListItem(
             identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
-            action: .command(makeCommand: { _ in DefaultHandleDeepLinkNavigationCommand(deepLink: deepLink) }),
+            action: .command(makeCommand: { _ in .handleDeepLink(deepLink) }),
             presentingNavigationSourceID: presentingNavigationSourceID
         )
     }
