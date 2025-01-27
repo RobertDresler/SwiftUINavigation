@@ -307,9 +307,9 @@ Then, when presenting it, pass the
 `sourceID` to the command's `presentedNode`:
 
 ```swift
-PresentNavigationCommand(
-    presentedNode: ConfirmationDialogPresentedNavigationNode(
-        inputData: ...,
+.present(
+    .confirmationDialog(
+        ...,
         sourceID: "logoutButton"
     )
 )
