@@ -23,8 +23,7 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
             let subscriptionNode = SubscriptionNavigationNode(
                 inputData: inputData,
                 flagsRepository: flagsRepository
-            )
-            subscriptionNode.addMessageListener(messageListener)
+            ).onMessageReceived(messageListener)
             node.execute(.present(.sheet(.stacked(subscriptionNode))))
         }
     }

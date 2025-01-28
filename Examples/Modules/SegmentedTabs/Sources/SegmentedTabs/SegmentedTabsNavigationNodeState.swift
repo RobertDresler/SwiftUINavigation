@@ -11,9 +11,8 @@ public class SegmentedTabsNavigationNodeState: NavigationNodeState {
 
     // MARK: Getters
 
-    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
-        super.childrenPublishers
-        + [$tabs.map { $0.map { $0.node } }]
+    public override var children: [any NavigationNode] {
+        super.children + tabs.map(\.node)
     }
 
     // MARK: Lifecycle

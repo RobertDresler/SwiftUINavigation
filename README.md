@@ -319,14 +319,22 @@ You can also define your own custom presentable nodes, such as for handling a `P
 
 ### NavigationMessage
 
-A `NavigationNode` can send a `NavigationMessage` through a message listener. You can add the listener using `addMessageListener(_:)`, and then send the message using `sendMessage(_:)`. The recipient can then check which type of message it is and handle it accordingly.
+A `NavigationNode` can send a `NavigationMessage` through a message listener. You can add the listener using `onMessageReceived(_:)`/`addMessageListener(_:)`, and then send the message using `sendMessage(_:)`. The recipient can then check which type of message it is and handle it accordingly.
 
 ```swift
-addMessageListener({ [weak self] message in
-    if message is RemovalNavigationMessage {
-        // Handle RemovalNavigationMessage
-    }    
-})
+execute(
+    .stackAppend(
+        DetailNavigationNode()
+            .onMessageReceived { [weak self] in 
+                switch message {
+                case _ as RemovalNavigationMessage:
+                    // Handle RemovalNavigationMessage
+                default:
+                    break
+                } 
+            }
+    )
+)
 ```
 
 The framework provides a predefined message, `RemovalNavigationMessage`, which is triggered whenever a `NavigationNode` is removed from its `parent`, so you know it is being deallocated, dismissed, or dropped from the stack.

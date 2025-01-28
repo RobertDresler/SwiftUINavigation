@@ -44,19 +44,17 @@ public final class ActionableListNavigationNode {
         execute(.openURL(url))
     }
 
-    func confirmLogoutWithCustomConfirmationDialog() async -> Bool {
-        await withCheckedContinuation { continuation in
-            let node = createLogoutCustomConfirmationDialogNavigationNode()
-            var didConfirm = false
-            node.addMessageListener({ message in
-                if message is CustomConfirmationDialogConfirmationNavigationMessage {
-                    didConfirm = true
-                } else if message is RemovalNavigationMessage {
-                    continuation.resume(returning: didConfirm)
+    func confirmLogoutWithCustomConfirmationDialog(onConfirm: @escaping () -> Void) {
+        let node = createLogoutCustomConfirmationDialogNavigationNode()
+            .onMessageReceived { message in
+                switch message {
+                case _ as CustomConfirmationDialogConfirmationNavigationMessage:
+                    onConfirm()
+                default:
+                    break
                 }
-            })
-            execute(.present(.sheet(.stacked(node))))
-        }
+            }
+        execute(.present(.sheet(.stacked(node))))
     }
 
     private func createLogoutCustomConfirmationDialogNavigationNode() -> CustomConfirmationDialogNavigationNode {

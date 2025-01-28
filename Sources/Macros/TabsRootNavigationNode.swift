@@ -33,7 +33,7 @@ public struct TabsRootNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         return [
             DeclSyntax(
                 """
-                @MainActor \(accessModifier)let state: TabsRootNavigationNodeState
+                \(accessModifier) let state: TabsRootNavigationNodeState
                 
                 @MainActor \(accessModifier) var body: some View {
                     TabsRootNavigationNodeView()

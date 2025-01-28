@@ -1,3 +1,4 @@
+@MainActor
 public extension NavigationNode where Self == StackRootNavigationNode {
     static func stacked(_ node: StackNavigationNode) -> StackRootNavigationNode {
         StackRootNavigationNode(stackNodes: [node])

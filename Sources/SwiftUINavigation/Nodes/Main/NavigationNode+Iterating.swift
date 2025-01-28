@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 public extension NavigationNode {
     var root: any NavigationNode {
         parent?.root ?? self

@@ -1,14 +1,13 @@
 import SwiftUI
 import Combine
 
-@MainActor
 public protocol NavigationNode: ObservableObject, NavigationCommandExecuter {
     associatedtype State: NavigationNodeState
     associatedtype Body: View
-    var body: Body { get }
-    var isWrapperNode: Bool { get }
+    @MainActor var body: Body { get }
+    @MainActor var isWrapperNode: Bool { get }
     var state: State { get }
-    func startIfNeeded()
+    @MainActor func startIfNeeded()
 }
 
 // MARK: Default Implementations

@@ -5,14 +5,13 @@ public class TabsRootNavigationNodeState: NavigationNodeState {
 
     // MARK: Published
 
-    @Published public internal(set) var selectedTabNode: TabNode
-    @Published public internal(set) var tabsNodes: [TabNode]
+    @Published public var selectedTabNode: TabNode
+    @Published public var tabsNodes: [TabNode]
 
     // MARK: Getters
 
-    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
-        super.childrenPublishers
-        + [$tabsNodes.map { $0.map { $0.navigationNode } }]
+    public override var children: [any NavigationNode] {
+        super.children + tabsNodes.map(\.navigationNode)
     }
 
     // MARK: Lifecycle

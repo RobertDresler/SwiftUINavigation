@@ -5,13 +5,12 @@ public class SwitchedNavigationNodeState: NavigationNodeState {
 
     // MARK: Published
 
-    @Published public internal(set) var switchedNode: (any NavigationNode)?
+    @Published public var switchedNode: (any NavigationNode)?
 
     // MARK: Getters
 
-    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
-        super.childrenPublishers
-        + [$switchedNode.map { [$0].compactMap { $0 } }]
+    public override var children: [any NavigationNode] {
+        super.children + [switchedNode].compactMap { $0 }
     }
 
 }
