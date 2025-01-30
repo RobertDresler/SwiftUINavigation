@@ -37,6 +37,10 @@ open class NavigationNodeState: ObservableObject {
 
     public init() {}
 
+    deinit {
+        printDebugText("Finished")
+    }
+
     // MARK: Internal Methods
 
     @MainActor func bind(with thisStateNode: any NavigationNode) {

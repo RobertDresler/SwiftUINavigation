@@ -37,7 +37,6 @@ public extension NavigationNode {
         state.finishTask = Task {
             await state.startTask?.value
             finish()
-            printDebugText("Finished")
         }
     }
 }
