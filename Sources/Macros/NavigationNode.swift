@@ -25,7 +25,7 @@ public struct NavigationNode: ExtensionMacro, MemberMacro, MemberAttributeMacro 
         return [
             DeclSyntax(
                 """
-                @MainActor \(accessModifier)let state = NavigationNodeState()
+                \(accessModifier) let state = NavigationNodeState()
                 """
             )
         ]

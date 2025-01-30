@@ -8,19 +8,16 @@ public struct TabsRootNavigationNodeView: View {
 
     public var body: some View {
         TabView(selection: selection) {
-            ForEach(navigationNodeState.tabsNodes, id: \.navigationNode.id) { node in
+            ForEach(navigationNodeState.tabsNodes, id: \.id) { node in
                 node.resolvedView
             }
         }
     }
 
-    private var selection: Binding<String> {
+    private var selection: Binding<AnyHashable> {
         Binding(
-            get: { navigationNodeState.selectedTabNode.navigationNode.id },
-            set: { id in
-                guard let selectedTabNode = navigationNodeState.tabsNodes.first(where: { $0.navigationNode.id == id }) else { return }
-                navigationNodeState.selectedTabNode = selectedTabNode
-            }
+            get: { navigationNodeState.selectedTabNodeID },
+            set: { navigationNodeState.selectedTabNodeID = $0 }
         )
     }
 

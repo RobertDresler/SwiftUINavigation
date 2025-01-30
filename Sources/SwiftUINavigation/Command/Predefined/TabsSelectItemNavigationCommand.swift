@@ -22,8 +22,11 @@ public struct TabsSelectItemNavigationCommand: NavigationCommand {
                 return
             }
         }
-        guard let newSelectedNode = state.tabsNodes.first(where: { $0.id == itemID }) else { return }
-        state.selectedTabNode = newSelectedNode
+        guard state.tabsNodes.contains(where: { $0.id == itemID }) else {
+            assertionFailure("There is no TabNode in tabsNodes with id: \(itemID)")
+            return
+        }
+        state.selectedTabNodeID = itemID
     }
 
 }

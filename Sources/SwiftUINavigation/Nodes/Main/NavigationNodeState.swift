@@ -5,29 +5,28 @@ open class NavigationNodeState: ObservableObject {
 
     // MARK: Published
 
-    @MainActor @Published var presentedNode: (any PresentedNavigationNode)?
+    @MainActor @Published public var presentedNode: (any PresentedNavigationNode)?
 
     // MARK: Stored
 
     public let id: String = UUID().uuidString
-    weak var parent: (any NavigationNode)?
+    weak var parent: (any NavigationNode)? {
+        didSet { objectWillChange.send() }
+    }
     var cancellables = Set<AnyCancellable>()
     var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
     var messageListeners = [NavigationMessageListener]()
     var debugPrintPrefix: String?
-    var didStart = false
     let _childrenPublisher = CurrentValueSubject<[any NavigationNode], Never>([])
     let navigationEnvironmentTrigger = PassthroughSubject<NavigationEnvironmentTrigger, Never>()
-    private var didSendRemovalMessage = false
+
+    var didStart = false
+    var didFinish = false
 
     // MARK: Getters
 
-    var children: [any NavigationNode] { _childrenPublisher.value }
-
-    @MainActor open var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
-        let presentedNodePublisher = $presentedNode.map { [$0?.node] }
-            .map { $0.compactMap { $0 } }
-        return [presentedNodePublisher]
+    @MainActor open var children: [any NavigationNode] {
+        [presentedNode?.node].compactMap { $0 }
     }
 
     @MainActor var defaultDeepLinkHandler: NavigationDeepLinkHandler? {
@@ -39,21 +38,13 @@ open class NavigationNodeState: ObservableObject {
     public init() {}
 
     deinit {
-        printDebugText("Deinit")
+        printDebugText("Finished")
     }
 
     // MARK: Internal Methods
 
     @MainActor func bind(with thisStateNode: any NavigationNode) {
         debugPrintPrefix = "[\(type(of: thisStateNode)) \(id.prefix(3))...]"
-        printDebugText("Init")
-        bindParentLogic(with: thisStateNode)
-        bindChildren()
-        bindSendingRemovalMessages()
-    }
-
-    func setDefaultDeepLinkHandler(_ handler: NavigationDeepLinkHandler?) {
-        _defaultDeepLinkHandler = handler
     }
 
     func addMessageListener(_ listener: NavigationMessageListener?) {
@@ -65,12 +56,6 @@ open class NavigationNodeState: ObservableObject {
         messageListeners.forEach { listener in
             listener(message)
         }
-    }
-
-    func sendRemovalMessage() {
-        guard !didSendRemovalMessage else { return }
-        didSendRemovalMessage = true
-        sendMessage(RemovalNavigationMessage())
     }
 
     func sendEnvironmentTrigger(_ trigger: NavigationEnvironmentTrigger) {
@@ -98,52 +83,4 @@ open class NavigationNodeState: ObservableObject {
         }
     }
 
-}
-
-// MARK: Private Methods
-
-private extension NavigationNodeState {
-    @MainActor func bindChildren() {
-        childrenPublisher
-            .sink { [weak self] in self?._childrenPublisher.send($0) }
-            .store(in: &cancellables)
-    }
-
-    @MainActor func bindSendingRemovalMessages() {
-        childrenPublisher.zip(childrenPublisher.dropFirst())
-            .sink { oldChildren, newChildren in
-                let removedChildren = oldChildren.filter { oldChild in
-                    !newChildren.contains(where: { oldChild === $0 })
-                }
-                removedChildren.forEach { child in
-                    child.successorsIncludingSelf.forEach { node in
-                        node.state.sendRemovalMessage()
-                    }
-                }
-            }
-            .store(in: &cancellables)
-    }
-
-    @MainActor func bindParentLogic(with thisStateNode: any NavigationNode) {
-        childrenPublisher
-            .sink { [weak thisStateNode] nodes in
-                guard let thisStateNode else { return }
-                nodes.forEach { node in
-                    node.startIfNeeded()
-                    node.state.parent = thisStateNode
-                }
-            }
-            .store(in: &cancellables)
-    }
-
-    @MainActor var childrenPublisher: AnyPublisher<[any NavigationNode], Never> {
-        guard let firstPublisher = childrenPublishers.first else {
-            return Just([]).eraseToAnyPublisher()
-        }
-        return childrenPublishers.dropFirst().reduce(firstPublisher.eraseToAnyPublisher()) { combinedPublisher, nextPublisher in
-            combinedPublisher.combineLatest(nextPublisher.eraseToAnyPublisher())
-                .map { $0 + $1 }
-                .eraseToAnyPublisher()
-        }
-    }
 }

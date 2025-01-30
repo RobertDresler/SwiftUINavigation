@@ -5,19 +5,23 @@ public class StackRootNavigationNodeState: NavigationNodeState {
 
     // MARK: Published
 
-    @Published public internal(set) var stackNodes: [StackNavigationNode]
+    @Published public var stackNodes: [StackNavigationNode]
+    @Published public var tabBarToolbarBehavior: StackTabBarToolbarBehavior
 
     // MARK: Getters
 
-    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
-        super.childrenPublishers
-        + [$stackNodes.map { $0.map { $0.destination } }]
+    public override var children: [any NavigationNode] {
+        super.children + stackNodes.map(\.destination)
     }
 
     // MARK: Lifecycle
 
-    public init(stackNodes: [StackNavigationNode]) {
+    public init(
+        stackNodes: [StackNavigationNode],
+        tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
+    ) {
         self.stackNodes = stackNodes
+        self.tabBarToolbarBehavior = tabBarToolbarBehavior
     }
 
     func setNewPath(_ newPath: NavigationPath) {

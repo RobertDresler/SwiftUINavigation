@@ -12,7 +12,9 @@ public struct StackRootNavigationNodeView: View {
     public var body: some View {
         NavigationStack(path: path) {
             navigationStackResolvedRoot
-        }.stackNavigationNamespace(namespace)
+        }
+            .stackNavigationNamespace(namespace)
+            .handlingStackTabBarToolbarBehavior()
     }
 
     private var path: Binding<NavigationPath> {

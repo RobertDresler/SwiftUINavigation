@@ -1,5 +1,4 @@
-@MainActor
 public protocol NavigationCommandExecuter {
-    func execute(_ command: NavigationCommand)
-    func canExecute(_ command: NavigationCommand) -> Bool
+    @MainActor func execute(_ command: NavigationCommand)
+    @MainActor func canExecute(_ command: NavigationCommand) -> Bool
 }

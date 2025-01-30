@@ -5,20 +5,19 @@ public class TabsRootNavigationNodeState: NavigationNodeState {
 
     // MARK: Published
 
-    @Published public internal(set) var selectedTabNode: TabNode
-    @Published public internal(set) var tabsNodes: [TabNode]
+    @Published public var selectedTabNodeID: AnyHashable
+    @Published public var tabsNodes: [TabNode]
 
     // MARK: Getters
 
-    public override var childrenPublishers: [any Publisher<[NavigationNode], Never>] {
-        super.childrenPublishers
-        + [$tabsNodes.map { $0.map { $0.navigationNode } }]
+    public override var children: [any NavigationNode] {
+        super.children + tabsNodes.map(\.navigationNode)
     }
 
     // MARK: Lifecycle
 
-    public init(selectedTabNode: TabNode, tabsNodes: [TabNode]) {
-        self.selectedTabNode = selectedTabNode
+    public init(selectedTabNodeID: AnyHashable, tabsNodes: [TabNode]) {
+        self.selectedTabNodeID = selectedTabNodeID
         self.tabsNodes = tabsNodes
         super.init()
     }

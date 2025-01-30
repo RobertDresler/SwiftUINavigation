@@ -5,7 +5,7 @@ public struct MainTabsInputData {
         case flows
     }
 
-    public let initialTab: AnyHashable
+    public let initialTab: Tab
 
     public init(initialTab: Tab) {
         self.initialTab = initialTab

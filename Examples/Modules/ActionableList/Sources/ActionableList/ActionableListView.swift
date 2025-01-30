@@ -194,10 +194,9 @@ struct ActionableListView: View {
     }
 
     private func handleLogoutWithCustomConfirmationDialog() {
-        Task {
-            guard await navigationNode.confirmLogoutWithCustomConfirmationDialog() else { return }
-            logout()
-        }
+        navigationNode.confirmLogoutWithCustomConfirmationDialog(
+            onConfirm: { logout() }
+        )
     }
 
     private func printDebugGraph() {

@@ -29,7 +29,7 @@ public struct StackRootNavigationNode: ExtensionMacro, MemberMacro, MemberAttrib
                     StackRootNavigationNodeView()
                 }
 
-                @MainActor \(accessModifier) let state: StackRootNavigationNodeState
+                \(accessModifier) let state: StackRootNavigationNodeState
                 """
             )
         ]
