@@ -20,8 +20,8 @@ open class NavigationNodeState: ObservableObject {
     let _childrenPublisher = CurrentValueSubject<[any NavigationNode], Never>([])
     let navigationEnvironmentTrigger = PassthroughSubject<NavigationEnvironmentTrigger, Never>()
 
-    @MainActor var startTask: Task<Void, Never>?
-    @MainActor var finishTask: Task<Void, Never>?
+    var didStart = false
+    var didFinish = false
 
     // MARK: Getters
 

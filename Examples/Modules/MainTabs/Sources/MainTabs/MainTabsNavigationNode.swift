@@ -25,13 +25,12 @@ public final class MainTabsNavigationNode {
                 tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
             )
         )
-        let tabsNodes = [
-            commandsTab,
-            flowsTab
-        ]
         state = TabsRootNavigationNodeState(
-            selectedTabNodeID: MainTabsInputData.Tab.commands,
-            tabsNodes: tabsNodes
+            selectedTabNodeID: inputData.initialTab,
+            tabsNodes: [
+                commandsTab,
+                flowsTab
+            ]
         )
     }
 

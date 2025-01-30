@@ -11,7 +11,7 @@ public protocol NavigationNode: ObservableObject, NavigationCommandExecuter {
         parent: (any NavigationNode)?,
         defaultDeepLinkHandler: NavigationDeepLinkHandler?
     ) async
-    @MainActor func finishIfNeeded() async
+    @MainActor func finishIfNeeded()
 }
 
 // MARK: Default Implementations
@@ -25,19 +25,18 @@ public extension NavigationNode {
         parent: (any NavigationNode)?,
         defaultDeepLinkHandler: NavigationDeepLinkHandler?
     ) async {
-        guard state.startTask == nil else { return }
-        state.startTask = Task {
+        guard !state.didStart else { return }
+        state.didStart = true
+        Task {
             await start(parent: parent, defaultDeepLinkHandler: defaultDeepLinkHandler)
             printDebugText("Started")
         }
     }
 
-    @MainActor func finishIfNeeded() async {
-        guard state.finishTask == nil else { return }
-        state.finishTask = Task {
-            await state.startTask?.value
-            finish()
-        }
+    @MainActor func finishIfNeeded() {
+        guard !state.didFinish else { return }
+        state.didFinish = true
+        finish()
     }
 }
 

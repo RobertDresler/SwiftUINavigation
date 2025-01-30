@@ -65,8 +65,8 @@ I highly recommend starting by exploring the Examples app. The app features many
 
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.2.0`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.2.0")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.3.0`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.3.0")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
@@ -138,7 +138,7 @@ To see the framework in action, check out the code in the [Examples App](#Explor
 
 ### NavigationWindow
 
-The `NavigationWindow` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root node.
+The `NavigationWindow` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root node. Don’t nest one window inside another; use it only at the top level.
 
 ### NavigationNode
 
@@ -169,10 +169,60 @@ You can access the `NavigationNode` from your `View` using the following:
   The simplest node you’ll use most of the time, especially if your screen doesn’t require any tabs or switch logic.
   
 - **`@StackRootNavigationNode`**  
-  Represents what you would typically associate with a `NavigationStack` or `UINavigationController`.
+  Represents what you would typically associate with a `NavigationStack` or `UINavigationController`. Most of the time, you don't have to create your own implementation; you can use the predefined `.stacked` / `StackRootNavigationNode` like this:
+  
+  ```swift
+  .stacked(HomeNavigationNode())
+  ```
 
 - **`@TabsRootNavigationNode`**  
-  Represents what you would typically associate with a `TabView` or `UITabBarController`.
+  Represents what you would typically associate with a `TabView` or `UITabBarController`. You can create your own implementation of `TabsRootNavigationNode` like this (for more, see [Examples App](#Explore-Examples-App)):
+    
+```swift
+struct MainTabsInputData {
+
+    enum Tab {
+        case commands
+        case flows
+    }
+
+    var initialTab: AnyHashable
+
+}
+
+@TabsRootNavigationNode
+final class MainTabsNavigationNode {
+
+    init(inputData: MainTabsInputData) {
+        let commandsTab = DefaultTabNode(
+            id: MainTabsInputData.Tab.commands,
+            image: Image(systemName: "square.grid.2x2"),
+            title: "Commands",
+            navigationNode: .stacked(
+                ActionableListNavigationNode(inputData: .default),
+                tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
+            )
+        )
+        let flowsTab = DefaultTabNode(
+            id: MainTabsInputData.Tab.flows,
+            image: Image(systemName: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"),
+            title: "Flows",
+            navigationNode: .stacked(
+                ActionableListNavigationNode(inputData: ActionableListInputData(id: .flows)),
+                tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
+            )
+        )
+        state = TabsRootNavigationNodeState(
+            selectedTabNodeID: inputData.initialTab,
+            tabsNodes: [
+                commandsTab,
+                flowsTab
+            ]
+        )
+    }
+
+}
+```
 
 - **`@SwitchedNavigationNode`**  
   A node that can dynamically switch between different child nodes. For example, it can display a tab bar node when the user is logged in or a welcome screen node when the user is not logged in.
@@ -185,6 +235,11 @@ You can access the `NavigationNode` from your `View` using the following:
   ```swift
   NavigationWindow(rootNode: .stacked(HomeNavigationNode()))
   ```
+  
+  - You can also pass `StackTabBarToolbarBehavior` as an argument like this:  
+`.stacked(..., tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: false))`. This will hide the tab bar toolbar when the root view is not visible.
+  	 - `.automatic` - Preserves the default behavior.
+  	 - `.hiddenWhenNotRoot(animated:)` - Hides the tab bar when the root view is not visible - could be animated or not.
   
 - **`SFSafariNavigationNode`**  
   A node that opens a URL in an in-app browser.
@@ -377,11 +432,11 @@ To enable debug printing, set the following:
 NavigationConfig.shared.isDebugPrintEnabled = true
 ```
 
-By default, this will print the initialization and deinitialization of nodes with their IDs, helping you ensure there are no memory leaks.
+By default, this will print the start and finish (deinit) of nodes with their IDs, helping you ensure there are no memory leaks.
 
 ```
-. [SomeNavigationNode E34...]: Init
-. [SomeNavigationNode F34...]: Deinit
+. [SomeNavigationNode E34...]: Started
+. [SomeNavigationNode F34...]: Finished
 ```
 
 You can also print the debug graph from a given `NavigationNode` and its successors using `printDebugGraph()`. This will help you understand the hierarchy structure.

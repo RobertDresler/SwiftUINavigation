@@ -43,9 +43,7 @@ public struct NavigationNodeResolvedView: View {
         }
         removedChildren.forEach { child in
             child.successorsIncludingSelf.forEach { node in
-                Task { @MainActor in
-                    await node.finishIfNeeded()
-                }
+                node.finishIfNeeded()
             }
         }
     }
