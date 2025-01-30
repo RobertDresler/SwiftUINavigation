@@ -5,7 +5,7 @@ public class TabsRootNavigationNodeState: NavigationNodeState {
 
     // MARK: Published
 
-    @Published public var selectedTabNode: TabNode
+    @Published public var selectedTabNodeID: AnyHashable
     @Published public var tabsNodes: [TabNode]
 
     // MARK: Getters
@@ -16,8 +16,8 @@ public class TabsRootNavigationNodeState: NavigationNodeState {
 
     // MARK: Lifecycle
 
-    public init(selectedTabNode: TabNode, tabsNodes: [TabNode]) {
-        self.selectedTabNode = selectedTabNode
+    public init(selectedTabNodeID: AnyHashable, tabsNodes: [TabNode]) {
+        self.selectedTabNodeID = selectedTabNodeID
         self.tabsNodes = tabsNodes
         super.init()
     }

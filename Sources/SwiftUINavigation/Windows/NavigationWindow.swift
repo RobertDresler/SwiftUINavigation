@@ -8,8 +8,9 @@ public struct NavigationWindow<Node: NavigationNode>: View {
 
     public init(rootNode: Node, defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
         self.rootNode = rootNode
-        rootNode.startIfNeeded()
-        rootNode.state.setDefaultDeepLinkHandler(defaultDeepLinkHandler)
+        Task { @MainActor in
+            await rootNode.startIfNeeded(parent: nil, defaultDeepLinkHandler: defaultDeepLinkHandler)
+        }
     }
 
     public var body: some View {

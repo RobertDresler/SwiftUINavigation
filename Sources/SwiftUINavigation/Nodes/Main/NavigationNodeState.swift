@@ -17,10 +17,11 @@ open class NavigationNodeState: ObservableObject {
     var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
     var messageListeners = [NavigationMessageListener]()
     var debugPrintPrefix: String?
-    var didStart = false
     let _childrenPublisher = CurrentValueSubject<[any NavigationNode], Never>([])
     let navigationEnvironmentTrigger = PassthroughSubject<NavigationEnvironmentTrigger, Never>()
-    private var didSendRemovalMessage = false
+
+    @MainActor var startTask: Task<Void, Never>?
+    @MainActor var finishTask: Task<Void, Never>?
 
     // MARK: Getters
 
@@ -36,19 +37,10 @@ open class NavigationNodeState: ObservableObject {
 
     public init() {}
 
-    deinit {
-        printDebugText("Deinit")
-    }
-
     // MARK: Internal Methods
 
     @MainActor func bind(with thisStateNode: any NavigationNode) {
         debugPrintPrefix = "[\(type(of: thisStateNode)) \(id.prefix(3))...]"
-        printDebugText("Init")
-    }
-
-    func setDefaultDeepLinkHandler(_ handler: NavigationDeepLinkHandler?) {
-        _defaultDeepLinkHandler = handler
     }
 
     func addMessageListener(_ listener: NavigationMessageListener?) {
@@ -60,12 +52,6 @@ open class NavigationNodeState: ObservableObject {
         messageListeners.forEach { listener in
             listener(message)
         }
-    }
-
-    func sendRemovalMessage() {
-        guard !didSendRemovalMessage else { return }
-        didSendRemovalMessage = true
-        sendMessage(RemovalNavigationMessage())
     }
 
     func sendEnvironmentTrigger(_ trigger: NavigationEnvironmentTrigger) {

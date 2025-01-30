@@ -29,7 +29,7 @@ public struct SwitchedNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
                     SwitchedNavigationNodeView()
                 }
                 \(accessModifier) let state = SwitchedNavigationNodeState()
-                @MainActor \(accessModifier) var isWrapperNode: Bool { false }
+                \(accessModifier) var isWrapperNode: Bool { false }
                 """
             )
         ]

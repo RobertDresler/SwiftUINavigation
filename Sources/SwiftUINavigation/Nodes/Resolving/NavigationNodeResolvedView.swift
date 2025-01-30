@@ -43,15 +43,18 @@ public struct NavigationNodeResolvedView: View {
         }
         removedChildren.forEach { child in
             child.successorsIncludingSelf.forEach { node in
-                node.state.sendRemovalMessage()
+                Task { @MainActor in
+                    await node.finishIfNeeded()
+                }
             }
         }
     }
 
     private func bindParentLogic(children: [any NavigationNode]) {
-        children.forEach { node in
-            node.startIfNeeded()
-            node.state.parent = self.node.base
+        children.forEach { child in
+            Task { @MainActor in
+                await child.startIfNeeded(parent: node.base, defaultDeepLinkHandler: nil)
+            }
         }
     }
 

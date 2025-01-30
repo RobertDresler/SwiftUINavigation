@@ -30,7 +30,7 @@ public final class MainTabsNavigationNode {
             flowsTab
         ]
         state = TabsRootNavigationNodeState(
-            selectedTabNode: tabsNodes.first(where: { $0.id == inputData.initialTab }) ?? commandsTab,
+            selectedTabNodeID: MainTabsInputData.Tab.commands,
             tabsNodes: tabsNodes
         )
     }
