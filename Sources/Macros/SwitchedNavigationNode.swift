@@ -26,7 +26,7 @@ public struct SwitchedNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
             DeclSyntax(
                 """
                 @MainActor \(accessModifier)var body: some View {
-                    SwitchedNavigationNodeView()
+                    body(for: SwitchedNavigationNodeView())
                 }
                 \(accessModifier) let state = SwitchedNavigationNodeState()
                 \(accessModifier) var isWrapperNode: Bool { false }
@@ -42,11 +42,9 @@ public struct SwitchedNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
-        let accessModifier = declaration.modifiers.first {
-            [.keyword(.open), .keyword(.public), .keyword(.package)].contains($0.name.tokenKind)
-        }
-        return [
-            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): NavigationNode {}")
+        [
+            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): NavigationNode {}"),
+            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): ModifiableSwitchedNavigationNode {}")
         ]
     }
 }

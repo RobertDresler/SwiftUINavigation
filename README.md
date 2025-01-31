@@ -65,8 +65,8 @@ I highly recommend starting by exploring the Examples app. The app features many
 
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.3.0`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.3.0")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.4.0`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.4.0")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
@@ -84,7 +84,7 @@ struct YourApp: App {
 }
 
 @NavigationNode
-final class HomeNavigationNode {
+class HomeNavigationNode {
 
     var body: some View {
         HomeView()
@@ -112,7 +112,7 @@ struct HomeView: View {
 }
 
 @NavigationNode
-final class DetailNavigationNode {
+class DetailNavigationNode {
 
     var body: some View {
         DetailView()
@@ -146,7 +146,7 @@ A `NavigationNode` represents a single node in the navigation graph, similar to 
 
 ```swift
 @NavigationNode
-final class HomeNavigationNode {
+class HomeNavigationNode {
     
     var body: some View {
         HomeView()
@@ -174,58 +174,89 @@ You can access the `NavigationNode` from your `View` using the following:
   ```swift
   .stacked(HomeNavigationNode())
   ```
+  
+  If you want to create your own implementation, you can update the node's body using `body(for:)`.
 
 - **`@TabsRootNavigationNode`**  
   Represents what you would typically associate with a `TabView` or `UITabBarController`. You can create your own implementation of `TabsRootNavigationNode` like this (for more, see [Examples App](#Explore-Examples-App)):
     
 ```swift
-struct MainTabsInputData {
+@TabsRootNavigationNode
+class MainTabsNavigationNode {
 
     enum Tab {
-        case commands
-        case flows
+        case home
+        case settings
     }
 
-    var initialTab: AnyHashable
-
-}
-
-@TabsRootNavigationNode
-final class MainTabsNavigationNode {
-
-    init(inputData: MainTabsInputData) {
-        let commandsTab = DefaultTabNode(
-            id: MainTabsInputData.Tab.commands,
-            image: Image(systemName: "square.grid.2x2"),
-            title: "Commands",
-            navigationNode: .stacked(
-                ActionableListNavigationNode(inputData: .default),
-                tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
-            )
-        )
-        let flowsTab = DefaultTabNode(
-            id: MainTabsInputData.Tab.flows,
-            image: Image(systemName: "point.topright.filled.arrow.triangle.backward.to.point.bottomleft.scurvepath"),
-            title: "Flows",
-            navigationNode: .stacked(
-                ActionableListNavigationNode(inputData: ActionableListInputData(id: .flows)),
-                tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
-            )
-        )
+    init(initialTab: Tab) {
         state = TabsRootNavigationNodeState(
-            selectedTabNodeID: inputData.initialTab,
+            selectedTabNodeID: initialTab,
             tabsNodes: [
-                commandsTab,
-                flowsTab
+                DefaultTabNode(
+                    id: Tab.home,
+                    image: Image(systemName: "house"),
+                    title: "Home",
+                    navigationNode: .stacked(HomeNavigationNode())
+                ),
+                DefaultTabNode(
+                    id: Tab.settings,
+                    image: Image(systemName: "gear"),
+                    title: "Settings",
+                    navigationNode: .stacked(SettingsNavigationNode())
+                )
             ]
         )
+    }
+
+    func body(for content: TabsRootNavigationNodeView) -> some View {
+        content // Modify default content if needed
     }
 
 }
 ```
 
-- **`@SwitchedNavigationNode`**  
-  A node that can dynamically switch between different child nodes. For example, it can display a tab bar node when the user is logged in or a welcome screen node when the user is not logged in.
+- **`@SwitchedNavigationNode`**    
+  Use this macro to create a node that can dynamically switch between different child nodes.  
+
+  This node is useful for scenarios like:  
+  - A root node that displays either the tabs root node or the login screen based on whether the user is logged in.  
+  - A subscription screen that shows different content depending on whether the user is subscribed.  
+  - And more...
+
+  See the example below, or for a practical implementation, check out the [Examples App](#Explore-Examples-App).
+  
+```swift
+class UserService {
+    @Published var isUserLogged = false
+}
+
+@SwitchedNavigationNode
+class AppNode {
+
+    var userService: UserService
+
+    init(userService: UserService) {
+        self.userService = userService
+    }
+
+    func body(for content: SwitchedNavigationNodeView) -> some View {
+        content
+            .onReceive(userService.$isUserLogged) { [weak self] in self?.switchNode(isUserLogged: $0) }
+    }
+
+    private func switchNode(isUserLogged: Bool) {
+        execute(
+            .switchNode(
+                isUserLogged
+                    ? MainTabsNavigationNode(initialTab: .home)
+                    : LoginNavigationNode()
+            )
+        )
+    }
+
+}
+```
 
 #### Predefined Nodes:
 
@@ -262,7 +293,7 @@ A command is executed on a `NavigationNode` using the `execute(_:)` method:
 
 ```swift
 @NavigationNode
-final class HomeNavigationNode {
+class HomeNavigationNode {
 
     ...
 
@@ -323,7 +354,7 @@ Since presenting views using native mechanisms requires separate view modifiers,
 
 ```swift
 @NavigationNode
-final class HomeNavigationNode {
+class HomeNavigationNode {
 
     ...
 

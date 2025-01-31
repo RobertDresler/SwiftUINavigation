@@ -9,12 +9,14 @@ public struct NavigationNodeResolvedView: View {
 
     public init(node: any NavigationNode) {
         self.node = AnyNavigationNode(node)
+        bindParentLogic(children: node.children) // TODO: Replace with onChange(of:initial:_:) for iOS 17
     }
 
     public var body: some View {
         node.body
             .presentingNavigationSource(id: nil)
             .onReceive(node.state.navigationEnvironmentTrigger) { environmentTriggerHandler.handleTrigger($0, in: environment) }
+            .onReceive(node.state.objectWillChange) { [weak node] in node?.objectWillChange.send() }
             .onChange(of: equatableNodeChildren) { [oldChildren = equatableNodeChildren] newChildren in
                 bindSendingRemovalMessages(
                     newChildren: newChildren.compactMap(\.wrapped),
@@ -22,7 +24,6 @@ public struct NavigationNodeResolvedView: View {
                 )
             }
             .onChange(of: equatableNodeChildren) { bindParentLogic(children: $0.compactMap(\.wrapped)) }
-            .onAppear { bindParentLogic(children: equatableNodeChildren.compactMap(\.wrapped)) }
             .environmentObject(node)
     }
 

@@ -17,4 +17,8 @@ public class StackRootNavigationNode {
         )
     }
 
+    public func body(for content: StackRootNavigationNodeView) -> some View {
+        content
+    }
+
 }
