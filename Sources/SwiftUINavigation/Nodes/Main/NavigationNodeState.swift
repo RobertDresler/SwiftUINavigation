@@ -13,11 +13,9 @@ open class NavigationNodeState: ObservableObject {
     weak var parent: (any NavigationNode)? {
         didSet { objectWillChange.send() }
     }
-    var cancellables = Set<AnyCancellable>()
     var _defaultDeepLinkHandler: NavigationDeepLinkHandler?
     var messageListeners = [NavigationMessageListener]()
     var debugPrintPrefix: String?
-    let _childrenPublisher = CurrentValueSubject<[any NavigationNode], Never>([])
     let navigationEnvironmentTrigger = PassthroughSubject<NavigationEnvironmentTrigger, Never>()
 
     var didStart = false

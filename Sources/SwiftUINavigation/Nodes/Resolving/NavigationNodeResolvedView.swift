@@ -15,6 +15,7 @@ public struct NavigationNodeResolvedView: View {
         node.body
             .presentingNavigationSource(id: nil)
             .onReceive(node.state.navigationEnvironmentTrigger) { environmentTriggerHandler.handleTrigger($0, in: environment) }
+            .onReceive(node.state.objectWillChange) { [weak node] in node?.objectWillChange.send() }
             .onChange(of: equatableNodeChildren) { [oldChildren = equatableNodeChildren] newChildren in
                 bindSendingRemovalMessages(
                     newChildren: newChildren.compactMap(\.wrapped),

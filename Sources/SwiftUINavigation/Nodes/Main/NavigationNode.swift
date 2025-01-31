@@ -43,13 +43,6 @@ public extension NavigationNode {
 private extension NavigationNode {
     @MainActor func start(parent: (any NavigationNode)?, defaultDeepLinkHandler: NavigationDeepLinkHandler?) async {
         state.bind(with: self)
-        state
-            .objectWillChange
-            .sink { [weak self] in
-                guard let publisher = self?.objectWillChange as? ObservableObjectPublisher else { return }
-                publisher.send()
-            }
-            .store(in: &state.cancellables)
         state._defaultDeepLinkHandler = defaultDeepLinkHandler
         await Task { @MainActor in /// This is needed since Publishing changes from within view updates is not allowed
             state.parent = parent
