@@ -9,6 +9,7 @@ public struct NavigationNodeResolvedView: View {
 
     public init(node: any NavigationNode) {
         self.node = AnyNavigationNode(node)
+        bindParentLogic(children: node.children) // TODO: Replace with onChange(of:initial:_:) for iOS 17
     }
 
     public var body: some View {
@@ -23,7 +24,6 @@ public struct NavigationNodeResolvedView: View {
                 )
             }
             .onChange(of: equatableNodeChildren) { bindParentLogic(children: $0.compactMap(\.wrapped)) }
-            .onAppear { bindParentLogic(children: equatableNodeChildren.compactMap(\.wrapped)) }
             .environmentObject(node)
     }
 

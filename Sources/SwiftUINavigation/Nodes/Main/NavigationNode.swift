@@ -27,10 +27,8 @@ public extension NavigationNode {
     ) async {
         guard !state.didStart else { return }
         state.didStart = true
-        Task {
-            await start(parent: parent, defaultDeepLinkHandler: defaultDeepLinkHandler)
-            printDebugText("Started")
-        }
+        await start(parent: parent, defaultDeepLinkHandler: defaultDeepLinkHandler)
+        printDebugText("Started")
     }
 
     @MainActor func finishIfNeeded() {
