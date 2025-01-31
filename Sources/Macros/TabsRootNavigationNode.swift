@@ -36,7 +36,7 @@ public struct TabsRootNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
                 \(accessModifier) let state: TabsRootNavigationNodeState
                 
                 @MainActor \(accessModifier) var body: some View {
-                    TabsRootNavigationNodeView()
+                    body(for: TabsRootNavigationNodeView())
                 }
                 """
             )
@@ -50,11 +50,9 @@ public struct TabsRootNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
-        let accessModifier = declaration.modifiers.first {
-            [.keyword(.open), .keyword(.public), .keyword(.package)].contains($0.name.tokenKind)
-        }
-        return [
-            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): NavigationNode {}")
+        [
+            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): NavigationNode {}"),
+            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): ModifiableTabsRootNavigationNode {}")
         ]
     }
 }

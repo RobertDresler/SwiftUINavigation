@@ -15,7 +15,6 @@ public final class AppNavigationNode {
     private let flagsRepository: FlagsRepository
     private let deepLinkForwarderService: DeepLinkForwarderService
     private let onboardingService: OnboardingService
-    private var cancellables = Set<AnyCancellable>()
 
     public init(
         flagsRepository: FlagsRepository,
@@ -25,44 +24,28 @@ public final class AppNavigationNode {
         self.flagsRepository = flagsRepository
         self.deepLinkForwarderService = deepLinkForwarderService
         self.onboardingService = onboardingService
-        bind()
     }
 
-    private var notLoggedNode: any NavigationNode {
-        .stacked(StartNavigationNode(inputData: StartInputData(), onboardingService: onboardingService))
+    public func body(for content: SwitchedNavigationNodeView) -> some View {
+        content
+            .onReceive(flagsRepository.$isUserLogged) { [weak self] in self?.switchNode(isUserLogged: $0) }
+            .onReceive(flagsRepository.$isAppLocked) { [weak self] in self?.setLockedAppWindow(isAppLocked: $0) }
+            .onReceive(flagsRepository.$isWaitingWindowOpen) { [weak self] in self?.handleIsWaitingWindowOpen($0) }
+            .onReceive(deepLinkForwarderService.deepLinkPublisher) { [weak self] in self?.handleDeepLink($0) }
     }
-
-    private var loggedNode: any NavigationNode {
-        MainTabsNavigationNode(
-            inputData: MainTabsInputData(
-                initialTab: .commands
+    
+    private func switchNode(isUserLogged: Bool) {
+        execute(
+            .switchNode(
+                isUserLogged
+                    ? MainTabsNavigationNode(
+                        inputData: MainTabsInputData(
+                            initialTab: .commands
+                        )
+                    )
+                    : .stacked(StartNavigationNode(inputData: StartInputData(), onboardingService: onboardingService))
             )
         )
-    }
-
-    // MARK: Actions
-
-    private func bind() {
-        flagsRepository.$isUserLogged
-            .sink { [weak self] in self?.setNode(isUserLogged: $0) }
-            .store(in: &cancellables)
-
-        flagsRepository.$isAppLocked
-            .sink { [weak self] in self?.setLockedAppWindow(isAppLocked: $0) }
-            .store(in: &cancellables)
-
-        flagsRepository.$isWaitingWindowOpen
-            .sink { [weak self] in self?.handleIsWaitingWindowOpen($0) }
-            .store(in: &cancellables)
-
-        deepLinkForwarderService.deepLinkPublisher
-            .sink { [weak self] in self?.handleDeepLink($0) }
-            .store(in: &cancellables)
-    }
-
-    private func setNode(isUserLogged: Bool) {
-        let switchedNode = isUserLogged ? loggedNode : notLoggedNode
-        execute(.switchNode(switchedNode))
     }
 
     private func handleDeepLink(_ deepLink: NavigationDeepLink) {

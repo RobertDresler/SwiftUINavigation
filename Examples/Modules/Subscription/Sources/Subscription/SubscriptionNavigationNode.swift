@@ -11,31 +11,25 @@ public final class SubscriptionNavigationNode {
 
     private let inputData: SubscriptionInputData
     private let flagsRepository: FlagsRepository
-    private var cancellables = Set<AnyCancellable>()
 
     public init(inputData: SubscriptionInputData, flagsRepository: FlagsRepository) {
         self.inputData = inputData
         self.flagsRepository = flagsRepository
-        bind()
     }
 
-    private func bind() {
-        flagsRepository.$isUserPremium
-            .sink { [weak self] in self?.setNode(isUserPremium: $0) }
-            .store(in: &cancellables)
+    public func body(for content: SwitchedNavigationNodeView) -> some View {
+        content
+            .onReceive(flagsRepository.$isUserPremium) { [weak self] in self?.switchNode(isUserPremium: $0) }
     }
 
-    private func setNode(isUserPremium: Bool) {
-        let switchedNode = isUserPremium ? premiumNode : freemiumNode
-        execute(.switchNode(switchedNode))
-    }
-
-    private var premiumNode: any NavigationNode {
-        SubscriptionPremiumNavigationNode(inputData: SubscriptionPremiumInputData())
-    }
-
-    private var freemiumNode: any NavigationNode {
-        SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
+    private func switchNode(isUserPremium: Bool) {
+        execute(
+            .switchNode(
+                isUserPremium
+                    ? SubscriptionPremiumNavigationNode(inputData: SubscriptionPremiumInputData())
+                    : SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
+            )
+        )
     }
 
 }

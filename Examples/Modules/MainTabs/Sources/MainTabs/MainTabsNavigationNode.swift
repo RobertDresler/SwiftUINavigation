@@ -34,4 +34,8 @@ public final class MainTabsNavigationNode {
         )
     }
 
+    public func body(for content: TabsRootNavigationNodeView) -> some View {
+        content
+    }
+
 }

@@ -4,7 +4,7 @@ import Combine
 public protocol NavigationNode: ObservableObject, NavigationCommandExecuter {
     associatedtype State: NavigationNodeState
     associatedtype Body: View
-    @MainActor var body: Body { get }
+    @MainActor @ViewBuilder var body: Body { get }
     var isWrapperNode: Bool { get }
     var state: State { get }
     @MainActor func startIfNeeded(
