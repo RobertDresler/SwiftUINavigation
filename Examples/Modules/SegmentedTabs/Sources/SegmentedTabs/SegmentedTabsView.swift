@@ -6,7 +6,7 @@ import Shared
 
 struct SegmentedTabsView: View {
 
-    @EnvironmentNavigationNodeState private var navigationNodeState: SegmentedTabsNavigationNodeState
+    @EnvironmentNavigationNode private var navigationNode: SegmentedTabsNavigationNode
 
     var body: some View {
         VStack(spacing: 16) {
@@ -19,11 +19,11 @@ struct SegmentedTabsView: View {
         Picker(
             "",
             selection: Binding(
-                get: { navigationNodeState.selectedTab },
-                set: { navigationNodeState.selectedTab = $0 }
+                get: { navigationNode.selectedTab },
+                set: { navigationNode.selectedTab = $0 }
             )
         ) {
-            ForEach(navigationNodeState.tabs) { tab in
+            ForEach(navigationNode.tabs) { tab in
                 Text(tab.name)
                     .tag(tab)
             }
@@ -32,7 +32,7 @@ struct SegmentedTabsView: View {
     }
 
     private var selectedTabView: some View {
-        NavigationNodeResolvedView(node: navigationNodeState.selectedTab.node)
+        NavigationNodeResolvedView(node: navigationNode.selectedTab.node)
     }
 
 }

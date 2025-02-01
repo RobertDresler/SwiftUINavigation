@@ -65,15 +65,6 @@ public extension NavigationCommand where Self == StackMapNavigationCommand {
     }
 }
 
-public extension NavigationCommand where Self == DefaultHandleDeepLinkNavigationCommand {
-    static func handleDeepLink(
-        _ deepLink: any NavigationDeepLink,
-        messageListener: NavigationMessageListener? = nil
-    ) -> NavigationCommand {
-        DefaultHandleDeepLinkNavigationCommand(deepLink: deepLink, messageListener: messageListener)
-    }
-}
-
 public extension NavigationCommand where Self == DismissWindowNavigationCommand {
     static func dismissWindow(id: String) -> DismissWindowNavigationCommand {
         DismissWindowNavigationCommand(id: id)

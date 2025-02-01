@@ -125,6 +125,8 @@ struct ActionableListView: View {
         switch action {
         case .command(let makeCommand):
             navigationNode.execute(makeCommand(navigationNode))
+        case .deepLink(let deepLink):
+            deepLinkForwarderService.forwardDeepLink(deepLink)
         case .custom(let customAction):
             switch customAction {
             case .logout(let sourceID):

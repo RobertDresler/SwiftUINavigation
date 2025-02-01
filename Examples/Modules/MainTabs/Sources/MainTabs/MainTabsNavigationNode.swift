@@ -6,6 +6,9 @@ import ActionableList
 @TabsRootNavigationNode
 public final class MainTabsNavigationNode {
 
+    public var selectedTabNodeID: AnyHashable
+    public var tabsNodes: [any TabNode]
+
     public init(inputData: MainTabsInputData) {
         let commandsTab = DefaultTabNode(
             id: MainTabsInputData.Tab.commands,
@@ -25,16 +28,14 @@ public final class MainTabsNavigationNode {
                 tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
             )
         )
-        state = TabsRootNavigationNodeState(
-            selectedTabNodeID: inputData.initialTab,
-            tabsNodes: [
-                commandsTab,
-                flowsTab
-            ]
-        )
+        selectedTabNodeID = inputData.initialTab
+        tabsNodes = [
+            commandsTab,
+            flowsTab
+        ]
     }
 
-    public func body(for content: TabsRootNavigationNodeView) -> some View {
+    public func body(for content: TabsRootNavigationNodeView<MainTabsNavigationNode>) -> some View {
         content
     }
 

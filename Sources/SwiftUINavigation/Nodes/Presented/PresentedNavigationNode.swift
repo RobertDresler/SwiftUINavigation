@@ -28,7 +28,7 @@ public extension PresentedNavigationNode {
             },
             set: { isPresented in
                 guard !isPresented else { return }
-                presentedNode?.node.parent?.state.presentedNode = nil
+                presentedNode?.node.parent?.presentedNode = nil
             }
         )
     }

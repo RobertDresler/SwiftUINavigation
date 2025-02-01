@@ -1,7 +1,7 @@
 import SwiftUINavigation
 import Foundation
 
-public struct ExamplesNavigationDeepLink: NavigationDeepLink {
+public struct ExamplesNavigationDeepLink {
 
     public indirect enum Destination {
         case subscription(SubscriptionInputData)

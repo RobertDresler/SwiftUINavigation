@@ -21,10 +21,7 @@ struct AppWindow: View {
     }
 
     var body: some View {
-        NavigationWindow(
-            rootNode: rootNode,
-            defaultDeepLinkHandler: dependencies.defaultDeepLinkHandler
-        )
+        NavigationWindow(rootNode: rootNode)
             .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])
             .navigationEnvironmentTriggerHandler(ExamplesNavigationEnvironmentTriggerHandler())
             .requestReviewProxy(requestReview)
@@ -32,6 +29,7 @@ struct AppWindow: View {
             .environmentObject(dependencies.notificationsService)
             .environmentObject(dependencies.deepLinkForwarderService)
             .environmentObject(dependencies.onboardingService)
+            .environmentObject(dependencies.deepLinkHandler)
             .onShake { rootNode.printDebugGraph() }
     }
 

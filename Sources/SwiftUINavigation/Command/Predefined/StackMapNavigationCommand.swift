@@ -5,7 +5,7 @@ public struct StackMapNavigationCommand: NavigationCommand {
     }
 
     public func canExecute(on node: any NavigationNode) -> Bool {
-        node.predecessorsIncludingSelf.contains(where: { $0.state is StackRootNavigationNodeState })
+        node.predecessorsIncludingSelf.contains(where: { $0 is any StackRootNavigationNode })
     }
 
     private let animated: Bool
@@ -20,21 +20,21 @@ public struct StackMapNavigationCommand: NavigationCommand {
     }
 
     private func mapStackNodes(on node: any NavigationNode) {
-        guard let state = node.state as? StackRootNavigationNodeState else {
+        guard let node = node as? any StackRootNavigationNode else {
             if let parent = node.parent {
                 return mapStackNodes(on: parent)
             } else {
                 return
             }
         }
-        setMappedNodes(for: state)
+        setMappedNodes(for: node)
     }
 
-    private func setMappedNodes(for state: StackRootNavigationNodeState) {
+    private func setMappedNodes(for node: any StackRootNavigationNode) {
         perform(
             animated: animated,
             action: {
-                state.stackNodes = transform(state.stackNodes)
+                node.stackNodes = transform(node.stackNodes)
             }
         )
     }

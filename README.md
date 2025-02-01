@@ -65,8 +65,8 @@ I highly recommend starting by exploring the Examples app. The app features many
 
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.4.0`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.4.0")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `1.5.0`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "1.5.0")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
@@ -84,7 +84,7 @@ struct YourApp: App {
 }
 
 @NavigationNode
-class HomeNavigationNode {
+final class HomeNavigationNode {
 
     var body: some View {
         HomeView()
@@ -112,7 +112,7 @@ struct HomeView: View {
 }
 
 @NavigationNode
-class DetailNavigationNode {
+final class DetailNavigationNode {
 
     var body: some View {
         DetailView()
@@ -146,7 +146,7 @@ A `NavigationNode` represents a single node in the navigation graph, similar to 
 
 ```swift
 @NavigationNode
-class HomeNavigationNode {
+final class HomeNavigationNode {
     
     var body: some View {
         HomeView()
@@ -165,11 +165,13 @@ You can access the `NavigationNode` from your `View` using the following:
 
 #### Predefined Macros:
 
+Keep in mind that any property of a class marked with one of these macros, which is settable (`var`), is automatically marked as `@Published`.
+
 - **`@NavigationNode`**  
   The simplest node you’ll use most of the time, especially if your screen doesn’t require any tabs or switch logic.
   
 - **`@StackRootNavigationNode`**  
-  Represents what you would typically associate with a `NavigationStack` or `UINavigationController`. Most of the time, you don't have to create your own implementation; you can use the predefined `.stacked` / `StackRootNavigationNode` like this:
+  Represents what you would typically associate with a `NavigationStack` or `UINavigationController`. Most of the time, you don't have to create your own implementation; you can use the predefined `.stacked` / `DefaultStackRootNavigationNode` like this:
   
   ```swift
   .stacked(HomeNavigationNode())
@@ -182,34 +184,35 @@ You can access the `NavigationNode` from your `View` using the following:
     
 ```swift
 @TabsRootNavigationNode
-class MainTabsNavigationNode {
+final class MainTabsNavigationNode {
 
     enum Tab {
         case home
         case settings
     }
 
+    var selectedTabNodeID: AnyHashable
+    var tabsNodes: [any TabNode]
+
     init(initialTab: Tab) {
-        state = TabsRootNavigationNodeState(
-            selectedTabNodeID: initialTab,
-            tabsNodes: [
-                DefaultTabNode(
-                    id: Tab.home,
-                    image: Image(systemName: "house"),
-                    title: "Home",
-                    navigationNode: .stacked(HomeNavigationNode())
-                ),
-                DefaultTabNode(
-                    id: Tab.settings,
-                    image: Image(systemName: "gear"),
-                    title: "Settings",
-                    navigationNode: .stacked(SettingsNavigationNode())
-                )
-            ]
-        )
+        selectedTabNodeID = initialTab
+        tabsNodes = [
+            DefaultTabNode(
+                id: Tab.home,
+                image: Image(systemName: "house"),
+                title: "Home",
+                navigationNode: .stacked(HomeNavigationNode())
+            ),
+            DefaultTabNode(
+                id: Tab.settings,
+                image: Image(systemName: "gear"),
+                title: "Settings",
+                navigationNode: .stacked(SettingsNavigationNode())
+            )
+        ]
     }
 
-    func body(for content: TabsRootNavigationNodeView) -> some View {
+    func body(for content: TabsRootNavigationNodeView<MainTabsNavigationNode>) -> some View {
         content // Modify default content if needed
     }
 
@@ -227,20 +230,21 @@ class MainTabsNavigationNode {
   See the example below, or for a practical implementation, check out the [Examples App](#Explore-Examples-App).
   
 ```swift
-class UserService {
+final class UserService {
     @Published var isUserLogged = false
 }
 
 @SwitchedNavigationNode
-class AppNode {
+final class AppNavigationNode {
 
-    var userService: UserService
+    var switchedNode: (any NavigationNode)?
+    let userService: UserService
 
     init(userService: UserService) {
         self.userService = userService
     }
 
-    func body(for content: SwitchedNavigationNodeView) -> some View {
+    func body(for content: SwitchedNavigationNodeView<AppNavigationNode>) -> some View {
         content
             .onReceive(userService.$isUserLogged) { [weak self] in self?.switchNode(isUserLogged: $0) }
     }
@@ -260,7 +264,7 @@ class AppNode {
 
 #### Predefined Nodes:
 
-- **`.stacked`/`StackRootNavigationNode`**  
+- **`.stacked`/`DefaultStackRootNavigationNode`**  
   A generic `@StackRootNavigationNode` that you can use in most cases without needing to create your own. You can create it using static `.stacked` getters.
 
   ```swift
@@ -275,15 +279,9 @@ class AppNode {
 - **`SFSafariNavigationNode`**  
   A node that opens a URL in an in-app browser.
   
-### NavigationNodeState
+### NavigationNode's State
 
-Each node maintains its state in the `state: NavigationNodeState` property. This state holds the node’s stored data, such as which node is currently presented or which nodes are in the stack (as in the StackRootNavigationNodeState subclass). The navigation hierarchy is then resolved based on this state.
-
-You can access the `NavigationNodeState` from your `View` using the following:
-
-```swift
-@EnvironmentNavigationNodeState private var navigationNodeState: YourNavigationNodeState
-```
+Each node maintains its state as `@Published` properties inside `NavigationNode`. By using any of the navigation node macros, all settable properties (`var`) are automatically marked with the `@Published` property wrapper, allowing you to observe these changes inside the `body`.
 
 ### NavigationCommand
 
@@ -293,7 +291,7 @@ A command is executed on a `NavigationNode` using the `execute(_:)` method:
 
 ```swift
 @NavigationNode
-class HomeNavigationNode {
+final class HomeNavigationNode {
 
     ...
 
@@ -341,8 +339,6 @@ class HomeNavigationNode {
   Opens a new window with ID
 - **`.dismissWindow`/`DismissWindowNavigationCommand`**  
   Closes the window with ID
-- **`.handleDeepLink`/`DefaultHandleDeepLinkNavigationCommand`**  
-  Handles a deep link on the most appropriate node (see [NavigationDeepLink](#NavigationDeepLink))
 - **`.openURL`/`OpenURLNavigationCommand`**  
   Opens a URL using `NavigationEnvironmentTrigger` (see [NavigationEnvironmentTrigger](#NavigationEnvironmentTrigger))
 
@@ -354,7 +350,7 @@ Since presenting views using native mechanisms requires separate view modifiers,
 
 ```swift
 @NavigationNode
-class HomeNavigationNode {
+final class HomeNavigationNode {
 
     ...
 
@@ -374,9 +370,9 @@ class HomeNavigationNode {
 
 #### Predefined PresentedNavigationNodes
 - **`.fullScreenCover`/`FullScreenCoverPresentedNavigationNode`**  
-  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. If you want to wrap a newly presented node into a stack node, use `.stacked` or `StackRootNavigationNode`.
+  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. If you want to wrap a newly presented node into a stack node, use `.stacked` or `DefaultStackRootNavigationNode`.
 - **`.sheet`/`SheetPresentedNavigationNode`**  
-  Displays a sheet, similar to `sheet` in SwiftUI (you can adjust the detents to show it as a bottom sheet). If you want to wrap a newly presented node into a stack node, use `.stacked` or `StackRootNavigationNode`.
+  Displays a sheet, similar to `sheet` in SwiftUI (you can adjust the detents to show it as a bottom sheet). If you want to wrap a newly presented node into a stack node, use `.stacked` or `DefaultStackRootNavigationNode`.
 - **`.alert`/`AlertPresentedNavigationNode`**  
   Presents a standard `alert`
 - **`.confirmationDialog`/`ConfirmationDialogPresentedNavigationNode`**  
@@ -425,11 +421,17 @@ execute(
 
 The framework provides a predefined message, `RemovalNavigationMessage`, which is triggered whenever a `NavigationNode` is removed from its `parent`, so you know it is being deallocated, dismissed, or dropped from the stack.
 
-### NavigationDeepLink
+### Deep Linking
 
-Sometimes you need content-driven navigation, for example, when backend data or notifications direct users to different screens. This data is called a `NavigationDeepLink`. The specific screen and how it should be displayed is handled by `NavigationDeepLinkHandler`, which you provide during the initialization of `NavigationWindow`.
+Sometimes, you need content-driven navigation, such as when backend data or notifications direct users to specific screens. How you handle this data is entirely up to you.
 
-If you want a specific node to handle the deep link, execute the `DefaultHandleDeepLinkNavigationCommand`, for example, from the root node. This will route the deep link to the correct node. Alternatively, you can create a custom command for this purpose.
+The basic flow works as follows:
+
+1. Receive a deep link—for example, from the backend after a notification is tapped.
+2. Pass the deep link to a `NavigationNode`—for example, by creating a service that observes deep links in `AppNavigationNode` (as demonstrated in the [Examples App](#Explore-Examples-App)).
+3. Handle the deep link in a specific `NavigationNode`—you can access properties like `children`, `presentedNode`, or cast `NavigationNode` to `TabsRootNavigationNode` to retrieve `tabsNodes`.
+
+An example approach is shown in the [Examples App](#Explore-Examples-App), where the `ExamplesNavigationDeepLinkHandler` service resolves the custom `HandleNavigationDeepLinkCommand`. This allows developers to handle deep links according to their needs. The exact implementation of this flow is entirely up to you.
 
 ### NavigationEnvironmentTrigger
 
@@ -449,7 +451,7 @@ If you want to customize the handler (e.g., sending a custom trigger), subclass 
 
 ### NavigationNodeResolvedView
 
-When creating a custom wrapper view, like in [`SegmentedTabsNavigationNode` in the Examples App](#Explore-Examples-App), use `NavigationNodeResolvedView` to display the node within the view hierarchy (this is e.g. how `StackRootNavigationNode` works internally).
+When creating a custom wrapper view, like in [`SegmentedTabsNavigationNode` in the Examples App](#Explore-Examples-App), use `NavigationNodeResolvedView` to display the node within the view hierarchy (this is e.g. how `DefaultStackRootNavigationNode` works internally).
 
 ### Custom transitions
 

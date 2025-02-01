@@ -1,10 +1,9 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import Subscription
 import FlagsRepository
 
-public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler {
+@MainActor public final class ExamplesNavigationDeepLinkHandler: ObservableObject {
 
     private let flagsRepository: FlagsRepository
 
@@ -12,20 +11,15 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
         self.flagsRepository = flagsRepository
     }
 
-    public func handleDeepLink(
-        _ deepLink: NavigationDeepLink,
-        on node: any NavigationNode,
-        messageListener: NavigationMessageListener?
-    ) {
-        guard let deepLink = deepLink as? ExamplesNavigationDeepLink else { return }
-        switch deepLink.destination {
-        case .subscription(let inputData):
-            let subscriptionNode = SubscriptionNavigationNode(
-                inputData: inputData,
-                flagsRepository: flagsRepository
-            ).onMessageReceived(messageListener)
-            node.execute(.present(.sheet(.stacked(subscriptionNode))))
-        }
+    public func handleDeepLinkCommand(
+        _ deepLink: ExamplesNavigationDeepLink,
+        messageListener: NavigationMessageListener? = nil
+    ) -> NavigationCommand {
+        HandleNavigationDeepLinkCommand(
+            flagsRepository: flagsRepository,
+            deepLink: deepLink,
+            messageListener: messageListener
+        )
     }
 
 }

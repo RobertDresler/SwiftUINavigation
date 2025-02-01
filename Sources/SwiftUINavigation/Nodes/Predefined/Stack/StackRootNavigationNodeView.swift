@@ -1,9 +1,9 @@
 import SwiftUI
 
-public struct StackRootNavigationNodeView: View {
+public struct StackRootNavigationNodeView<InputNavigationNode: StackRootNavigationNode>: View {
 
     @Namespace private var namespace
-    @EnvironmentNavigationNodeState private var navigationNodeState: StackRootNavigationNodeState
+    @EnvironmentNavigationNode private var navigationNode: InputNavigationNode
 
     // MARK: Getters
 
@@ -14,7 +14,7 @@ public struct StackRootNavigationNodeView: View {
             navigationStackResolvedRoot
         }
             .stackNavigationNamespace(namespace)
-            .handlingStackTabBarToolbarBehavior()
+            .handlingStackTabBarToolbarBehavior(inputNavigationNodeType: InputNavigationNode.self)
     }
 
     private var path: Binding<NavigationPath> {
@@ -26,7 +26,7 @@ public struct StackRootNavigationNodeView: View {
 
     private var navigationStackResolvedRoot: some View {
         Group {
-            if let rootNode = navigationNodeState.stackNodes.first?.destination {
+            if let rootNode = navigationNode.stackNodes.first?.destination {
                 NavigationNodeResolvedView(node: rootNode)
                     .connectingNavigationDestinationLogic(
                         nodeForNodeID: { node(for: $0) },
@@ -57,13 +57,13 @@ public struct StackRootNavigationNodeView: View {
     }
 
     private var stackNodes: [StackNavigationNode] {
-        navigationNodeState.stackNodes
+        navigationNode.stackNodes
     }
 
     // MARK: Methods
 
     private func setNewPath(_ newPath: NavigationPath) {
-        navigationNodeState.setNewPath(newPath)
+        navigationNode.setNewPath(newPath)
     }
 
 }

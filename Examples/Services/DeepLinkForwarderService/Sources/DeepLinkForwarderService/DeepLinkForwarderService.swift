@@ -12,7 +12,7 @@ public final class DeepLinkForwarderService: ObservableObject, Sendable {
         }
     }
 
-    public func deepLink(for userInfo: [AnyHashable: Any]) -> NavigationDeepLink? {
+    public func deepLink(for userInfo: [AnyHashable: Any]) -> ExamplesNavigationDeepLink? {
         if let deepLink = userInfo["deepLink"] as? String {
             switch deepLink {
             case "subscription":
@@ -25,11 +25,11 @@ public final class DeepLinkForwarderService: ObservableObject, Sendable {
         }
     }
 
-    public func forwardDeepLink(_ deepLink: NavigationDeepLink) {
+    public func forwardDeepLink(_ deepLink: ExamplesNavigationDeepLink) {
         deepLinkPublisher.send(deepLink)
     }
 
-    public let deepLinkPublisher = PassthroughSubject<NavigationDeepLink, Never>()
+    public let deepLinkPublisher = PassthroughSubject<ExamplesNavigationDeepLink, Never>()
 
     public init() {}
 
