@@ -107,6 +107,14 @@ private extension NavigationNode {
     }
 
     func start(parent: (any NavigationNode)?) async {
+        /// Binding like this is needed since withTransaction wouldn't work with that
+        commonState
+            .objectWillChange
+            .sink { [weak self] in
+                guard let publisher = self?.objectWillChange as? ObservableObjectPublisher else { return }
+                publisher.send()
+            }
+            .store(in: &commonState.cancellables)
         await Task { @MainActor in /// This is needed since Publishing changes from within view updates is not allowed
             commonState.parent = parent
         }.value

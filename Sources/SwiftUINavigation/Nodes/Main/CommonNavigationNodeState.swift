@@ -12,6 +12,7 @@ public final class CommonNavigationNodeState: ObservableObject {
     }
     var messageListeners = [NavigationMessageListener]()
     let navigationEnvironmentTrigger = PassthroughSubject<NavigationEnvironmentTrigger, Never>()
+    var cancellables = Set<AnyCancellable>()
 
     public init() {}
 
