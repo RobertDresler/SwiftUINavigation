@@ -4,7 +4,7 @@ import ExamplesNavigation
 import Subscription
 import FlagsRepository
 
-public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler {
+@MainActor public final class ExamplesNavigationDeepLinkHandler: ObservableObject {
 
     private let flagsRepository: FlagsRepository
 
@@ -13,11 +13,10 @@ public final class ExamplesNavigationDeepLinkHandler: NavigationDeepLinkHandler 
     }
 
     public func handleDeepLink(
-        _ deepLink: NavigationDeepLink,
+        _ deepLink: ExamplesNavigationDeepLink,
         on node: any NavigationNode,
-        messageListener: NavigationMessageListener?
+        messageListener: NavigationMessageListener? = nil
     ) {
-        guard let deepLink = deepLink as? ExamplesNavigationDeepLink else { return }
         switch deepLink.destination {
         case .subscription(let inputData):
             let subscriptionNode = SubscriptionNavigationNode(

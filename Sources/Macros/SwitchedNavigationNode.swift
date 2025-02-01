@@ -9,9 +9,12 @@ public struct SwitchedNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AttributeSyntax] {
-        [
-            AttributeSyntax("@MainActor")
-        ]
+        let commonAttributes = [AttributeSyntax("@MainActor")]
+        guard let variableDecl = member.as(VariableDeclSyntax.self) else { return commonAttributes }
+        let hasExplicitGetter = variableDecl.bindings.contains { $0.accessorBlock != nil }
+        let isLetDeclaration = variableDecl.bindingSpecifier.text == "let"
+        guard !hasExplicitGetter, !isLetDeclaration else { return commonAttributes }
+        return commonAttributes + [AttributeSyntax("@Published")]
     }
 
     public static func expansion(
@@ -25,11 +28,12 @@ public struct SwitchedNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         return [
             DeclSyntax(
                 """
-                @MainActor \(accessModifier)var body: some View {
-                    body(for: SwitchedNavigationNodeView())
-                }
-                \(accessModifier) let state = SwitchedNavigationNodeState()
+                \(accessModifier) let commonState = CommonNavigationNodeState()
+                \(accessModifier) let id = UUID().uuidString
                 \(accessModifier) var isWrapperNode: Bool { false }
+                deinit {
+                    printDebugText("Finished")
+                }
                 """
             )
         ]
@@ -43,8 +47,7 @@ public struct SwitchedNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
         [
-            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): NavigationNode {}"),
-            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): ModifiableSwitchedNavigationNode {}")
+            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): SwitchedNavigationNode {}")
         ]
     }
 }

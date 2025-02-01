@@ -5,7 +5,7 @@ public struct TabsSelectItemNavigationCommand: NavigationCommand {
     }
 
     public func canExecute(on node: any NavigationNode) -> Bool {
-        node.predecessorsIncludingSelf.contains(where: { $0.state is TabsRootNavigationNodeState })
+        node.predecessorsIncludingSelf.contains(where: { $0 is any TabsRootNavigationNode })
     }
 
     private let itemID: AnyHashable
@@ -15,18 +15,18 @@ public struct TabsSelectItemNavigationCommand: NavigationCommand {
     }
 
     private func selectItem(on node: any NavigationNode) {
-        guard let state = node.state as? TabsRootNavigationNodeState else {
+        guard let node = node as? any TabsRootNavigationNode else {
             if let parent = node.parent {
                 return selectItem(on: parent)
             } else {
                 return
             }
         }
-        guard state.tabsNodes.contains(where: { $0.id == itemID }) else {
+        guard node.tabsNodes.contains(where: { $0.id == itemID }) else {
             assertionFailure("There is no TabNode in tabsNodes with id: \(itemID)")
             return
         }
-        state.selectedTabNodeID = itemID
+        node.selectedTabNodeID = itemID
     }
 
 }

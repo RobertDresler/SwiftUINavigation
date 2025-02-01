@@ -1,24 +1,23 @@
 import SwiftUI
+import Combine
 
-@StackRootNavigationNode
-public class StackRootNavigationNode {
+public protocol StackRootNavigationNode: NavigationNode {
+    associatedtype ModifiedView: View
+    var stackNodes: [StackNavigationNode] { get set }
+    var tabBarToolbarBehavior: StackTabBarToolbarBehavior { get set }
+    @ViewBuilder func body(for content: StackRootNavigationNodeView<Self>) -> ModifiedView
+}
 
-    public init(stackNodes: [StackNavigationNode], tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic) {
-        self.state = StackRootNavigationNodeState(stackNodes: stackNodes, tabBarToolbarBehavior: tabBarToolbarBehavior)
+public extension StackRootNavigationNode {
+    var children: [any NavigationNode] {
+        baseNavigationNodeChildren + stackNodes.map(\.destination)
     }
 
-    public convenience init(
-        stackNodes: [any NavigationNode],
-        tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
-    ) {
-        self.init(
-            stackNodes: stackNodes.map { StackNavigationNode(destination: $0) },
-            tabBarToolbarBehavior: tabBarToolbarBehavior
-        )
+    var body: ModifiedView {
+        body(for: StackRootNavigationNodeView())
     }
 
-    public func body(for content: StackRootNavigationNodeView) -> some View {
-        content
+    func setNewPath(_ newPath: NavigationPath) {
+        stackNodes = Array(stackNodes.prefix(newPath.count + 1))
     }
-
 }

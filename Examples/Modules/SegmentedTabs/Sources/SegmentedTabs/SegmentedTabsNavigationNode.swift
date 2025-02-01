@@ -2,16 +2,26 @@ import SwiftUI
 import Combine
 import SwiftUINavigation
 
-public final class SegmentedTabsNavigationNode: NavigationNode {
+@NavigationNode
+public final class SegmentedTabsNavigationNode {
 
-    public let state: SegmentedTabsNavigationNodeState
+    var tabs = [SegmentedTab]()
+    var selectedTab: SegmentedTab
+
+    public var children: [any NavigationNode] {
+        baseNavigationNodeChildren + tabs.map(\.node)
+    }
 
     public var body: some View {
         SegmentedTabsView()
     }
 
     public init(tabs: [SegmentedTab]) {
-        state = SegmentedTabsNavigationNodeState(tabs: tabs)
+        guard let firstTab = tabs.first else {
+            fatalError("SegmentedTabsNavigationNode requires at least one tab")
+        }
+        self.tabs = tabs
+        self.selectedTab = firstTab
     }
 
 }

@@ -1,14 +1,14 @@
 import SwiftUI
 
-public struct TabsRootNavigationNodeView: View {
+public struct TabsRootNavigationNodeView<InputNavigationNode: TabsRootNavigationNode>: View {
 
-    @EnvironmentNavigationNodeState private var navigationNodeState: TabsRootNavigationNodeState
+    @EnvironmentNavigationNode private var navigationNode: InputNavigationNode
 
     public init() {}
 
     public var body: some View {
         TabView(selection: selection) {
-            ForEach(navigationNodeState.tabsNodes, id: \.id) { node in
+            ForEach(navigationNode.tabsNodes, id: \.id) { node in
                 node.resolvedView
             }
         }
@@ -16,8 +16,8 @@ public struct TabsRootNavigationNodeView: View {
 
     private var selection: Binding<AnyHashable> {
         Binding(
-            get: { navigationNodeState.selectedTabNodeID },
-            set: { navigationNodeState.selectedTabNodeID = $0 }
+            get: { navigationNode.selectedTabNodeID },
+            set: { navigationNode.selectedTabNodeID = $0 }
         )
     }
 

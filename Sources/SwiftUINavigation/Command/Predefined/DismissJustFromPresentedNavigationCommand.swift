@@ -2,10 +2,10 @@ public struct DismissJustFromPresentedNavigationCommand: NavigationCommand {
 
     public func execute(on node: any NavigationNode) {
         guard canExecute(on: node) else { return }
-        if node.state.presentedNode != nil {
+        if node.presentedNode != nil {
             perform(
                 animated: animated,
-                action: { node.state.presentedNode = nil }
+                action: { node.presentedNode = nil }
             )
         } else if let parent = node.parent {
             execute(on: parent)
@@ -14,7 +14,7 @@ public struct DismissJustFromPresentedNavigationCommand: NavigationCommand {
 
     public func canExecute(on node: any NavigationNode) -> Bool {
         node.predecessorsIncludingSelf.contains { predecessorIncludingSelf in
-            guard let presentedNode = predecessorIncludingSelf.state.presentedNode else { return false }
+            guard let presentedNode = predecessorIncludingSelf.presentedNode else { return false }
             return node.predecessorsIncludingSelf.contains(where: { $0 === presentedNode.node })
         }
     }

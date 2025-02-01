@@ -19,7 +19,7 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
         registeredPresentableNavigationNodes.reduce(AnyView(view)) { resolvedView, modifier in
             AnyView(
                 modifier.presenterResolvedViewModifier(
-                    presentedNode: navigationNode.state.presentedNode,
+                    presentedNode: navigationNode.presentedNode,
                     content: resolvedView,
                     sourceID: sourceID
                 )

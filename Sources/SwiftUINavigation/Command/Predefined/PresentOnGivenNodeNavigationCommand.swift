@@ -3,7 +3,7 @@ public struct PresentOnGivenNodeNavigationCommand: NavigationCommand {
     public func execute(on node: any NavigationNode) {
         perform(
             animated: animated,
-            action: { node.state.presentedNode = presentedNode }
+            action: { node.presentedNode = presentedNode }
         )
     }
 

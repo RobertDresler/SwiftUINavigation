@@ -9,6 +9,7 @@ import SubscriptionFreemium
 @SwitchedNavigationNode
 public final class SubscriptionNavigationNode {
 
+    public var switchedNode: (any NavigationNode)?
     private let inputData: SubscriptionInputData
     private let flagsRepository: FlagsRepository
 
@@ -17,7 +18,7 @@ public final class SubscriptionNavigationNode {
         self.flagsRepository = flagsRepository
     }
 
-    public func body(for content: SwitchedNavigationNodeView) -> some View {
+    public func body(for content: SwitchedNavigationNodeView<SubscriptionNavigationNode>) -> some View {
         content
             .onReceive(flagsRepository.$isUserPremium) { [weak self] in self?.switchNode(isUserPremium: $0) }
     }

@@ -5,9 +5,9 @@ public enum StackTabBarToolbarBehavior {
     case hiddenWhenNotRoot(animated: Bool)
 }
 
-struct StackTabBarToolbarBehaviorViewModifier: ViewModifier {
+struct StackTabBarToolbarBehaviorViewModifier<InputNavigationNode: StackRootNavigationNode>: ViewModifier {
 
-    @EnvironmentNavigationNodeState private var navigationNodeState: StackRootNavigationNodeState
+    @EnvironmentNavigationNode private var navigationNode: InputNavigationNode
 
     func body(content: Content) -> some View {
         content
@@ -16,7 +16,7 @@ struct StackTabBarToolbarBehaviorViewModifier: ViewModifier {
     }
 
     private var animated: Bool {
-        switch navigationNodeState.tabBarToolbarBehavior {
+        switch navigationNode.tabBarToolbarBehavior {
         case .automatic:
             false
         case .hiddenWhenNotRoot(let animated):
@@ -25,18 +25,20 @@ struct StackTabBarToolbarBehaviorViewModifier: ViewModifier {
     }
 
     private var tabBarVisibility: Visibility {
-        switch navigationNodeState.tabBarToolbarBehavior {
+        switch navigationNode.tabBarToolbarBehavior {
         case .automatic:
             .automatic
         case .hiddenWhenNotRoot:
-            navigationNodeState.stackNodes.count > 1 ? .hidden : .automatic
+            navigationNode.stackNodes.count > 1 ? .hidden : .automatic
         }
     }
 
 }
 
 public extension View {
-    func handlingStackTabBarToolbarBehavior() -> some View {
-        modifier(StackTabBarToolbarBehaviorViewModifier())
+    func handlingStackTabBarToolbarBehavior<InputNavigationNode: StackRootNavigationNode>(
+        inputNavigationNodeType: InputNavigationNode.Type
+    ) -> some View {
+        modifier(StackTabBarToolbarBehaviorViewModifier<InputNavigationNode>())
     }
 }

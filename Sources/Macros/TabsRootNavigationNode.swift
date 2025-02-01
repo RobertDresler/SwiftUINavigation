@@ -17,9 +17,12 @@ public struct TabsRootNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AttributeSyntax] {
-        [
-            AttributeSyntax("@MainActor")
-        ]
+        let commonAttributes = [AttributeSyntax("@MainActor")]
+        guard let variableDecl = member.as(VariableDeclSyntax.self) else { return commonAttributes }
+        let hasExplicitGetter = variableDecl.bindings.contains { $0.accessorBlock != nil }
+        let isLetDeclaration = variableDecl.bindingSpecifier.text == "let"
+        guard !hasExplicitGetter, !isLetDeclaration else { return commonAttributes }
+        return commonAttributes + [AttributeSyntax("@Published")]
     }
 
     public static func expansion(
@@ -33,10 +36,10 @@ public struct TabsRootNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         return [
             DeclSyntax(
                 """
-                \(accessModifier) let state: TabsRootNavigationNodeState
-                
-                @MainActor \(accessModifier) var body: some View {
-                    body(for: TabsRootNavigationNodeView())
+                \(accessModifier) let commonState = CommonNavigationNodeState()
+                \(accessModifier) let id = UUID().uuidString
+                deinit {
+                    printDebugText("Finished")
                 }
                 """
             )
@@ -51,8 +54,7 @@ public struct TabsRootNavigationNode: ExtensionMacro, MemberMacro, MemberAttribu
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
         [
-            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): NavigationNode {}"),
-            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): ModifiableTabsRootNavigationNode {}")
+            try ExtensionDeclSyntax("@MainActor extension \(type.trimmed): TabsRootNavigationNode {}")
         ]
     }
 }

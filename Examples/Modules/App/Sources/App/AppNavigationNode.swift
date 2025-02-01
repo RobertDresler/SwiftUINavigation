@@ -8,10 +8,12 @@ import MainTabs
 import DeepLinkForwarderService
 import OnboardingService
 import LockedApp
+import ExamplesNavigationDeepLinkHandler
 
 @SwitchedNavigationNode
 public final class AppNavigationNode {
 
+    public var switchedNode: (any NavigationNode)?
     private let flagsRepository: FlagsRepository
     private let deepLinkForwarderService: DeepLinkForwarderService
     private let onboardingService: OnboardingService
@@ -26,7 +28,7 @@ public final class AppNavigationNode {
         self.onboardingService = onboardingService
     }
 
-    public func body(for content: SwitchedNavigationNodeView) -> some View {
+    public func body(for content: SwitchedNavigationNodeView<AppNavigationNode>) -> some View {
         content
             .onReceive(flagsRepository.$isUserLogged) { [weak self] in self?.switchNode(isUserLogged: $0) }
             .onReceive(flagsRepository.$isAppLocked) { [weak self] in self?.setLockedAppWindow(isAppLocked: $0) }
@@ -48,8 +50,9 @@ public final class AppNavigationNode {
         )
     }
 
-    private func handleDeepLink(_ deepLink: NavigationDeepLink) {
-        execute(.handleDeepLink(deepLink))
+    private func handleDeepLink(_ deepLink: ExamplesNavigationDeepLink) {
+        ExamplesNavigationDeepLinkHandler(flagsRepository: flagsRepository)
+            .handleDeepLink(deepLink, on: self)
     }
 
     private func setLockedAppWindow(isAppLocked: Bool) {

@@ -17,10 +17,7 @@ struct WaitingWindow: View {
     }
 
     var body: some View {
-        NavigationWindow(
-            rootNode: rootNode,
-            defaultDeepLinkHandler: dependencies.defaultDeepLinkHandler
-        )
+        NavigationWindow(rootNode: rootNode)
     }
 
 }

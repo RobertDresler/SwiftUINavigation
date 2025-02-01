@@ -1,30 +1,30 @@
 @MainActor
-public extension NavigationNode where Self == StackRootNavigationNode {
+public extension NavigationNode where Self == DefaultStackRootNavigationNode {
     static func stacked(
         _ node: StackNavigationNode,
         tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
-    ) -> StackRootNavigationNode {
+    ) -> DefaultStackRootNavigationNode {
         .stacked([node], tabBarToolbarBehavior: tabBarToolbarBehavior)
     }
 
     static func stacked(
         _ node: any NavigationNode,
         tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
-    ) -> StackRootNavigationNode {
+    ) -> DefaultStackRootNavigationNode {
         .stacked([node], tabBarToolbarBehavior: tabBarToolbarBehavior)
     }
 
     static func stacked(
         _ nodes: [StackNavigationNode],
         tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
-    ) -> StackRootNavigationNode {
-        StackRootNavigationNode(stackNodes: nodes, tabBarToolbarBehavior: tabBarToolbarBehavior)
+    ) -> DefaultStackRootNavigationNode {
+        DefaultStackRootNavigationNode(stackNodes: nodes, tabBarToolbarBehavior: tabBarToolbarBehavior)
     }
 
     static func stacked(
         _ nodes: [any NavigationNode],
         tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
-    ) -> StackRootNavigationNode {
-        StackRootNavigationNode(stackNodes: nodes, tabBarToolbarBehavior: tabBarToolbarBehavior)
+    ) -> DefaultStackRootNavigationNode {
+        DefaultStackRootNavigationNode(stackNodes: nodes, tabBarToolbarBehavior: tabBarToolbarBehavior)
     }
 }

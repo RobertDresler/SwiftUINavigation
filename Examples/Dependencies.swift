@@ -16,5 +16,5 @@ final class Dependencies {
         onboardingNavigationCommandFactory: DefaultOnboardingNavigationCommandFactory(),
         flagsRepository: flagsRepository
     )
-    lazy var defaultDeepLinkHandler = ExamplesNavigationDeepLinkHandler(flagsRepository: flagsRepository)
+    lazy var deepLinkHandler = ExamplesNavigationDeepLinkHandler(flagsRepository: flagsRepository)
 }

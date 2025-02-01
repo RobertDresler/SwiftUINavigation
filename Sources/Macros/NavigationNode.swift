@@ -9,9 +9,12 @@ public struct NavigationNode: ExtensionMacro, MemberMacro, MemberAttributeMacro 
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AttributeSyntax] {
-        [
-            AttributeSyntax("@MainActor")
-        ]
+        let commonAttributes = [AttributeSyntax("@MainActor")]
+        guard let variableDecl = member.as(VariableDeclSyntax.self) else { return commonAttributes }
+        let hasExplicitGetter = variableDecl.bindings.contains { $0.accessorBlock != nil }
+        let isLetDeclaration = variableDecl.bindingSpecifier.text == "let"
+        guard !hasExplicitGetter, !isLetDeclaration else { return commonAttributes }
+        return commonAttributes + [AttributeSyntax("@Published")]
     }
 
     public static func expansion(
@@ -25,7 +28,11 @@ public struct NavigationNode: ExtensionMacro, MemberMacro, MemberAttributeMacro 
         return [
             DeclSyntax(
                 """
-                \(accessModifier) let state = NavigationNodeState()
+                \(accessModifier) let commonState = CommonNavigationNodeState()
+                \(accessModifier) let id = UUID().uuidString
+                deinit {
+                    printDebugText("Finished")
+                }
                 """
             )
         ]

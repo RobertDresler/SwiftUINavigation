@@ -15,8 +15,8 @@ public struct NavigationNodeResolvedView: View {
     public var body: some View {
         node.body
             .presentingNavigationSource(id: nil)
-            .onReceive(node.state.navigationEnvironmentTrigger) { environmentTriggerHandler.handleTrigger($0, in: environment) }
-            .onReceive(node.state.objectWillChange) { [weak node] in node?.objectWillChange.send() }
+            .onReceive(node.commonState.navigationEnvironmentTrigger) { environmentTriggerHandler.handleTrigger($0, in: environment) }
+            .onReceive(node.commonState.objectWillChange) { [weak node] in node?.objectWillChange.send() }
             .onChange(of: equatableNodeChildren) { [oldChildren = equatableNodeChildren] newChildren in
                 bindSendingRemovalMessages(
                     newChildren: newChildren.compactMap(\.wrapped),
@@ -52,7 +52,7 @@ public struct NavigationNodeResolvedView: View {
     private func bindParentLogic(children: [any NavigationNode]) {
         children.forEach { child in
             Task { @MainActor in
-                await child.startIfNeeded(parent: node.base, defaultDeepLinkHandler: nil)
+                await child.startIfNeeded(parent: node.base)
             }
         }
     }

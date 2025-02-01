@@ -6,10 +6,10 @@ public struct NavigationWindow<Node: NavigationNode>: View {
 
     // MARK: Init
 
-    public init(rootNode: Node, defaultDeepLinkHandler: NavigationDeepLinkHandler? = nil) {
+    public init(rootNode: Node) {
         self.rootNode = rootNode
         Task { @MainActor in
-            await rootNode.startIfNeeded(parent: nil, defaultDeepLinkHandler: defaultDeepLinkHandler)
+            await rootNode.startIfNeeded(parent: nil)
         }
     }
 

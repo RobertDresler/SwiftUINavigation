@@ -20,6 +20,7 @@ struct ActionableListItem {
 
         case command(makeCommand: (any NavigationNode) -> NavigationCommand)
         case custom(CustomAction)
+        case deepLink(ExamplesNavigationDeepLink)
 
     }
 
@@ -58,12 +59,12 @@ extension ActionableListItem {
     static func new(
         id: String = UUID().uuidString,
         viewModel: ActionableListItemView.ViewModel,
-        deepLink: NavigationDeepLink,
+        deepLink: ExamplesNavigationDeepLink,
         presentingNavigationSourceID: String? = nil
     ) -> ActionableListItem {
         ActionableListItem(
             identifiableViewModel: IdentifiableViewModel(id: id, viewModel: viewModel),
-            action: .command(makeCommand: { _ in .handleDeepLink(deepLink) }),
+            action: .deepLink(deepLink),
             presentingNavigationSourceID: presentingNavigationSourceID
         )
     }
