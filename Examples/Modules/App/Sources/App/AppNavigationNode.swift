@@ -14,6 +14,7 @@ import ExamplesNavigationDeepLinkHandler
 public final class AppNavigationNode {
 
     public var switchedNode: (any NavigationNode)?
+
     private let flagsRepository: FlagsRepository
     private let deepLinkForwarderService: DeepLinkForwarderService
     private let onboardingService: OnboardingService
@@ -51,8 +52,10 @@ public final class AppNavigationNode {
     }
 
     private func handleDeepLink(_ deepLink: ExamplesNavigationDeepLink) {
-        ExamplesNavigationDeepLinkHandler(flagsRepository: flagsRepository)
-            .handleDeepLink(deepLink, on: self)
+        execute(
+            ExamplesNavigationDeepLinkHandler(flagsRepository: flagsRepository)
+                .handleDeepLinkCommand(deepLink)
+        )
     }
 
     private func setLockedAppWindow(isAppLocked: Bool) {

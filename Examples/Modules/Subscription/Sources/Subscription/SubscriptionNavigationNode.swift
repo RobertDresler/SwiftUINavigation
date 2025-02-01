@@ -10,6 +10,7 @@ import SubscriptionFreemium
 public final class SubscriptionNavigationNode {
 
     public var switchedNode: (any NavigationNode)?
+
     private let inputData: SubscriptionInputData
     private let flagsRepository: FlagsRepository
 
