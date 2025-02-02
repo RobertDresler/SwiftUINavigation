@@ -7,31 +7,30 @@ import OnboardingResult
 
 public struct MoveInOnboardingNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
+    public func execute(on model: any NavigationModel) {
         if previousStepID == nil {
             onboardingService.startOnboarding()
         }
         switch onboardingService.nextStep(for: previousStepID) {
         case .question(let inputData):
             StackAppendNavigationCommand(
-                appendedNode: OnboardingQuestionNavigationNode(
+                appendedModel: OnboardingQuestionNavigationModel(
                     inputData: inputData,
                     onboardingService: onboardingService
                 )
-            ).execute(on: node)
-        case .result(let inputData):
+            ).execute(on: model)
+        case .result:
             StackAppendNavigationCommand(
-                appendedNode: OnboardingResultNavigationNode(
-                    inputData: inputData,
+                appendedModel: OnboardingResultNavigationModel(
                     onboardingService: onboardingService
                 )
-            ).execute(on: node)
+            ).execute(on: model)
         case .none:
             onboardingService.finishOnboarding()
         }
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
+    public func canExecute(on model: any NavigationModel) -> Bool {
         true
     }
 

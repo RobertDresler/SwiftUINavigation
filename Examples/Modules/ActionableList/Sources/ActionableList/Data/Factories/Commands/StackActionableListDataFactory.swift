@@ -1,10 +1,17 @@
 import SwiftUINavigation
 import ExamplesNavigation
 import Shared
+import DeepLinkForwarderService
+import NotificationsService
+import FlagsRepository
 
-/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
+/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct StackActionableListDataFactory: ActionableListDataFactory {
 
+    var deepLinkForwarderService: DeepLinkForwarderService
+    var notificationsService: NotificationsService
+    var flagsRepository: FlagsRepository
+    
     func makeTitle() -> String {
         "Stack"
     }
@@ -32,7 +39,14 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Append"
             ),
             makeCommand: {
-                .stackAppend(ActionableListNavigationNode(inputData: .default))
+                .stackAppend(
+                    ActionableListNavigationModel(
+                        inputData: .default,
+                        deepLinkForwarderService: deepLinkForwarderService,
+                        notificationsService: notificationsService,
+                        flagsRepository: flagsRepository
+                    )
+                )
             }
         )
     }
@@ -47,7 +61,12 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackAppend(
-                    ActionableListNavigationNode(inputData: .default),
+                    ActionableListNavigationModel(
+                        inputData: .default,
+                        deepLinkForwarderService: deepLinkForwarderService,
+                        notificationsService: notificationsService,
+                        flagsRepository: flagsRepository
+                    ),
                     animated: false
                 )
             }
@@ -66,8 +85,13 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackAppend(
-                    StackNavigationNode(
-                        destination: ActionableListNavigationNode(inputData: .default),
+                    StackNavigationModel(
+                        destination: ActionableListNavigationModel(
+                            inputData: .default,
+                            deepLinkForwarderService: deepLinkForwarderService,
+                            notificationsService: notificationsService,
+                            flagsRepository: flagsRepository
+                        ),
                         transition: .zoom(sourceID: transitionID)
                     )
                 )
@@ -83,8 +107,8 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Set This As Root",
                 subtitle: "...and clear path"
             ),
-            makeCommand: { node in
-                .stackSetRoot(node, clear: true)
+            makeCommand: { model in
+                .stackSetRoot(model, clear: true)
             }
         )
     }
@@ -99,7 +123,12 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackSetRoot(
-                    ActionableListNavigationNode(inputData: ActionableListInputData(id: .stack)),
+                    ActionableListNavigationModel(
+                        inputData: ActionableListInputData(id: .stack),
+                        deepLinkForwarderService: deepLinkForwarderService,
+                        notificationsService: notificationsService,
+                        flagsRepository: flagsRepository
+                    ),
                     clear: false
                 )
             }

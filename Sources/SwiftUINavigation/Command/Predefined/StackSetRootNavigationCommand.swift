@@ -1,36 +1,36 @@
 public struct StackSetRootNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        stackMapCommand(for: node).execute(on: node)
+    public func execute(on model: any NavigationModel) {
+        stackMapCommand(for: model).execute(on: model)
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        stackMapCommand(for: node).canExecute(on: node)
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        stackMapCommand(for: model).canExecute(on: model)
     }
 
-    private let rootNode: any NavigationNode
+    private let rootModel: any NavigationModel
     private let clear: Bool
     private let animated: Bool
 
-    public init(rootNode: any NavigationNode, clear: Bool, animated: Bool = true) {
-        self.rootNode = rootNode
+    public init(rootModel: any NavigationModel, clear: Bool, animated: Bool = true) {
+        self.rootModel = rootModel
         self.clear = clear
         self.animated = animated
     }
 
-    private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
+    private func stackMapCommand(for model: any NavigationModel) -> NavigationCommand {
         .stackMap(
-            { nodes in
-                let rootNodeWithStackTransition = StackNavigationNode(
-                    destination: rootNode,
+            { models in
+                let rootModelWithStackTransition = StackNavigationModel(
+                    destination: rootModel,
                     transition: nil
                 )
-                if clear || nodes.isEmpty {
-                    return [rootNodeWithStackTransition]
+                if clear || models.isEmpty {
+                    return [rootModelWithStackTransition]
                 } else {
-                    var newNodes = nodes
-                    newNodes.removeFirst()
-                    return [rootNodeWithStackTransition] + newNodes
+                    var newModels = models
+                    newModels.removeFirst()
+                    return [rootModelWithStackTransition] + newModels
                 }
             },
             animated: animated

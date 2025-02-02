@@ -38,7 +38,7 @@ public final class OnboardingService: ObservableObject {
         case .question:
             switch state.questionAnswer {
             case .myself:
-                .result(OnboardingResultInputData())
+                .result
             case .xcode, .none:
                 .question(OnboardingQuestionInputData(usage: .wrongAnswer))
             }

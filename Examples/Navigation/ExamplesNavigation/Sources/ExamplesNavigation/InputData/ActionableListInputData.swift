@@ -7,7 +7,6 @@ public struct ActionableListInputData {
         case stack
         case urlHandling
         case flows
-        case architectures
     }
 
     public let id: ID

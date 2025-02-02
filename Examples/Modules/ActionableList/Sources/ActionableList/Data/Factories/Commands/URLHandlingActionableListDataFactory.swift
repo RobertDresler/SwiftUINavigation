@@ -2,7 +2,7 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 
-/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
+/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
@@ -37,12 +37,12 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
                 symbolName: "safari.fill",
                 accentColor: .brown,
                 title: "Open URL",
-                subtitle: "...in SFSafari (note that SFSafariNavigationNode utilizes UIViewControllerRepresentable)"
+                subtitle: "...in SFSafari (note that SFSafariNavigationModel utilizes UIViewControllerRepresentable)"
             ),
             makeCommand: {
                 .present(
                     .sheet(
-                        SFSafariNavigationNode(
+                        SFSafariNavigationModel(
                             inputData: SFSafariInputData(url: URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!) /// Don’t unwrap this in practice — unless you’re into playing with fire.
                         )
                     )

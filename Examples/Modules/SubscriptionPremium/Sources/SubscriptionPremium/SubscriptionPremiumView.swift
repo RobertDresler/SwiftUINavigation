@@ -5,10 +5,8 @@ import FlagsRepository
 
 struct SubscriptionPremiumView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: SubscriptionPremiumNavigationNode
-    @EnvironmentObject private var flagsRepository: FlagsRepository
-
-    var inputData: SubscriptionPremiumInputData
+    @EnvironmentNavigationModel private var navigationModel: SubscriptionPremiumNavigationModel
+    @ObservedObject var model: SubscriptionPremiumModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,7 +28,7 @@ struct SubscriptionPremiumView: View {
     }
 
     private var unsubscribeButton: some View {
-        Button(action: { unsubscribe() }) {
+        Button(action: { model.unsubscribe() }) {
             Text("Unsubscribe")
         }
     }
@@ -57,7 +55,7 @@ struct SubscriptionPremiumView: View {
     }
 
     private var buyMeCoffeeButton: some View {
-        Button(action: { buyMeCoffee() }) {
+        Button(action: { model.buyMeCoffee() }) {
             Image(.buyMeCoffeeButton)
                 .resizable()
                 .renderingMode(.original)
@@ -68,21 +66,11 @@ struct SubscriptionPremiumView: View {
         }
     }
 
-    // MARK: Actions
-
-    private func buyMeCoffee() {
-        navigationNode.buyMeCoffee()
-    }
-
-    private func unsubscribe() {
-        flagsRepository.isUserPremium = false
-    }
-
 }
 
 #Preview {
     NavigationStack(root: {
-        SubscriptionPremiumNavigationNode(inputData: SubscriptionPremiumInputData())
+        SubscriptionPremiumNavigationModel(flagsRepository: FlagsRepository())
             .body
             .environmentObject(FlagsRepository())
     })

@@ -6,10 +6,8 @@ import Shared
 
 struct SubscriptionFreemiumView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: SubscriptionFreemiumNavigationNode
-    @EnvironmentObject private var flagsRepository: FlagsRepository
-
-    var inputData: SubscriptionFreemiumInputData
+    @EnvironmentNavigationModel private var navigationModel: SubscriptionFreemiumNavigationModel
+    @ObservedObject var model: SubscriptionFreemiumModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -49,19 +47,13 @@ struct SubscriptionFreemiumView: View {
     }
 
     private var subscribeButton: some View {
-        PrimaryButton(title: "Simulate Purchase", action: { subscribe() })
-    }
-
-    // MARK: Actions
-
-    private func subscribe() {
-        flagsRepository.isUserPremium = true
+        PrimaryButton(title: "Simulate Purchase", action: { model.subscribe() })
     }
 
 }
 
 #Preview {
-    SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
+    SubscriptionFreemiumNavigationModel(flagsRepository: FlagsRepository())
         .body
         .environmentObject(FlagsRepository())
 }

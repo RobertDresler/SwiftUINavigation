@@ -6,9 +6,7 @@ import Shared
 
 struct WaitingView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: WaitingNavigationNode
-
-    var inputData: WaitingInputData
+    @EnvironmentNavigationModel private var navigationModel: WaitingNavigationModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -53,11 +51,11 @@ struct WaitingView: View {
     // MARK: Actions
 
     private func close() {
-        navigationNode.close()
+        navigationModel.close()
     }
 
 }
 
 #Preview {
-    WaitingNavigationNode(inputData: WaitingInputData(), flagsRepository: FlagsRepository()).body
+    WaitingNavigationModel(flagsRepository: FlagsRepository()).body
 }

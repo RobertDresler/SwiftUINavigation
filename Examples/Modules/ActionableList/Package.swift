@@ -19,9 +19,7 @@ let package = Package(
         .package(path: "../../Services/NotificationsService"),
         .package(path: "../../Services/DeepLinkForwarderService"),
         .package(path: "../../Modules/CustomConfirmationDialog"),
-        .package(path: "../../Modules/ArchitectureViewOnly"),
-        .package(path: "../../Modules/ArchitectureMVVM"),
-        .package(path: "../../Modules/ArchitectureComposable"),
+        .package(path: "../../Modules/ArchitectureExample"),
         .package(path: "../../Modules/SegmentedTabs"),
         .package(path: "../../Modules/CustomNavigationBar")
     ],
@@ -35,9 +33,7 @@ let package = Package(
                 .product(name: "NotificationsService", package: "NotificationsService"),
                 .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
                 .product(name: "CustomConfirmationDialog", package: "CustomConfirmationDialog"),
-                .product(name: "ArchitectureViewOnly", package: "ArchitectureViewOnly"),
-                .product(name: "ArchitectureMVVM", package: "ArchitectureMVVM"),
-                .product(name: "ArchitectureComposable", package: "ArchitectureComposable"),
+                .product(name: "ArchitectureExample", package: "ArchitectureExample"),
                 .product(name: "SegmentedTabs", package: "SegmentedTabs"),
                 .product(name: "CustomNavigationBar", package: "CustomNavigationBar")
             ]

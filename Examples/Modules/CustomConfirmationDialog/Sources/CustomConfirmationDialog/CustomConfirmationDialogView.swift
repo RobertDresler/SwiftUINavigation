@@ -5,9 +5,8 @@ import Shared
 
 struct CustomConfirmationDialogView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: CustomConfirmationDialogNavigationNode
-
-    var inputData: CustomConfirmationDialogInputData
+    @EnvironmentNavigationModel private var navigationModel: CustomConfirmationDialogNavigationModel
+    @ObservedObject var model: CustomConfirmationDialogModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,7 +31,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var title: some View {
-        Text(inputData.title)
+        Text(model.inputData.title)
             .font(.largeTitle)
             .bold()
             .frame(maxWidth: .infinity, alignment: .center)
@@ -40,7 +39,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var message: some View {
-        Text(inputData.message)
+        Text(model.inputData.message)
             .font(.title2)
             .frame(maxWidth: .infinity, alignment: .center)
             .multilineTextAlignment(.center)
@@ -48,24 +47,22 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var confirmButton: some View {
-        PrimaryButton(title: inputData.confirmButtonTitle, action: { sendConfirmationMessage() })
+        PrimaryButton(
+            title: model.inputData.confirmButtonTitle,
+            action: { model.confirm() }
+        )
     }
 
     // MARK: Actions
 
-    private func sendConfirmationMessage() {
-        navigationNode.sendConfirmationMessage()
-        dismiss()
-    }
-
     private func dismiss() {
-        navigationNode.dismiss()
+        navigationModel.dismiss()
     }
 
 }
 
 #Preview {
-    CustomConfirmationDialogNavigationNode(
+    CustomConfirmationDialogNavigationModel(
         inputData: CustomConfirmationDialogInputData(
             title: "Confirm Logout",
             message: "Are you sure you want to log out? You can easily log in again anytime.",

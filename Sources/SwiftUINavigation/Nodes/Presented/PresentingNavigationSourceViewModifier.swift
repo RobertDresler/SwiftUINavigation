@@ -2,8 +2,8 @@ import SwiftUI
 
 public struct PresentingNavigationSourceViewModifier: ViewModifier {
 
-    @EnvironmentObject private var navigationNode: AnyNavigationNode
-    @Environment(\.registeredCustomPresentableNavigationNodes) private var registeredCustomPresentableNavigationNodes
+    @EnvironmentObject private var navigationModel: AnyNavigationModel
+    @Environment(\.registeredCustomPresentableNavigationModels) private var registeredCustomPresentableNavigationModels
 
     private let sourceID: String?
 
@@ -12,14 +12,14 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
     }
 
     public func body(content: Content) -> some View {
-        modifyNodeViewWithPresentableNavigationNodes(content)
+        modifyModelViewWithPresentableNavigationModels(content)
     }
 
-    func modifyNodeViewWithPresentableNavigationNodes(_ view: some View) -> some View {
-        registeredPresentableNavigationNodes.reduce(AnyView(view)) { resolvedView, modifier in
+    func modifyModelViewWithPresentableNavigationModels(_ view: some View) -> some View {
+        registeredPresentableNavigationModels.reduce(AnyView(view)) { resolvedView, modifier in
             AnyView(
                 modifier.presenterResolvedViewModifier(
-                    presentedNode: navigationNode.presentedNode,
+                    presentedModel: navigationModel.presentedModel,
                     content: resolvedView,
                     sourceID: sourceID
                 )
@@ -27,14 +27,14 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
         }
     }
 
-    private var registeredPresentableNavigationNodes: [any PresentedNavigationNode.Type] {
+    private var registeredPresentableNavigationModels: [any PresentedNavigationModel.Type] {
         [
-            FullScreenCoverPresentedNavigationNode.self,
-            SheetPresentedNavigationNode.self,
-            AlertPresentedNavigationNode.self,
-            ConfirmationDialogPresentedNavigationNode.self
+            FullScreenCoverPresentedNavigationModel.self,
+            SheetPresentedNavigationModel.self,
+            AlertPresentedNavigationModel.self,
+            ConfirmationDialogPresentedNavigationModel.self
         ]
-        + registeredCustomPresentableNavigationNodes
+        + registeredCustomPresentableNavigationModels
     }
 
 }

@@ -1,30 +1,30 @@
 public struct StackAppendNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        stackMapCommand(for: node).execute(on: node)
+    public func execute(on model: any NavigationModel) {
+        stackMapCommand(for: model).execute(on: model)
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        stackMapCommand(for: node).canExecute(on: node)
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        stackMapCommand(for: model).canExecute(on: model)
     }
 
-    private let appendedNode: StackNavigationNode
+    private let appendedModel: StackNavigationModel
     private let animated: Bool
 
-    public init(appendedNode: StackNavigationNode, animated: Bool = true) {
-        self.appendedNode = appendedNode
+    public init(appendedModel: StackNavigationModel, animated: Bool = true) {
+        self.appendedModel = appendedModel
         self.animated = animated
     }
 
-    public init(appendedNode: any NavigationNode, animated: Bool = true) {
-        self.appendedNode = StackNavigationNode(destination: appendedNode)
+    public init(appendedModel: any NavigationModel, animated: Bool = true) {
+        self.appendedModel = StackNavigationModel(destination: appendedModel)
         self.animated = animated
     }
 
-    private func stackMapCommand(for node: any NavigationNode) -> NavigationCommand {
+    private func stackMapCommand(for model: any NavigationModel) -> NavigationCommand {
         .stackMap(
-            { nodes in
-                nodes + [appendedNode]
+            { models in
+                models + [appendedModel]
             },
             animated: animated
         )

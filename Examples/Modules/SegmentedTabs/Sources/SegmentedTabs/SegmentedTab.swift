@@ -5,12 +5,12 @@ public struct SegmentedTab: Hashable, Identifiable {
 
     public let id: String
     let name: String
-    let node: any NavigationNode
+    let model: any NavigationModel
 
-    public init(id: String = UUID().uuidString, name: String, node: any NavigationNode) {
+    public init(id: String = UUID().uuidString, name: String, model: any NavigationModel) {
         self.id = id
         self.name = name
-        self.node = node
+        self.model = model
     }
 
     public func hash(into hasher: inout Hasher) {

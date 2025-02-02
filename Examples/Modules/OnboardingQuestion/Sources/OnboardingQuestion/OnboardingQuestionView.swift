@@ -7,12 +7,8 @@ import OnboardingService
 
 struct OnboardingQuestionView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: OnboardingQuestionNavigationNode
-    @EnvironmentObject private var flagsRepository: FlagsRepository
-    @EnvironmentObject private var onboardingService: OnboardingService
-    @State private var selectedAnswer: OnboardingService.State.QuestionAnswer?
-
-    var inputData: OnboardingQuestionInputData
+    @EnvironmentNavigationModel private var navigationModel: OnboardingQuestionNavigationModel
+    @ObservedObject var model: OnboardingQuestionModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -37,7 +33,7 @@ struct OnboardingQuestionView: View {
     }
 
     private var titleText: String {
-        switch inputData.usage {
+        switch model.inputData.usage {
         case .start:
             "Let's begin!"
         case .wrongAnswer:
@@ -63,11 +59,11 @@ struct OnboardingQuestionView: View {
     private func answerButton(
         for answer: OnboardingService.State.QuestionAnswer
     ) -> some View {
-        Button(action: { selectedAnswer = answer }) {
+        Button(action: { model.selectedAnswer = answer }) {
             HStack(spacing: 12) {
-                Image(systemName: answer == selectedAnswer ? "checkmark.circle.fill" : "circle")
+                Image(systemName: answer == model.selectedAnswer ? "checkmark.circle.fill" : "circle")
                     .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(answer == selectedAnswer ? .blue : .gray)
+                    .foregroundStyle(answer == model.selectedAnswer ? .blue : .gray)
                     .font(.system(size: 24))
                     .frame(width: 24)
                 Text({
@@ -89,25 +85,16 @@ struct OnboardingQuestionView: View {
     }
 
     private var continueButton: some View {
-        PrimaryButton(title: "Continue", action: { continueInOnboarding() })
-            .opacity(selectedAnswer == nil ? 0.5 : 1)
-            .disabled(selectedAnswer == nil)
-    }
-
-    // MARK: Actions
-
-    private func continueInOnboarding() {
-        onboardingService.state.questionAnswer = selectedAnswer
-        navigationNode.continueInOnboarding()
+        PrimaryButton(title: "Continue", action: { model.continueInOnboarding() })
+            .opacity(model.selectedAnswer == nil ? 0.5 : 1)
+            .disabled(model.selectedAnswer == nil)
     }
 
 }
 
 #Preview {
-    OnboardingQuestionNavigationNode(
+    OnboardingQuestionNavigationModel(
         inputData: OnboardingQuestionInputData(usage: .start),
         onboardingService: OnboardingService.makeStub()
-    )
-        .body
-        .environmentObject(FlagsRepository())
+    ).body
 }

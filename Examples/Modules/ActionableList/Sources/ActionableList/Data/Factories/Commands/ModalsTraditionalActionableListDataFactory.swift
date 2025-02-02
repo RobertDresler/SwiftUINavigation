@@ -1,9 +1,16 @@
 import SwiftUINavigation
 import ExamplesNavigation
+import DeepLinkForwarderService
+import NotificationsService
+import FlagsRepository
 
-/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
+/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
 
+    var deepLinkForwarderService: DeepLinkForwarderService
+    var notificationsService: NotificationsService
+    var flagsRepository: FlagsRepository
+    
     func makeTitle() -> String {
         "Modals - Traditional"
     }
@@ -26,7 +33,18 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 title: "Present Full Screen Cover"
             ),
             makeCommand: {
-                .present(.fullScreenCover(.stacked(ActionableListNavigationNode(inputData: .default))))
+                .present(
+                    .fullScreenCover(
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        )
+                    )
+                )
             }
         )
     }
@@ -40,7 +58,19 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "Without Animation"
             ),
             makeCommand: {
-                .present(.fullScreenCover(.stacked(ActionableListNavigationNode(inputData: .default))), animated: false)
+                .present(
+                    .fullScreenCover(
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        )
+                    ),
+                    animated: false
+                )
             }
         )
     }
@@ -53,7 +83,18 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 title: "Present Sheet"
             ),
             makeCommand: {
-                .present(.sheet(.stacked(ActionableListNavigationNode(inputData: .default))))
+                .present(
+                    .sheet(
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        )
+                    )
+                )
             }
         )
     }
@@ -70,11 +111,14 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                 .present(
                     .sheet(
                         .stacked(
-                            ActionableListNavigationNode(
+                            ActionableListNavigationModel(
                                 inputData: ActionableListInputData(
                                     id: .commands,
                                     addPresentationDetents: true
-                                )
+                                ),
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
                             )
                         )
                     )

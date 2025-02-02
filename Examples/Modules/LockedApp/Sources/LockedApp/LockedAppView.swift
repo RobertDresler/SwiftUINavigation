@@ -6,10 +6,8 @@ import Shared
 
 struct LockedAppView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: LockedAppNavigationNode
-    @EnvironmentObject private var flagsRepository: FlagsRepository
-
-    var inputData: LockedAppInputData
+    @EnvironmentNavigationModel private var navigationModel: LockedAppNavigationModel
+    @ObservedObject var model: LockedAppModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -49,17 +47,11 @@ struct LockedAppView: View {
     }
 
     private var unlockButton: some View {
-        PrimaryButton(title: "Let me in!", action: { unlock() })
-    }
-
-    // MARK: Actions
-
-    private func unlock() {
-        flagsRepository.isAppLocked = false
+        PrimaryButton(title: "Let me in!", action: { model.unlock() })
     }
 
 }
 
 #Preview {
-    LockedAppNavigationNode(inputData: LockedAppInputData()).body
+    LockedAppNavigationModel(flagsRepository: FlagsRepository()).body
 }
