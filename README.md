@@ -34,7 +34,7 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 
 The framework consists of two key components: `NavigationNode`, and `NavigationCommand`.
 
-- **NavigationNode**: Think of it as a screen/module or what you might know as a coordinator. These `NavigationNode`s form a navigation graph. Each node stores its state in `NavigationNodeState`. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedNode`, the new node is presented.
+- **NavigationNode**: Think of it as a screen/module or what you might know as a coordinator. These `NavigationNode`s form a navigation graph. Each node stores its state in itself in `@Published` properties. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedNode`, the new node is presented.
   
 - **NavigationCommand**: This represents an operation that modifies the navigation state of `NavigationNode`. For example, a `PresentNavigationCommand ` sets the `presentedNode`. These operations can include actions like `.stackAppend(_:animated:)` (push), `.stackDropLast(_:animated:)` (pop), `.present(_:animated:)`, `.dismiss(animated:)`, `.openURL(_)` and more.
 
