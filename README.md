@@ -83,7 +83,9 @@ import SwiftUINavigation
 @main
 struct YourApp: App {
 
-    @StateObject private var rootModel = DefaultStackRootNavigationModel(HomeNavigationModel())
+    @StateObject private var rootModel = DefaultStackRootNavigationModel(
+	HomeNavigationModel()
+    )
 
     var body: some Scene {
         WindowGroup {
@@ -185,8 +187,6 @@ struct DetailView: View {
 To see the framework in action, check out the code in the [Examples App](#Explore-Examples-App). If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
 
 ### RootNavigationView
-
-# RootNavigationView  
 
 The `RootNavigationView` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root `Model`. Avoid nesting one `RootNavigationView` inside another—use it only at the top level.  
 
