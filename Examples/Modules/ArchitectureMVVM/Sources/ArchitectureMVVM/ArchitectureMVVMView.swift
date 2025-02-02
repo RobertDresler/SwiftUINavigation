@@ -5,7 +5,7 @@ import Shared
 
 struct ArchitectureMVVMView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: ArchitectureMVVMNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: ArchitectureMVVMNavigationModel
     @ObservedObject var viewModel: ArchitectureMVVMViewModel
 
     var body: some View {
@@ -34,5 +34,5 @@ struct ArchitectureMVVMView: View {
 }
 
 #Preview {
-    ArchitectureMVVMNavigationNode(inputData: ArchitectureMVVMInputData(initialName: "Anna")).body
+    ArchitectureMVVMNavigationModel(inputData: ArchitectureMVVMInputData(initialName: "Anna")).body
 }

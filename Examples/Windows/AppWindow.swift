@@ -7,14 +7,14 @@ import Shared
 struct AppWindow: View {
 
     @Environment(\.requestReview) private var requestReview
-    @StateObject private var rootNode: AppNavigationNode
+    @StateObject private var rootModel: AppNavigationModel
 
     var dependencies: Dependencies
 
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
-        self._rootNode = StateObject(
-            wrappedValue: AppNavigationNode(
+        self._rootModel = StateObject(
+            wrappedValue: AppNavigationModel(
                 flagsRepository: dependencies.flagsRepository,
                 deepLinkForwarderService: dependencies.deepLinkForwarderService,
                 onboardingService: dependencies.onboardingService
@@ -23,8 +23,8 @@ struct AppWindow: View {
     }
 
     var body: some View {
-        RootNavigationView(rootNode: rootNode)
-            .registerCustomPresentableNavigationNodes([PhotosPickerPresentedNavigationNode.self])
+        RootNavigationView(rootModel: rootModel)
+            .registerCustomPresentableNavigationModels([PhotosPickerPresentedNavigationModel.self])
             .navigationEnvironmentTriggerHandler(ExamplesNavigationEnvironmentTriggerHandler())
             .requestReviewProxy(requestReview)
             .environmentObject(dependencies.flagsRepository)
@@ -32,7 +32,7 @@ struct AppWindow: View {
             .environmentObject(dependencies.deepLinkForwarderService)
             .environmentObject(dependencies.onboardingService)
             .environmentObject(dependencies.deepLinkHandler)
-            .onShake { rootNode.printDebugGraph() }
+            .onShake { rootModel.printDebugGraph() }
     }
 
 }

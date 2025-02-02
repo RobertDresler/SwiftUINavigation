@@ -1,21 +1,21 @@
 public struct DismissJustFromPresentedNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        guard canExecute(on: node) else { return }
-        if node.presentedNode != nil {
+    public func execute(on model: any NavigationModel) {
+        guard canExecute(on: model) else { return }
+        if model.presentedModel != nil {
             perform(
                 animated: animated,
-                action: { node.presentedNode = nil }
+                action: { model.presentedModel = nil }
             )
-        } else if let parent = node.parent {
+        } else if let parent = model.parent {
             execute(on: parent)
         }
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        node.predecessorsIncludingSelf.contains { predecessorIncludingSelf in
-            guard let presentedNode = predecessorIncludingSelf.presentedNode else { return false }
-            return node.predecessorsIncludingSelf.contains(where: { $0 === presentedNode.node })
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        model.predecessorsIncludingSelf.contains { predecessorIncludingSelf in
+            guard let presentedModel = predecessorIncludingSelf.presentedModel else { return false }
+            return model.predecessorsIncludingSelf.contains(where: { $0 === presentedModel.model })
         }
     }
 

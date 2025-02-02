@@ -5,7 +5,7 @@ import FlagsRepository
 
 struct StartView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: StartNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: StartNavigationModel
     @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: StartInputData
@@ -62,7 +62,7 @@ struct StartView: View {
     // MARK: Actions
 
     private func createAccount() {
-        navigationNode.startOnboarding()
+        navigationModel.startOnboarding()
     }
 
     private func login() {

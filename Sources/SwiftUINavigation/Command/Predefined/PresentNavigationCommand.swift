@@ -1,34 +1,34 @@
 public struct PresentNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        guard let presenterNode = presenterNode(for: node) else { return }
-        executableCommand.execute(on: presenterNode)
+    public func execute(on model: any NavigationModel) {
+        guard let presenterModel = presenterModel(for: model) else { return }
+        executableCommand.execute(on: presenterModel)
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        guard let presenterNode = presenterNode(for: node) else { return false }
-        return executableCommand.canExecute(on: node)
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        guard let presenterModel = presenterModel(for: model) else { return false }
+        return executableCommand.canExecute(on: model)
     }
 
-    private let presentedNode: any PresentedNavigationNode
+    private let presentedModel: any PresentedNavigationModel
     private let animated: Bool
 
-    public init(presentedNode: any PresentedNavigationNode, animated: Bool = true) {
-        self.presentedNode = presentedNode
+    public init(presentedModel: any PresentedNavigationModel, animated: Bool = true) {
+        self.presentedModel = presentedModel
         self.animated = animated
     }
 
     private var executableCommand: NavigationCommand {
-        PresentOnGivenNodeNavigationCommand(
-            presentedNode: presentedNode,
+        PresentOnGivenModelNavigationCommand(
+            presentedModel: presentedModel,
             animated: animated
         )
     }
 
-    /// If `sourceID` is not `nil`, `presentedNode` is presented on the `node` from `execude(_on:)` since we want to present from
-    /// `presenterResolvedViewModifier(presentedNode:content:sourceID:)` on that source view
-    private func presenterNode(for node: any NavigationNode) -> (any NavigationNode)? {
-        presentedNode.sourceID == nil ? node.nearestNodeWhichCanPresent : node
+    /// If `sourceID` is not `nil`, `presentedModel` is presented on the `model` from `execude(_on:)` since we want to present from
+    /// `presenterResolvedViewModifier(presentedModel:content:sourceID:)` on that source view
+    private func presenterModel(for model: any NavigationModel) -> (any NavigationModel)? {
+        presentedModel.sourceID == nil ? model.nearestModelWhichCanPresent : model
     }
 
 }

@@ -1,8 +1,8 @@
 import Foundation
 
 public extension NavigationCommand where Self == PresentNavigationCommand {
-    static func present(_ presentedNode: any PresentedNavigationNode, animated: Bool = true) -> PresentNavigationCommand {
-        PresentNavigationCommand(presentedNode: presentedNode, animated: animated)
+    static func present(_ presentedModel: any PresentedNavigationModel, animated: Bool = true) -> PresentNavigationCommand {
+        PresentNavigationCommand(presentedModel: presentedModel, animated: animated)
     }
 }
 
@@ -25,12 +25,12 @@ public extension NavigationCommand where Self == DismissJustFromPresentedNavigat
 }
 
 public extension NavigationCommand where Self == StackAppendNavigationCommand {
-    static func stackAppend(_ node: StackNavigationNode, animated: Bool = true) -> StackAppendNavigationCommand {
-        StackAppendNavigationCommand(appendedNode: node, animated: animated)
+    static func stackAppend(_ model: StackNavigationModel, animated: Bool = true) -> StackAppendNavigationCommand {
+        StackAppendNavigationCommand(appendedModel: model, animated: animated)
     }
 
-    static func stackAppend(_ node: any NavigationNode, animated: Bool = true) -> StackAppendNavigationCommand {
-        StackAppendNavigationCommand(appendedNode: node, animated: animated)
+    static func stackAppend(_ model: any NavigationModel, animated: Bool = true) -> StackAppendNavigationCommand {
+        StackAppendNavigationCommand(appendedModel: model, animated: animated)
     }
 }
 
@@ -48,17 +48,17 @@ public extension NavigationCommand where Self == StackDropToRootNavigationComman
 
 public extension NavigationCommand where Self == StackSetRootNavigationCommand {
     static func stackSetRoot(
-        _ rootNode: any NavigationNode,
+        _ rootModel: any NavigationModel,
         clear: Bool,
         animated: Bool = true
     ) -> StackSetRootNavigationCommand {
-        StackSetRootNavigationCommand(rootNode: rootNode, clear: clear, animated: animated)
+        StackSetRootNavigationCommand(rootModel: rootModel, clear: clear, animated: animated)
     }
 }
 
 public extension NavigationCommand where Self == StackMapNavigationCommand {
     static func stackMap(
-        _ transform: @escaping ([StackNavigationNode]) -> [StackNavigationNode],
+        _ transform: @escaping ([StackNavigationModel]) -> [StackNavigationModel],
         animated: Bool = true
     ) -> StackMapNavigationCommand {
         StackMapNavigationCommand(animated: animated, transform: transform)
@@ -84,8 +84,8 @@ public extension NavigationCommand where Self == OpenURLNavigationCommand {
 }
 
 public extension NavigationCommand where Self == SwitchNavigationCommand {
-    static func switchNode(_ switchedNode: any NavigationNode) -> SwitchNavigationCommand {
-        SwitchNavigationCommand(switchedNode: switchedNode)
+    static func switchModel(_ switchedModel: any NavigationModel) -> SwitchNavigationCommand {
+        SwitchNavigationCommand(switchedModel: switchedModel)
     }
 }
 

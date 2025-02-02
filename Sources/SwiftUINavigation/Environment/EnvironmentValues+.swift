@@ -23,20 +23,20 @@ extension View {
     }
 }
 
-private struct RegisteredCustomPresentableNavigationNodes: EnvironmentKey {
-    static let defaultValue: [any PresentedNavigationNode.Type] = []
+private struct RegisteredCustomPresentableNavigationModels: EnvironmentKey {
+    static let defaultValue: [any PresentedNavigationModel.Type] = []
 }
 
 public extension EnvironmentValues {
-    var registeredCustomPresentableNavigationNodes: [any PresentedNavigationNode.Type] {
-        get { self[RegisteredCustomPresentableNavigationNodes.self] }
-        set { self[RegisteredCustomPresentableNavigationNodes.self] = newValue }
+    var registeredCustomPresentableNavigationModels: [any PresentedNavigationModel.Type] {
+        get { self[RegisteredCustomPresentableNavigationModels.self] }
+        set { self[RegisteredCustomPresentableNavigationModels.self] = newValue }
     }
 }
 
 public extension View {
-    func registerCustomPresentableNavigationNodes(_ nodes: [any PresentedNavigationNode.Type]) -> some View {
-        environment(\.registeredCustomPresentableNavigationNodes, nodes)
+    func registerCustomPresentableNavigationModels(_ models: [any PresentedNavigationModel.Type]) -> some View {
+        environment(\.registeredCustomPresentableNavigationModels, models)
     }
 }
 

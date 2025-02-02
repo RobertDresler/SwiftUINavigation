@@ -2,7 +2,7 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
-/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
+/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
@@ -98,11 +98,11 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
                 symbolName: "person.2.crop.square.stack.fill",
                 accentColor: .red,
                 title: "Photos Picker",
-                subtitle: "Since the Photos Picker is a custom PresentedNavigationNode, it must be registered using registerCustomPresentableNavigationNodes(_:) on the NavigationWindow"
+                subtitle: "Since the Photos Picker is a custom PresentedNavigationModel, it must be registered using registerCustomPresentableNavigationModels(_:) on the NavigationWindow"
             ),
             makeCommand: {
                 .present(
-                    PhotosPickerPresentedNavigationNode(
+                    PhotosPickerPresentedNavigationModel(
                         inputData: PhotosPickerInputData(
                             maxSelectionCount: 3,
                             photosPickerItem: []
@@ -126,7 +126,7 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
             makeCommand: {
                 .present(
                     .sheet(
-                        ActivityNavigationNode(
+                        ActivityNavigationModel(
                             inputData: ActivityInputData(
                                 activityItems: ["Just came across this and had to share it with you! 🔥"]
                             )

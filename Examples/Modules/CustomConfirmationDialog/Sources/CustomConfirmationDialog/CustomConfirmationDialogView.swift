@@ -5,7 +5,7 @@ import Shared
 
 struct CustomConfirmationDialogView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: CustomConfirmationDialogNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: CustomConfirmationDialogNavigationModel
 
     var inputData: CustomConfirmationDialogInputData
 
@@ -54,18 +54,18 @@ struct CustomConfirmationDialogView: View {
     // MARK: Actions
 
     private func sendConfirmationMessage() {
-        navigationNode.sendConfirmationMessage()
+        navigationModel.sendConfirmationMessage()
         dismiss()
     }
 
     private func dismiss() {
-        navigationNode.dismiss()
+        navigationModel.dismiss()
     }
 
 }
 
 #Preview {
-    CustomConfirmationDialogNavigationNode(
+    CustomConfirmationDialogNavigationModel(
         inputData: CustomConfirmationDialogInputData(
             title: "Confirm Logout",
             message: "Are you sure you want to log out? You can easily log in again anytime.",

@@ -8,8 +8,8 @@ import DeepLinkForwarderService
 
 struct ActionableListView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: ActionableListNavigationNode
-    @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackNodeNamespace
+    @EnvironmentNavigationModel private var navigationModel: ActionableListNavigationModel
+    @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackModelNamespace
     @EnvironmentObject private var flagsRepository: FlagsRepository
     @EnvironmentObject private var notificationsService: NotificationsService
     @EnvironmentObject private var deepLinkForwarderService: DeepLinkForwarderService
@@ -48,7 +48,7 @@ struct ActionableListView: View {
         scrollView
             .navigationTitle(title)
             .toolbar {
-                if navigationNode.canDismiss {
+                if navigationModel.canDismiss {
                     ToolbarItem(placement: .topBarTrailing) {
                         dismissButton
                     }
@@ -58,7 +58,7 @@ struct ActionableListView: View {
     }
 
     private var dismissButton: some View {
-        DismissButton(action: { navigationNode.dismiss() })
+        DismissButton(action: { navigationModel.dismiss() })
     }
 
     private var scrollView: some View {
@@ -83,11 +83,11 @@ struct ActionableListView: View {
     private var itemsView: some View {
         VStack(spacing: 8) {
             ForEach(items, id: \.identifiableViewModel.id) { item in
-                if #available(iOS 18.0, *), let wrappedNavigationStackNodeNamespace {
+                if #available(iOS 18.0, *), let wrappedNavigationStackModelNamespace {
                     configuredItemViewWithPresentingNavigationSource(for: item)
                         .matchedTransitionSource(
                             id: item.identifiableViewModel.id,
-                            in: wrappedNavigationStackNodeNamespace
+                            in: wrappedNavigationStackModelNamespace
                         )
                 } else {
                     configuredItemViewWithPresentingNavigationSource(for: item)
@@ -124,7 +124,7 @@ struct ActionableListView: View {
         guard let action = items.first(where: { $0.identifiableViewModel.id == itemID })?.action else { return }
         switch action {
         case .command(let makeCommand):
-            navigationNode.execute(makeCommand(navigationNode))
+            navigationModel.execute(makeCommand(navigationModel))
         case .deepLink(let deepLink):
             deepLinkForwarderService.forwardDeepLink(deepLink)
         case .custom(let customAction):
@@ -149,7 +149,7 @@ struct ActionableListView: View {
 
     private func handleLogoutAction(sourceID: String) {
         Task {
-            guard await navigationNode.confirmLogout(sourceID: sourceID) else { return }
+            guard await navigationModel.confirmLogout(sourceID: sourceID) else { return }
             logout()
         }
     }
@@ -178,7 +178,7 @@ struct ActionableListView: View {
     }
 
     private func openNotificationSettings() {
-        navigationNode.openNotificationSettings()
+        navigationModel.openNotificationSettings()
     }
 
     private func sendNotification() async {
@@ -196,13 +196,13 @@ struct ActionableListView: View {
     }
 
     private func handleLogoutWithCustomConfirmationDialog() {
-        navigationNode.confirmLogoutWithCustomConfirmationDialog(
+        navigationModel.confirmLogoutWithCustomConfirmationDialog(
             onConfirm: { logout() }
         )
     }
 
     private func printDebugGraph() {
-        navigationNode.printDebugGraph()
+        navigationModel.printDebugGraph()
     }
 
     private func lockApp() {
@@ -216,5 +216,5 @@ struct ActionableListView: View {
 }
 
 #Preview {
-    ActionableListNavigationNode(inputData: .default).body
+    ActionableListNavigationModel(inputData: .default).body
 }

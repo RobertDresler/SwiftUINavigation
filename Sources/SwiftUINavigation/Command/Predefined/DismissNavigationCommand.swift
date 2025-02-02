@@ -1,16 +1,16 @@
 public struct DismissNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        guard let nearestNodeWhichCanPresent = node.nearestNodeWhichCanPresent else { return }
+    public func execute(on model: any NavigationModel) {
+        guard let nearestModelWhichCanPresent = model.nearestModelWhichCanPresent else { return }
         perform(
             animated: animated,
-            action: { nearestNodeWhichCanPresent.parent?.presentedNode = nil }
+            action: { nearestModelWhichCanPresent.parent?.presentedModel = nil }
         )
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        let nearestNodeWhichCanPresent = node.nearestNodeWhichCanPresent
-        return nearestNodeWhichCanPresent?.parent?.presentedNode?.node === nearestNodeWhichCanPresent
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        let nearestModelWhichCanPresent = model.nearestModelWhichCanPresent
+        return nearestModelWhichCanPresent?.parent?.presentedModel?.model === nearestModelWhichCanPresent
     }
 
     private let animated: Bool

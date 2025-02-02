@@ -3,15 +3,15 @@ import Foundation
 /// When you want to dismiss Window on iOS 16, call this command from the window you want to dismiss, from iOS 17, you can call this command from any Window
 public struct DismissWindowNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
+    public func execute(on model: any NavigationModel) {
         if #available(iOS 17, *) {
-            node.sendEnvironmentTrigger(DismissWindowNavigationEnvironmentTrigger(id: id))
+            model.sendEnvironmentTrigger(DismissWindowNavigationEnvironmentTrigger(id: id))
         } else {
-            node.sendEnvironmentTrigger(DismissNavigationEnvironmentTrigger())
+            model.sendEnvironmentTrigger(DismissNavigationEnvironmentTrigger())
         }
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
+    public func canExecute(on model: any NavigationModel) -> Bool {
         true
     }
 

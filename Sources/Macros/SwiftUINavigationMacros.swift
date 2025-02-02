@@ -6,10 +6,10 @@ import SwiftCompilerPlugin
 struct SwiftUINavigationMacros: CompilerPlugin {
 
     var providingMacros: [Macro.Type] = [
-        NavigationNode.self,
-        TabsRootNavigationNode.self,
-        SwitchedNavigationNode.self,
-        StackRootNavigationNode.self
+        NavigationModel.self,
+        TabsRootNavigationModel.self,
+        SwitchedNavigationModel.self,
+        StackRootNavigationModel.self
     ]
 
 }

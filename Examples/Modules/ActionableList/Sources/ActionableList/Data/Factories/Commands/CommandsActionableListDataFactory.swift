@@ -2,7 +2,7 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
-/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
+/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct CommandsActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
@@ -112,8 +112,8 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 ShowAndHideAfterDelayNavigationCommand(
-                    presentedNode: .fullScreenCover(
-                        .stacked(ActionableListNavigationNode(inputData: .default))
+                    presentedModel: .fullScreenCover(
+                        .stacked(ActionableListNavigationModel(inputData: .default))
                     ),
                     hideDelay: 2
                 )
@@ -135,7 +135,7 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
 
     private func makeAppendActionableListCommand(for id: ActionableListInputData.ID) -> () -> NavigationCommand {
         {
-            .stackAppend(ActionableListNavigationNode(inputData: ActionableListInputData(id: id)))
+            .stackAppend(ActionableListNavigationModel(inputData: ActionableListInputData(id: id)))
         }
     }
 

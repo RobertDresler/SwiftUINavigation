@@ -6,7 +6,7 @@ import Shared
 
 struct SubscriptionFreemiumView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: SubscriptionFreemiumNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: SubscriptionFreemiumNavigationModel
     @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: SubscriptionFreemiumInputData
@@ -61,7 +61,7 @@ struct SubscriptionFreemiumView: View {
 }
 
 #Preview {
-    SubscriptionFreemiumNavigationNode(inputData: SubscriptionFreemiumInputData())
+    SubscriptionFreemiumNavigationModel(inputData: SubscriptionFreemiumInputData())
         .body
         .environmentObject(FlagsRepository())
 }

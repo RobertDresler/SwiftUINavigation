@@ -6,7 +6,7 @@ import Shared
 
 struct LockedAppView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: LockedAppNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: LockedAppNavigationModel
     @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: LockedAppInputData
@@ -61,5 +61,5 @@ struct LockedAppView: View {
 }
 
 #Preview {
-    LockedAppNavigationNode(inputData: LockedAppInputData()).body
+    LockedAppNavigationModel(inputData: LockedAppInputData()).body
 }

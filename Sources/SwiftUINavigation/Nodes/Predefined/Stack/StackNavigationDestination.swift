@@ -1,4 +1,4 @@
 struct StackNavigationDestination: Hashable {
-    let nodeID: String
+    let modelID: String
     let transition: StackNavigationTransition?
 }

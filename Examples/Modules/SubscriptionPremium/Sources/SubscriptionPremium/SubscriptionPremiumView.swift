@@ -5,7 +5,7 @@ import FlagsRepository
 
 struct SubscriptionPremiumView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: SubscriptionPremiumNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: SubscriptionPremiumNavigationModel
     @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: SubscriptionPremiumInputData
@@ -71,7 +71,7 @@ struct SubscriptionPremiumView: View {
     // MARK: Actions
 
     private func buyMeCoffee() {
-        navigationNode.buyMeCoffee()
+        navigationModel.buyMeCoffee()
     }
 
     private func unsubscribe() {
@@ -82,7 +82,7 @@ struct SubscriptionPremiumView: View {
 
 #Preview {
     NavigationStack(root: {
-        SubscriptionPremiumNavigationNode(inputData: SubscriptionPremiumInputData())
+        SubscriptionPremiumNavigationModel(inputData: SubscriptionPremiumInputData())
             .body
             .environmentObject(FlagsRepository())
     })

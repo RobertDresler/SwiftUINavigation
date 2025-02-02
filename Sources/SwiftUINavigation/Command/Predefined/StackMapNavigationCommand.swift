@@ -1,40 +1,40 @@
 public struct StackMapNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        mapStackNodes(on: node)
+    public func execute(on model: any NavigationModel) {
+        mapStackModels(on: model)
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        node.predecessorsIncludingSelf.contains(where: { $0 is any StackRootNavigationNode })
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        model.predecessorsIncludingSelf.contains(where: { $0 is any StackRootNavigationModel })
     }
 
     private let animated: Bool
-    private let transform: ([StackNavigationNode]) -> [StackNavigationNode]
+    private let transform: ([StackNavigationModel]) -> [StackNavigationModel]
 
     public init(
         animated: Bool,
-        transform: @escaping ([StackNavigationNode]) -> [StackNavigationNode]
+        transform: @escaping ([StackNavigationModel]) -> [StackNavigationModel]
     ) {
         self.animated = animated
         self.transform = transform
     }
 
-    private func mapStackNodes(on node: any NavigationNode) {
-        guard let node = node as? any StackRootNavigationNode else {
-            if let parent = node.parent {
-                return mapStackNodes(on: parent)
+    private func mapStackModels(on model: any NavigationModel) {
+        guard let model = model as? any StackRootNavigationModel else {
+            if let parent = model.parent {
+                return mapStackModels(on: parent)
             } else {
                 return
             }
         }
-        setMappedNodes(for: node)
+        setMappedModels(for: model)
     }
 
-    private func setMappedNodes(for node: any StackRootNavigationNode) {
+    private func setMappedModels(for model: any StackRootNavigationModel) {
         perform(
             animated: animated,
             action: {
-                node.stackNodes = transform(node.stackNodes)
+                model.stackModels = transform(model.stackModels)
             }
         )
     }

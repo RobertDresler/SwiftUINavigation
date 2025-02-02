@@ -5,7 +5,7 @@ import Shared
 
 struct ArchitectureComposableView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: ArchitectureComposableNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: ArchitectureComposableNavigationModel
     @ObservedObject var viewModel: ArchitectureComposableViewModel
 
     var body: some View {
@@ -34,5 +34,5 @@ struct ArchitectureComposableView: View {
 }
 
 #Preview {
-    ArchitectureComposableNavigationNode(inputData: ArchitectureComposableInputData(initialName: "Anna")).body
+    ArchitectureComposableNavigationModel(inputData: ArchitectureComposableInputData(initialName: "Anna")).body
 }

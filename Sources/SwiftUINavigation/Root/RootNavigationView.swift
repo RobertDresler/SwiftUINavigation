@@ -1,20 +1,20 @@
 import SwiftUI
 
-public struct RootNavigationView<Node: NavigationNode>: View {
+public struct RootNavigationView<Model: NavigationModel>: View {
 
-    @ObservedObject private var rootNode: Node
+    @ObservedObject private var rootModel: Model
 
     // MARK: Init
 
-    public init(rootNode: Node) {
-        self.rootNode = rootNode
+    public init(rootModel: Model) {
+        self.rootModel = rootModel
         Task { @MainActor in
-            await rootNode.startIfNeeded(parent: nil)
+            await rootModel.startIfNeeded(parent: nil)
         }
     }
 
     public var body: some View {
-        NavigationNodeResolvedView(node: rootNode)
+        NavigationModelResolvedView(model: rootModel)
     }
 
 }

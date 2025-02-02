@@ -5,7 +5,7 @@ import Shared
 
 struct ArchitectureViewOnlyView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: ArchitectureViewOnlyNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: ArchitectureViewOnlyNavigationModel
     @State private var name: String
 
     var inputData: ArchitectureViewOnlyInputData
@@ -36,11 +36,11 @@ struct ArchitectureViewOnlyView: View {
     // MARK: Actions
 
     private func save() {
-        navigationNode.hide()
+        navigationModel.hide()
     }
 
 }
 
 #Preview {
-    ArchitectureViewOnlyNavigationNode(inputData: ArchitectureViewOnlyInputData(initialName: "Anna")).body
+    ArchitectureViewOnlyNavigationModel(inputData: ArchitectureViewOnlyInputData(initialName: "Anna")).body
 }

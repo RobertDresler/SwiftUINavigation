@@ -7,7 +7,7 @@ import OnboardingService
 
 struct OnboardingQuestionView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: OnboardingQuestionNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: OnboardingQuestionNavigationModel
     @EnvironmentObject private var flagsRepository: FlagsRepository
     @EnvironmentObject private var onboardingService: OnboardingService
     @State private var selectedAnswer: OnboardingService.State.QuestionAnswer?
@@ -98,13 +98,13 @@ struct OnboardingQuestionView: View {
 
     private func continueInOnboarding() {
         onboardingService.state.questionAnswer = selectedAnswer
-        navigationNode.continueInOnboarding()
+        navigationModel.continueInOnboarding()
     }
 
 }
 
 #Preview {
-    OnboardingQuestionNavigationNode(
+    OnboardingQuestionNavigationModel(
         inputData: OnboardingQuestionInputData(usage: .start),
         onboardingService: OnboardingService.makeStub()
     )

@@ -3,35 +3,35 @@ import Foundation
 
 public struct ShowAndHideAfterDelayNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        executablePresentCommand(on: node).execute(on: node)
+    public func execute(on model: any NavigationModel) {
+        executablePresentCommand(on: model).execute(on: model)
         let hideDelay = hideDelay
         let animated = animated
-        let hidePresentedNode = { @MainActor [weak presentedNode = presentedNode.node] in
-            presentedNode?.execute(.dismiss(animated: animated))
+        let hidePresentedModel = { @MainActor [weak presentedModel = presentedModel.model] in
+            presentedModel?.execute(.dismiss(animated: animated))
         }
         Task {
             try? await Task.sleep(nanoseconds: UInt64(hideDelay * 1_000_000_000))
-            hidePresentedNode()
+            hidePresentedModel()
         }
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        executablePresentCommand(on: node).canExecute(on: node)
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        executablePresentCommand(on: model).canExecute(on: model)
     }
 
-    private let presentedNode: any PresentedNavigationNode
+    private let presentedModel: any PresentedNavigationModel
     private let hideDelay: TimeInterval
     private let animated: Bool
 
-    public init(presentedNode: any PresentedNavigationNode, hideDelay: TimeInterval, animated: Bool = true) {
-        self.presentedNode = presentedNode
+    public init(presentedModel: any PresentedNavigationModel, hideDelay: TimeInterval, animated: Bool = true) {
+        self.presentedModel = presentedModel
         self.hideDelay = hideDelay
         self.animated = animated
     }
 
-    private func executablePresentCommand(on node: any NavigationNode) -> NavigationCommand {
-        .present(presentedNode, animated: animated)
+    private func executablePresentCommand(on model: any NavigationModel) -> NavigationCommand {
+        .present(presentedModel, animated: animated)
     }
 
 }

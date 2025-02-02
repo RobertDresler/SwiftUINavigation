@@ -2,7 +2,7 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 
-/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationNode` methods from the `View` or pass events to the `NavigationNode`. Check examples in **Architectures** flow for the correct approach.
+/// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct StackActionableListDataFactory: ActionableListDataFactory {
 
     func makeTitle() -> String {
@@ -32,7 +32,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Append"
             ),
             makeCommand: {
-                .stackAppend(ActionableListNavigationNode(inputData: .default))
+                .stackAppend(ActionableListNavigationModel(inputData: .default))
             }
         )
     }
@@ -47,7 +47,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackAppend(
-                    ActionableListNavigationNode(inputData: .default),
+                    ActionableListNavigationModel(inputData: .default),
                     animated: false
                 )
             }
@@ -66,8 +66,8 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackAppend(
-                    StackNavigationNode(
-                        destination: ActionableListNavigationNode(inputData: .default),
+                    StackNavigationModel(
+                        destination: ActionableListNavigationModel(inputData: .default),
                         transition: .zoom(sourceID: transitionID)
                     )
                 )
@@ -83,8 +83,8 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Set This As Root",
                 subtitle: "...and clear path"
             ),
-            makeCommand: { node in
-                .stackSetRoot(node, clear: true)
+            makeCommand: { model in
+                .stackSetRoot(model, clear: true)
             }
         )
     }
@@ -99,7 +99,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackSetRoot(
-                    ActionableListNavigationNode(inputData: ActionableListInputData(id: .stack)),
+                    ActionableListNavigationModel(inputData: ActionableListInputData(id: .stack)),
                     clear: false
                 )
             }

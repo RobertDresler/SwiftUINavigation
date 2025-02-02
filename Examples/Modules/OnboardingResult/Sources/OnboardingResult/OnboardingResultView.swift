@@ -7,7 +7,7 @@ import OnboardingService
 
 struct OnboardingResultView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: OnboardingResultNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: OnboardingResultNavigationModel
     @EnvironmentObject private var flagsRepository: FlagsRepository
 
     var inputData: OnboardingResultInputData
@@ -55,13 +55,13 @@ struct OnboardingResultView: View {
     // MARK: Actions
 
     private func continueInOnboarding() {
-        navigationNode.continueInOnboarding()
+        navigationModel.continueInOnboarding()
     }
 
 }
 
 #Preview {
-    OnboardingResultNavigationNode(
+    OnboardingResultNavigationModel(
         inputData: OnboardingResultInputData(),
         onboardingService: OnboardingService.makeStub()
     )

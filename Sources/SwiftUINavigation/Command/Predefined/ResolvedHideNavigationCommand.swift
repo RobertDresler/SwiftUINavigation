@@ -1,11 +1,11 @@
 public struct ResolvedHideNavigationCommand: NavigationCommand {
 
-    public func execute(on node: any NavigationNode) {
-        resolvedCommand(on: node).execute(on: node)
+    public func execute(on model: any NavigationModel) {
+        resolvedCommand(on: model).execute(on: model)
     }
 
-    public func canExecute(on node: any NavigationNode) -> Bool {
-        resolvedCommand(on: node).canExecute(on: node)
+    public func canExecute(on model: any NavigationModel) -> Bool {
+        resolvedCommand(on: model).canExecute(on: model)
     }
 
     private let animated: Bool
@@ -14,8 +14,8 @@ public struct ResolvedHideNavigationCommand: NavigationCommand {
         self.animated = animated
     }
 
-    private func resolvedCommand(on node: any NavigationNode) -> NavigationCommand {
-        if (node.parent as? any StackRootNavigationNode)?.stackNodes.first?.destination === node {
+    private func resolvedCommand(on model: any NavigationModel) -> NavigationCommand {
+        if (model.parent as? any StackRootNavigationModel)?.stackModels.first?.destination === model {
             .dismiss(animated: animated)
         } else {
             .stackDropLast(animated: animated)

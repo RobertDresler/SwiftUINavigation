@@ -6,7 +6,7 @@ import Shared
 
 struct CustomNavigationBarView: View {
 
-    @EnvironmentNavigationNode private var navigationNode: CustomNavigationBarNavigationNode
+    @EnvironmentNavigationModel private var navigationModel: CustomNavigationBarNavigationModel
     @EnvironmentObject private var flagsRepository: FlagsRepository
     @State private var navigationBarBackgroundOpacity: CGFloat = 0
     var inputData: CustomNavigationBarInputData
@@ -68,13 +68,13 @@ struct CustomNavigationBarView: View {
     }
 
     private func hide() {
-        navigationNode.dropLast()
+        navigationModel.dropLast()
     }
 
 }
 
 #Preview {
-    CustomNavigationBarNavigationNode(inputData: CustomNavigationBarInputData())
+    CustomNavigationBarNavigationModel(inputData: CustomNavigationBarInputData())
         .body
         .environmentObject(FlagsRepository())
 }

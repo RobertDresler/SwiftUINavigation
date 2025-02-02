@@ -5,18 +5,18 @@ import ExamplesNavigation
 
 struct HandleNavigationDeepLinkCommand: NavigationCommand {
 
-    func execute(on node: any NavigationNode) {
+    func execute(on model: any NavigationModel) {
         switch deepLink.destination {
         case .subscription(let inputData):
-            let subscriptionNode = SubscriptionNavigationNode(
+            let subscriptionModel = SubscriptionNavigationModel(
                 inputData: inputData,
                 flagsRepository: flagsRepository
             ).onMessageReceived(messageListener)
-            node.execute(.present(.sheet(.stacked(subscriptionNode))))
+            model.execute(.present(.sheet(.stacked(subscriptionModel))))
         }
     }
 
-    func canExecute(on node: any NavigationNode) -> Bool {
+    func canExecute(on model: any NavigationModel) -> Bool {
         true
     }
 
