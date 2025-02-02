@@ -1,14 +1,9 @@
 import SwiftUI
 
-private struct StackNavigationNamespace: EnvironmentKey {
-    static let defaultValue: Namespace.ID? = nil
-}
-
 public extension EnvironmentValues {
-    var stackNavigationNamespace: Namespace.ID? {
-        get { self[StackNavigationNamespace.self] }
-        set { self[StackNavigationNamespace.self] = newValue }
-    }
+    @Entry var stackNavigationNamespace: Namespace.ID?
+    @Entry var registeredCustomPresentableNavigationModels = [any PresentedNavigationModel.Type]()
+    @Entry var navigationEnvironmentTriggerHandler = DefaultNavigationEnvironmentTriggerHandler()
 }
 
 extension View {
@@ -21,38 +16,12 @@ extension View {
             }
         }
     }
-}
 
-private struct RegisteredCustomPresentableNavigationModels: EnvironmentKey {
-    static let defaultValue: [any PresentedNavigationModel.Type] = []
-}
-
-public extension EnvironmentValues {
-    var registeredCustomPresentableNavigationModels: [any PresentedNavigationModel.Type] {
-        get { self[RegisteredCustomPresentableNavigationModels.self] }
-        set { self[RegisteredCustomPresentableNavigationModels.self] = newValue }
-    }
-}
-
-public extension View {
-    func registerCustomPresentableNavigationModels(_ models: [any PresentedNavigationModel.Type]) -> some View {
+    public func registerCustomPresentableNavigationModels(_ models: [any PresentedNavigationModel.Type]) -> some View {
         environment(\.registeredCustomPresentableNavigationModels, models)
     }
-}
 
-private struct NavigationEnvironmentTriggerHandler: EnvironmentKey {
-    static let defaultValue: DefaultNavigationEnvironmentTriggerHandler = DefaultNavigationEnvironmentTriggerHandler()
-}
-
-public extension EnvironmentValues {
-    var navigationEnvironmentTriggerHandler: DefaultNavigationEnvironmentTriggerHandler {
-        get { self[NavigationEnvironmentTriggerHandler.self] }
-        set { self[NavigationEnvironmentTriggerHandler.self] = newValue }
-    }
-}
-
-public extension View {
-    func navigationEnvironmentTriggerHandler(_ handler: DefaultNavigationEnvironmentTriggerHandler) -> some View {
+    public func navigationEnvironmentTriggerHandler(_ handler: DefaultNavigationEnvironmentTriggerHandler) -> some View {
         environment(\.navigationEnvironmentTriggerHandler, handler)
     }
 }
