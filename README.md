@@ -83,7 +83,9 @@ import SwiftUINavigation
 @main
 struct YourApp: App {
 
-    @StateObject private var rootModel = DefaultStackRootNavigationModel(HomeNavigationModel())
+    @StateObject private var rootModel = DefaultStackRootNavigationModel(
+	HomeNavigationModel()
+    )
 
     var body: some Scene {
         WindowGroup {
