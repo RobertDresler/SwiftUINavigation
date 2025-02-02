@@ -186,8 +186,6 @@ To see the framework in action, check out the code in the [Examples App](#Explor
 
 ### RootNavigationView
 
-# RootNavigationView  
-
 The `RootNavigationView` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root `Model`. Avoid nesting one `RootNavigationView` inside another—use it only at the top level.  
 
 The only exception is when integrating `SwiftUINavigation` into an existing project that uses UIKit-based navigation. In this case, `RootNavigationView` allows you to bridge between SwiftUI and UIKit navigation patterns.
