@@ -1,15 +1,12 @@
 import SwiftUI
 import SwiftUINavigation
 import ExamplesNavigation
-import FlagsRepository
 import Shared
 
 struct CustomNavigationBarView: View {
 
     @EnvironmentNavigationModel private var navigationModel: CustomNavigationBarNavigationModel
-    @EnvironmentObject private var flagsRepository: FlagsRepository
     @State private var navigationBarBackgroundOpacity: CGFloat = 0
-    var inputData: CustomNavigationBarInputData
 
     var body: some View {
         scrollView
@@ -74,7 +71,5 @@ struct CustomNavigationBarView: View {
 }
 
 #Preview {
-    CustomNavigationBarNavigationModel(inputData: CustomNavigationBarInputData())
-        .body
-        .environmentObject(FlagsRepository())
+    CustomNavigationBarNavigationModel().body
 }

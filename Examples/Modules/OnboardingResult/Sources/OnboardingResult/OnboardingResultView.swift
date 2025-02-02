@@ -8,9 +8,6 @@ import OnboardingService
 struct OnboardingResultView: View {
 
     @EnvironmentNavigationModel private var navigationModel: OnboardingResultNavigationModel
-    @EnvironmentObject private var flagsRepository: FlagsRepository
-
-    var inputData: OnboardingResultInputData
 
     var body: some View {
         VStack(spacing: 0) {
@@ -62,9 +59,6 @@ struct OnboardingResultView: View {
 
 #Preview {
     OnboardingResultNavigationModel(
-        inputData: OnboardingResultInputData(),
         onboardingService: OnboardingService.makeStub()
-    )
-        .body
-        .environmentObject(FlagsRepository())
+    ).body
 }

@@ -8,8 +8,6 @@ struct WaitingView: View {
 
     @EnvironmentNavigationModel private var navigationModel: WaitingNavigationModel
 
-    var inputData: WaitingInputData
-
     var body: some View {
         VStack(spacing: 0) {
             title
@@ -59,5 +57,5 @@ struct WaitingView: View {
 }
 
 #Preview {
-    WaitingNavigationModel(inputData: WaitingInputData(), flagsRepository: FlagsRepository()).body
+    WaitingNavigationModel(flagsRepository: FlagsRepository()).body
 }

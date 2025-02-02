@@ -13,7 +13,8 @@ public struct SwitchedNavigationModel: ExtensionMacro, MemberMacro, MemberAttrib
         guard let variableDecl = member.as(VariableDeclSyntax.self) else { return commonAttributes }
         let hasExplicitGetter = variableDecl.bindings.contains { $0.accessorBlock != nil }
         let isLetDeclaration = variableDecl.bindingSpecifier.text == "let"
-        guard !hasExplicitGetter, !isLetDeclaration else { return commonAttributes }
+        let isLazy = variableDecl.modifiers.contains { $0.name.text == "lazy" }
+        guard !hasExplicitGetter, !isLetDeclaration, !isLazy else { return commonAttributes }
         return commonAttributes + [AttributeSyntax("@Published")]
     }
 

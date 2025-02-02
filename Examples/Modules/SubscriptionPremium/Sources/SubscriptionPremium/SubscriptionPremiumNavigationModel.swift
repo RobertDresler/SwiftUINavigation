@@ -1,18 +1,24 @@
 import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
+import FlagsRepository
 
 @NavigationModel
 public final class SubscriptionPremiumNavigationModel {
 
-    private let inputData: SubscriptionPremiumInputData
+    lazy var model = SubscriptionPremiumModel(
+        navigationModel: self,
+        flagsRepository: flagsRepository
+    )
 
-    public init(inputData: SubscriptionPremiumInputData) {
-        self.inputData = inputData
+    private let flagsRepository: FlagsRepository
+
+    public init(flagsRepository: FlagsRepository) {
+        self.flagsRepository = flagsRepository
     }
 
     public var body: some View {
-        SubscriptionPremiumView(inputData: inputData)
+        SubscriptionPremiumView(model: model)
     }
 
     func buyMeCoffee() {

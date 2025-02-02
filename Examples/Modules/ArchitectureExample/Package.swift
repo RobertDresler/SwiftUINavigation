@@ -4,12 +4,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "ArchitectureViewOnly",
+    name: "ArchitectureExample",
     platforms: [.iOS(.v16)],
     products: [
         .library(
-            name: "ArchitectureViewOnly",
-            targets: ["ArchitectureViewOnly"]
+            name: "ArchitectureExample",
+            targets: ["ArchitectureExample"]
         ),
     ],
     dependencies: [
@@ -19,7 +19,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ArchitectureViewOnly",
+            name: "ArchitectureExample",
             dependencies: [
                 .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "SwiftUINavigation", package: "SwiftUINavigation"),

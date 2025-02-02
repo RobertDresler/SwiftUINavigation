@@ -5,14 +5,10 @@ import SwiftUI
 @NavigationModel
 public final class CustomNavigationBarNavigationModel {
 
-    private let inputData: CustomNavigationBarInputData
-
-    public init(inputData: CustomNavigationBarInputData) {
-        self.inputData = inputData
-    }
+    public init() {}
 
     public var body: some View {
-        CustomNavigationBarView(inputData: inputData)
+        CustomNavigationBarView()
     }
 
     func dropLast() {

@@ -28,8 +28,8 @@ public final class SubscriptionNavigationModel {
         execute(
             .switchModel(
                 isUserPremium
-                    ? SubscriptionPremiumNavigationModel(inputData: SubscriptionPremiumInputData())
-                    : SubscriptionFreemiumNavigationModel(inputData: SubscriptionFreemiumInputData())
+                    ? SubscriptionPremiumNavigationModel(flagsRepository: flagsRepository)
+                    : SubscriptionFreemiumNavigationModel(flagsRepository: flagsRepository)
             )
         )
     }

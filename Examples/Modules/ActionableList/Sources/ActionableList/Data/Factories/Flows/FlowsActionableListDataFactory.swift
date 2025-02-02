@@ -2,14 +2,19 @@ import SwiftUINavigation
 import ExamplesNavigation
 import Shared
 import SegmentedTabs
-import ArchitectureViewOnly
-import ArchitectureMVVM
-import ArchitectureComposable
 import CustomNavigationBar
+import DeepLinkForwarderService
+import NotificationsService
+import FlagsRepository
+import ArchitectureExample
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct FlowsActionableListDataFactory: ActionableListDataFactory {
 
+    var deepLinkForwarderService: DeepLinkForwarderService
+    var notificationsService: NotificationsService
+    var flagsRepository: FlagsRepository
+    
     func makeTitle() -> String {
         "Flows"
     }
@@ -89,14 +94,14 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
     private var architecturesItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
-                symbolName: "cube.fill",
+                symbolName: "point.topleft.filled.down.to.point.bottomright.curvepath",
                 accentColor: .purple,
-                title: "Architectures",
-                subtitle: "How SwiftUINavigation works with architectures like MVVM or Composable, helping you envision your code structure"
+                title: "Architecture",
+                subtitle: "Starting from SwiftUINavigation 2.0.0, the preferred architecture is MV (Model-View). However, you can still adapt it to fit your needs."
             ),
             makeCommand: {
                 .stackAppend(
-                    ActionableListNavigationModel(inputData: ActionableListInputData(id: .architectures))
+                    ArchitectureExampleNavigationModel(inputData: ArchitectureExampleInputData(initialName: "Anna"))
                 )
             }
         )
@@ -159,7 +164,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 subtitle: "The best way to customize the navigation bar is by creating your own"
             ),
             makeCommand: {
-                .stackAppend(CustomNavigationBarNavigationModel(inputData: CustomNavigationBarInputData()))
+                .stackAppend(CustomNavigationBarNavigationModel())
             }
         )
     }
@@ -178,15 +183,15 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                         tabs: [
                             SegmentedTab(
                                 name: "View Only",
-                                model: ArchitectureViewOnlyNavigationModel(inputData: ArchitectureViewOnlyInputData(initialName: "Anna"))
+                                model: ArchitectureExampleNavigationModel(inputData: ArchitectureExampleInputData(initialName: "Anna"))
                             ),
                             SegmentedTab(
                                 name: "MVVM",
-                                model: ArchitectureMVVMNavigationModel(inputData: ArchitectureMVVMInputData(initialName: "Robert"))
+                                model: ArchitectureExampleNavigationModel(inputData: ArchitectureExampleInputData(initialName: "Robert"))
                             ),
                             SegmentedTab(
                                 name: "Composable",
-                                model: ArchitectureComposableNavigationModel(inputData: ArchitectureComposableInputData(initialName: "Thomas"))
+                                model: ArchitectureExampleNavigationModel(inputData: ArchitectureExampleInputData(initialName: "Thomas"))
                             )
                         ]
                     )

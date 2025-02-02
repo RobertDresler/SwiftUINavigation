@@ -6,9 +6,7 @@ import FlagsRepository
 struct StartView: View {
 
     @EnvironmentNavigationModel private var navigationModel: StartNavigationModel
-    @EnvironmentObject private var flagsRepository: FlagsRepository
-
-    var inputData: StartInputData
+    @ObservedObject var model: StartModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -37,7 +35,7 @@ struct StartView: View {
     }
 
     private var createAccountButton: some View {
-        Button(action: { createAccount() }) {
+        Button(action: { model.createAccount() }) {
             Text("Create Account (Onboarding)")
                 .font(.title3)
                 .bold()
@@ -51,22 +49,12 @@ struct StartView: View {
     }
 
     private var loginButton: some View {
-        Button(action: { login() }) {
+        Button(action: { model.login() }) {
             Text("Already have an account (Login)")
                 .multilineTextAlignment(.center)
                 .frame(height: 48)
                 .frame(maxWidth: .infinity)
         }
-    }
-
-    // MARK: Actions
-
-    private func createAccount() {
-        navigationModel.startOnboarding()
-    }
-
-    private func login() {
-        flagsRepository.isUserLogged = true
     }
 
 }

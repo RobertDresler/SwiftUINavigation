@@ -6,16 +6,14 @@ import FlagsRepository
 @NavigationModel
 public final class WaitingNavigationModel {
 
-    private let inputData: WaitingInputData
     private let flagsRepository: FlagsRepository
 
-    public init(inputData: WaitingInputData, flagsRepository: FlagsRepository) {
-        self.inputData = inputData
+    public init(flagsRepository: FlagsRepository) {
         self.flagsRepository = flagsRepository
     }
 
     public var body: some View {
-        WaitingView(inputData: inputData)
+        WaitingView()
     }
 
     func close() {

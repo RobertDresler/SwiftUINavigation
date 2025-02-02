@@ -10,7 +10,6 @@ struct WaitingWindow: View {
     init(dependencies: Dependencies) {
         self._rootModel = StateObject(
             wrappedValue: WaitingNavigationModel(
-                inputData: WaitingInputData(),
                 flagsRepository: dependencies.flagsRepository
             )
         )

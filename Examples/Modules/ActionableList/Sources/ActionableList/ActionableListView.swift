@@ -10,43 +10,15 @@ struct ActionableListView: View {
 
     @EnvironmentNavigationModel private var navigationModel: ActionableListNavigationModel
     @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackModelNamespace
-    @EnvironmentObject private var flagsRepository: FlagsRepository
-    @EnvironmentObject private var notificationsService: NotificationsService
-    @EnvironmentObject private var deepLinkForwarderService: DeepLinkForwarderService
+    @ObservedObject private var model: ActionableListModel
 
-    var inputData: ActionableListInputData
-    let title: String
-    let subtitle: String?
-    let items: [ActionableListItem]
-
-    init(inputData: ActionableListInputData) {
-        self.inputData = inputData
-        let factory: ActionableListDataFactory = {
-            switch inputData.id {
-            case .commands:
-                CommandsActionableListDataFactory()
-            case .modalsTraditional:
-                ModalsTraditionalActionableListDataFactory()
-            case .modalsSpecial:
-                ModalsSpecialActionableListDataFactory()
-            case .stack:
-                StackActionableListDataFactory()
-            case .urlHandling:
-                URLHandlingActionableListDataFactory()
-            case .flows:
-                FlowsActionableListDataFactory()
-            case .architectures:
-                ArchitecturesActionableListDataFactory()
-            }
-        }()
-        self.title = factory.makeTitle()
-        self.subtitle = factory.makeSubtitle()
-        self.items = factory.makeItems()
+    init(model: ActionableListModel) {
+        self.model = model
     }
 
     var body: some View {
         scrollView
-            .navigationTitle(title)
+            .navigationTitle(model.title)
             .toolbar {
                 if navigationModel.canDismiss {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -54,7 +26,7 @@ struct ActionableListView: View {
                     }
                 }
             }
-            .presentationDetents(inputData.addPresentationDetents ? [.medium, .large] : [])
+            .presentationDetents(model.inputData.addPresentationDetents ? [.medium, .large] : [])
     }
 
     private var dismissButton: some View {
@@ -64,7 +36,7 @@ struct ActionableListView: View {
     private var scrollView: some View {
         ScrollView {
             VStack(spacing: 24) {
-                if let subtitle {
+                if let subtitle = model.subtitle {
                     self.subtitle(for: subtitle)
                 }
                 itemsView
@@ -82,7 +54,7 @@ struct ActionableListView: View {
 
     private var itemsView: some View {
         VStack(spacing: 8) {
-            ForEach(items, id: \.identifiableViewModel.id) { item in
+            ForEach(model.items, id: \.identifiableViewModel.id) { item in
                 if #available(iOS 18.0, *), let wrappedNavigationStackModelNamespace {
                     configuredItemViewWithPresentingNavigationSource(for: item)
                         .matchedTransitionSource(
@@ -114,107 +86,19 @@ struct ActionableListView: View {
     ) -> some View {
         ActionableListItemView(
             viewModel: item.viewModel,
-            action: { handleAction(for: item.id) }
+            action: { model.handleAction(for: item.id) }
         )
     }
 
     // MARK: Actions
 
-    private func handleAction(for itemID: String) {
-        guard let action = items.first(where: { $0.identifiableViewModel.id == itemID })?.action else { return }
-        switch action {
-        case .command(let makeCommand):
-            navigationModel.execute(makeCommand(navigationModel))
-        case .deepLink(let deepLink):
-            deepLinkForwarderService.forwardDeepLink(deepLink)
-        case .custom(let customAction):
-            switch customAction {
-            case .logout(let sourceID):
-                handleLogoutAction(sourceID: sourceID)
-            case .sendNotification:
-                handleSendNotificationAction()
-            case .logoutWithCustomConfirmationDialog:
-                handleLogoutWithCustomConfirmationDialog()
-            case .logoutWithConfirmation:
-                logout()
-            case .printDebugGraph:
-                printDebugGraph()
-            case .lockApp:
-                lockApp()
-            case .openWaitingWindow:
-                openWaitingWindow()
-            }
-        }
-    }
-
-    private func handleLogoutAction(sourceID: String) {
-        Task {
-            guard await navigationModel.confirmLogout(sourceID: sourceID) else { return }
-            logout()
-        }
-    }
-
-    private func logout() {
-        flagsRepository.isUserLogged = false
-    }
-
-    private func handleSendNotificationAction() {
-        Task { @MainActor in
-            switch await notificationsService.getAuthorizationStatus() {
-            case .notDetermined:
-                if await notificationsService.requestAuthorization() {
-                    await sendNotification()
-                } else {
-                    openNotificationSettings()
-                }
-            case .denied, .provisional, .ephemeral:
-                openNotificationSettings()
-            case .authorized:
-                await sendNotification()
-            @unknown default:
-                openNotificationSettings()
-            }
-        }
-    }
-
-    private func openNotificationSettings() {
-        navigationModel.openNotificationSettings()
-    }
-
-    private func sendNotification() async {
-        do {
-            try await notificationsService.sendNotification(
-                title: "Ready for Premium?",
-                body: "Tap here to check out the Subscription screen. Who knows, maybe it's your lucky day for an upgrade!",
-                userInfo: deepLinkForwarderService.userInfo(
-                    for: ExamplesNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
-                )
-            )
-        } catch {
-            print(error)
-        }
-    }
-
-    private func handleLogoutWithCustomConfirmationDialog() {
-        navigationModel.confirmLogoutWithCustomConfirmationDialog(
-            onConfirm: { logout() }
-        )
-    }
-
-    private func printDebugGraph() {
-        navigationModel.printDebugGraph()
-    }
-
-    private func lockApp() {
-        flagsRepository.isAppLocked = true
-    }
-
-    private func openWaitingWindow() {
-        flagsRepository.isWaitingWindowOpen = true
-    }
-
 }
 
 #Preview {
-    ActionableListNavigationModel(inputData: .default).body
+    ActionableListNavigationModel(
+        inputData: .default,
+        deepLinkForwarderService: DeepLinkForwarderService(),
+        notificationsService: NotificationsService(notificationCenter: .current()),
+        flagsRepository: FlagsRepository()
+    ).body
 }

@@ -1,10 +1,17 @@
 import SwiftUINavigation
 import ExamplesNavigation
 import Shared
+import DeepLinkForwarderService
+import NotificationsService
+import FlagsRepository
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct StackActionableListDataFactory: ActionableListDataFactory {
 
+    var deepLinkForwarderService: DeepLinkForwarderService
+    var notificationsService: NotificationsService
+    var flagsRepository: FlagsRepository
+    
     func makeTitle() -> String {
         "Stack"
     }
@@ -32,7 +39,14 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                 title: "Append"
             ),
             makeCommand: {
-                .stackAppend(ActionableListNavigationModel(inputData: .default))
+                .stackAppend(
+                    ActionableListNavigationModel(
+                        inputData: .default,
+                        deepLinkForwarderService: deepLinkForwarderService,
+                        notificationsService: notificationsService,
+                        flagsRepository: flagsRepository
+                    )
+                )
             }
         )
     }
@@ -47,7 +61,12 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackAppend(
-                    ActionableListNavigationModel(inputData: .default),
+                    ActionableListNavigationModel(
+                        inputData: .default,
+                        deepLinkForwarderService: deepLinkForwarderService,
+                        notificationsService: notificationsService,
+                        flagsRepository: flagsRepository
+                    ),
                     animated: false
                 )
             }
@@ -67,7 +86,12 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             makeCommand: {
                 .stackAppend(
                     StackNavigationModel(
-                        destination: ActionableListNavigationModel(inputData: .default),
+                        destination: ActionableListNavigationModel(
+                            inputData: .default,
+                            deepLinkForwarderService: deepLinkForwarderService,
+                            notificationsService: notificationsService,
+                            flagsRepository: flagsRepository
+                        ),
                         transition: .zoom(sourceID: transitionID)
                     )
                 )
@@ -99,7 +123,12 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 .stackSetRoot(
-                    ActionableListNavigationModel(inputData: ActionableListInputData(id: .stack)),
+                    ActionableListNavigationModel(
+                        inputData: ActionableListInputData(id: .stack),
+                        deepLinkForwarderService: deepLinkForwarderService,
+                        notificationsService: notificationsService,
+                        flagsRepository: flagsRepository
+                    ),
                     clear: false
                 )
             }

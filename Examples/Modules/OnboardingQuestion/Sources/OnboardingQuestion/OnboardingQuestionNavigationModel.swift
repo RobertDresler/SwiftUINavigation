@@ -6,6 +6,11 @@ import OnboardingService
 @NavigationModel
 public final class OnboardingQuestionNavigationModel {
 
+    lazy var model = OnboardingQuestionModel(
+        inputData: inputData,
+        navigationModel: self,
+        onboardingService: onboardingService
+    )
     private let inputData: OnboardingQuestionInputData
     private let onboardingService: OnboardingService
 
@@ -15,7 +20,7 @@ public final class OnboardingQuestionNavigationModel {
     }
 
     public var body: some View {
-        OnboardingQuestionView(inputData: inputData)
+        OnboardingQuestionView(model: model)
     }
 
     func continueInOnboarding() {

@@ -9,6 +9,7 @@ import DeepLinkForwarderService
 import OnboardingService
 import LockedApp
 import ExamplesNavigationDeepLinkHandler
+import NotificationsService
 
 @SwitchedNavigationModel
 public final class AppNavigationModel {
@@ -18,15 +19,18 @@ public final class AppNavigationModel {
     private let flagsRepository: FlagsRepository
     private let deepLinkForwarderService: DeepLinkForwarderService
     private let onboardingService: OnboardingService
+    private let notificationsService: NotificationsService
 
     public init(
         flagsRepository: FlagsRepository,
         deepLinkForwarderService: DeepLinkForwarderService,
-        onboardingService: OnboardingService
+        onboardingService: OnboardingService,
+        notificationsService: NotificationsService
     ) {
         self.flagsRepository = flagsRepository
         self.deepLinkForwarderService = deepLinkForwarderService
         self.onboardingService = onboardingService
+        self.notificationsService = notificationsService
     }
 
     public func body(for content: SwitchedNavigationModelView<AppNavigationModel>) -> some View {
@@ -44,9 +48,12 @@ public final class AppNavigationModel {
                     ? MainTabsNavigationModel(
                         inputData: MainTabsInputData(
                             initialTab: .commands
-                        )
+                        ),
+                        deepLinkForwarderService: deepLinkForwarderService,
+                        notificationsService: notificationsService,
+                        flagsRepository: flagsRepository
                     )
-                    : .stacked(StartNavigationModel(inputData: StartInputData(), onboardingService: onboardingService))
+                    : .stacked(StartNavigationModel(flagsRepository: flagsRepository, onboardingService: onboardingService))
             )
         )
     }
@@ -62,7 +69,7 @@ public final class AppNavigationModel {
         if isAppLocked {
             execute(
                 .present(
-                    .fullScreenCover(.stacked(LockedAppNavigationModel(inputData: LockedAppInputData()))),
+                    .fullScreenCover(.stacked(LockedAppNavigationModel(flagsRepository: flagsRepository))),
                     animated: false
                 )
             )

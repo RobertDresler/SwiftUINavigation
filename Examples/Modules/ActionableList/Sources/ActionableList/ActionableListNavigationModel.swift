@@ -2,18 +2,39 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 import CustomConfirmationDialog
+import DeepLinkForwarderService
+import NotificationsService
+import FlagsRepository
 
 @NavigationModel
 public final class ActionableListNavigationModel {
 
+    private lazy var model = ActionableListModel(
+        inputData: inputData,
+        navigationModel: self,
+        deepLinkForwarderService: deepLinkForwarderService,
+        notificationsService: notificationsService,
+        flagsRepository: flagsRepository
+    )
     private let inputData: ActionableListInputData
+    private let deepLinkForwarderService: DeepLinkForwarderService
+    private let notificationsService: NotificationsService
+    private let flagsRepository: FlagsRepository
 
-    public init(inputData: ActionableListInputData) {
+    public init(
+        inputData: ActionableListInputData,
+        deepLinkForwarderService: DeepLinkForwarderService,
+        notificationsService: NotificationsService,
+        flagsRepository: FlagsRepository
+    ) {
         self.inputData = inputData
+        self.deepLinkForwarderService = deepLinkForwarderService
+        self.notificationsService = notificationsService
+        self.flagsRepository = flagsRepository
     }
 
     public var body: some View {
-        ActionableListView(inputData: inputData)
+        ActionableListView(model: model)
     }
 
     func confirmLogout(sourceID: String) async -> Bool {
@@ -44,12 +65,12 @@ public final class ActionableListNavigationModel {
         execute(.openURL(url))
     }
 
-    func confirmLogoutWithCustomConfirmationDialog(onConfirm: @escaping () -> Void) {
+    func presentLogoutWithCustomConfirmationDialog() {
         let model = createLogoutCustomConfirmationDialogNavigationModel()
-            .onMessageReceived { message in
+            .onMessageReceived { [weak self] message in
                 switch message {
                 case _ as CustomConfirmationDialogConfirmationNavigationMessage:
-                    onConfirm()
+                    self?.model.logout()
                 default:
                     break
                 }

@@ -1,9 +1,16 @@
 import SwiftUINavigation
 import ExamplesNavigation
 import Shared
+import DeepLinkForwarderService
+import NotificationsService
+import FlagsRepository
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct CommandsActionableListDataFactory: ActionableListDataFactory {
+
+    var deepLinkForwarderService: DeepLinkForwarderService
+    var notificationsService: NotificationsService
+    var flagsRepository: FlagsRepository
 
     func makeTitle() -> String {
         "Commands"
@@ -113,7 +120,14 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
             makeCommand: {
                 ShowAndHideAfterDelayNavigationCommand(
                     presentedModel: .fullScreenCover(
-                        .stacked(ActionableListNavigationModel(inputData: .default))
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        )
                     ),
                     hideDelay: 2
                 )
@@ -135,7 +149,14 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
 
     private func makeAppendActionableListCommand(for id: ActionableListInputData.ID) -> () -> NavigationCommand {
         {
-            .stackAppend(ActionableListNavigationModel(inputData: ActionableListInputData(id: id)))
+            .stackAppend(
+                ActionableListNavigationModel(
+                    inputData: ActionableListInputData(id: id),
+                    deepLinkForwarderService: deepLinkForwarderService,
+                    notificationsService: notificationsService,
+                    flagsRepository: flagsRepository
+                )
+            )
         }
     }
 

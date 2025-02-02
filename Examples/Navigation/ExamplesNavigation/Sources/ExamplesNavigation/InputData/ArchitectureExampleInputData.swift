@@ -1,4 +1,4 @@
-public struct ArchitectureComposableInputData {
+public struct ArchitectureExampleInputData {
 
     public let initialName: String
 

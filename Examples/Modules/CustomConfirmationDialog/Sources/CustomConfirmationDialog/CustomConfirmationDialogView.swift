@@ -6,8 +6,7 @@ import Shared
 struct CustomConfirmationDialogView: View {
 
     @EnvironmentNavigationModel private var navigationModel: CustomConfirmationDialogNavigationModel
-
-    var inputData: CustomConfirmationDialogInputData
+    @ObservedObject var model: CustomConfirmationDialogModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,7 +31,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var title: some View {
-        Text(inputData.title)
+        Text(model.inputData.title)
             .font(.largeTitle)
             .bold()
             .frame(maxWidth: .infinity, alignment: .center)
@@ -40,7 +39,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var message: some View {
-        Text(inputData.message)
+        Text(model.inputData.message)
             .font(.title2)
             .frame(maxWidth: .infinity, alignment: .center)
             .multilineTextAlignment(.center)
@@ -48,15 +47,13 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var confirmButton: some View {
-        PrimaryButton(title: inputData.confirmButtonTitle, action: { sendConfirmationMessage() })
+        PrimaryButton(
+            title: model.inputData.confirmButtonTitle,
+            action: { model.confirm() }
+        )
     }
 
     // MARK: Actions
-
-    private func sendConfirmationMessage() {
-        navigationModel.sendConfirmationMessage()
-        dismiss()
-    }
 
     private func dismiss() {
         navigationModel.dismiss()

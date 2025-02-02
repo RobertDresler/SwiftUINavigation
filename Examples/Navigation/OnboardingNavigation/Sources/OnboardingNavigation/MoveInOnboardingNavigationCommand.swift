@@ -19,10 +19,9 @@ public struct MoveInOnboardingNavigationCommand: NavigationCommand {
                     onboardingService: onboardingService
                 )
             ).execute(on: model)
-        case .result(let inputData):
+        case .result:
             StackAppendNavigationCommand(
                 appendedModel: OnboardingResultNavigationModel(
-                    inputData: inputData,
                     onboardingService: onboardingService
                 )
             ).execute(on: model)

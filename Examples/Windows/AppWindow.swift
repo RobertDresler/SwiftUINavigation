@@ -17,7 +17,8 @@ struct AppWindow: View {
             wrappedValue: AppNavigationModel(
                 flagsRepository: dependencies.flagsRepository,
                 deepLinkForwarderService: dependencies.deepLinkForwarderService,
-                onboardingService: dependencies.onboardingService
+                onboardingService: dependencies.onboardingService,
+                notificationsService: dependencies.notificationsService
             )
         )
     }

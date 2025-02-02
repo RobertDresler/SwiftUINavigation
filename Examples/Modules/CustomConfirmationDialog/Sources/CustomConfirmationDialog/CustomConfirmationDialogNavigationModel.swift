@@ -5,6 +5,11 @@ import SwiftUI
 @NavigationModel
 public final class CustomConfirmationDialogNavigationModel {
 
+    lazy var model = CustomConfirmationDialogModel(
+        inputData: inputData,
+        navigationModel: self
+    )
+
     private let inputData: CustomConfirmationDialogInputData
 
     public init(inputData: CustomConfirmationDialogInputData) {
@@ -12,11 +17,7 @@ public final class CustomConfirmationDialogNavigationModel {
     }
 
     public var body: some View {
-        CustomConfirmationDialogView(inputData: inputData)
-    }
-
-    func sendConfirmationMessage() {
-        sendMessage(CustomConfirmationDialogConfirmationNavigationMessage())
+        CustomConfirmationDialogView(model: model)
     }
 
     func dismiss() {

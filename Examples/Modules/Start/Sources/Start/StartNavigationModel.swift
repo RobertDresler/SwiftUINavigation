@@ -2,20 +2,25 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 import OnboardingService
+import FlagsRepository
 
 @NavigationModel
 public final class StartNavigationModel {
 
-    private let inputData: StartInputData
+    lazy var model = StartModel(
+        navigationModel: self,
+        flagsRepository: flagsRepository
+    )
+    private let flagsRepository: FlagsRepository
     private let onboardingService: OnboardingService
 
-    public init(inputData: StartInputData, onboardingService: OnboardingService) {
-        self.inputData = inputData
+    public init(flagsRepository: FlagsRepository, onboardingService: OnboardingService) {
+        self.flagsRepository = flagsRepository
         self.onboardingService = onboardingService
     }
 
     public var body: some View {
-        StartView(inputData: inputData)
+        StartView(model: model)
     }
 
     func startOnboarding() {
