@@ -5,19 +5,19 @@ import ExamplesNavigation
 
 struct WaitingWindow: View {
 
-    @ObservedObject private var rootNode: WaitingNavigationNode
-    var dependencies: Dependencies
+    @StateObject private var rootNode: WaitingNavigationNode
 
     init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-        self.rootNode = WaitingNavigationNode(
-            inputData: WaitingInputData(),
-            flagsRepository: dependencies.flagsRepository
+        self._rootNode = StateObject(
+            wrappedValue: WaitingNavigationNode(
+                inputData: WaitingInputData(),
+                flagsRepository: dependencies.flagsRepository
+            )
         )
     }
 
     var body: some View {
-        NavigationWindow(rootNode: rootNode)
+        RootNavigationView(rootNode: rootNode)
     }
 
 }

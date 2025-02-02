@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct NavigationWindow<Node: NavigationNode>: View {
+public struct RootNavigationView<Node: NavigationNode>: View {
 
     @ObservedObject private var rootNode: Node
 

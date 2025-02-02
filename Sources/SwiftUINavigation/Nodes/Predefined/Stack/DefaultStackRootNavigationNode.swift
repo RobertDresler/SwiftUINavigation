@@ -6,17 +6,37 @@ public final class DefaultStackRootNavigationNode {
     public var stackNodes: [StackNavigationNode]
     public var tabBarToolbarBehavior: StackTabBarToolbarBehavior
 
-    public init(stackNodes: [StackNavigationNode], tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic) {
+    public init(_ stackNodes: [StackNavigationNode], tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic) {
         self.stackNodes = stackNodes
         self.tabBarToolbarBehavior = tabBarToolbarBehavior
     }
 
     public convenience init(
-        stackNodes: [any NavigationNode],
+        _ stackNodes: [any NavigationNode],
         tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
     ) {
         self.init(
-            stackNodes: stackNodes.map { StackNavigationNode(destination: $0) },
+            stackNodes.map { StackNavigationNode(destination: $0) },
+            tabBarToolbarBehavior: tabBarToolbarBehavior
+        )
+    }
+
+    public convenience init(
+        _ stackNode: StackNavigationNode,
+        tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
+    ) {
+        self.init(
+            [stackNode],
+            tabBarToolbarBehavior: tabBarToolbarBehavior
+        )
+    }
+
+    public convenience init(
+        _ stackNode: any NavigationNode,
+        tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
+    ) {
+        self.init(
+            [stackNode],
             tabBarToolbarBehavior: tabBarToolbarBehavior
         )
     }
