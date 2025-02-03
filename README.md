@@ -32,11 +32,13 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 
 ## Core Idea - `NavigationModel` 
 
-In SwiftUI, State/Model/ViewModel serves as the single source of truth for the view's content. This framework separates the state of the navigation into separate model called `NavigationModel`.
+In SwiftUI, `State`/`Model`/`ViewModel` serves as the single source of truth for the view's content. This framework separates the state of navigation into a dedicated model called `NavigationModel`.
 
-Think of it as a screen/module or what you might know as a coordinator. These `NavigationModel`s form a navigation graph. Each model stores its state within itself using `@Published` properties. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedModel`, view for the new `presentedModel` is presented. This `NavigationModel` is also responsible for providing its screen's content in `body` which is then provided to view hierarchy by framework internally.
- 
-Here is a diagram explaining the relationships when using `SwiftUINavigation` along with MVVM or MV architecture patterns  
+Think of it as a screen/module or what you might recognize as a coordinator. These `NavigationModels` form a navigation graph, where each `NavigationNodel` maintains its own state using `@Published` properties. This state is rendered using native SwiftUI mechanisms, and when the state changes, navigation occurs. 
+
+For example, when you update `presentedModel`, the corresponding view for the new `presentedModel` is presented. The `NavigationModel` is also responsible for providing the screen's content within its `body`, which is then integrated into the view hierarchy by the framework.
+
+Below is a diagram illustrating the relationships between components when using `SwiftUINavigation` alongside MVVM or MV architecture patterns:
 
 ![](READMEAssets/relationships.png)
 
