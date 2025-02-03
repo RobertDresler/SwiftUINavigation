@@ -17,7 +17,7 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 - ✅ Built on native SwiftUI components, leveraging state-driven architecture in the background
 - ✅ Clearly separates the navigation and presentation layers
 - ✅ Perfect for everything from simple apps to large-scale projects
-- ✅ The preferred architecture is MV (Model-View), however, you can still adapt it to fit your needs – is even compatible with TCA ([See Examples app](#Explore-Examples-App))
+- ✅ You can choose any architecture that fits your needs—MV, MVVM, or even TCA
 - ✅ Fully customizable to fit your specific needs
 - ✅ Inspired by the well-known Coordinator pattern but without the hassle of manually managing parent-child relationships
 - ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
@@ -32,13 +32,11 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 
 ## Core Idea - `NavigationModel` 
 
-In MV (Model-View) architecture, `Model` serves as the single source of truth and is also responsible for handling actions. This framework separates navigation and presentation state into two different models—one as you know it from `MV` (where you can use either `ObservableObject` or the `@Observable` macro), and a second, new model responsible for navigation called `NavigationModel`.  
+In SwiftUI, State/Model/ViewModel serves as the single source of truth for the view's content. This framework separates the state of the navigation into separate model called `NavigationModel`.
 
-Think of it as a screen/module or what you might know as a coordinator. These `NavigationModel`s form a navigation graph. Each model stores its state within itself using `@Published` properties. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedModel`, the new `Model` is presented.  
-
-It is recommended to store the classic view's `Model` inside the `NavigationModel`. This allows for a two-way binding between `Model` and `NavigationModel`—[see example below](#Explore-on-Your-Own).  
+Think of it as a screen/module or what you might know as a coordinator. These `NavigationModel`s form a navigation graph. Each model stores its state within itself using `@Published` properties. This state is rendered using native SwiftUI mechanisms. When the state changes, navigation occurs. For example, when you change the `presentedModel`, view for the new `presentedModel` is presented. This `NavigationModel` is also responsible for providing its screen's content in `body` which is then provided to view hierarchy by framework internally.
  
-Here is a diagram explaining the relationships between `Model`, `NavigationModel`, child `NavigationModel`s, and `View`:  
+Here is a diagram explaining the relationships when using `SwiftUINavigation` along with MVVM or MV architecture patterns  
 
 ![](READMEAssets/relationships.png)
 
@@ -76,6 +74,8 @@ To get started, first add the package to your project:
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
+#### MVVM
+
 ```swift
 import SwiftUI
 import SwiftUINavigation
@@ -83,13 +83,13 @@ import SwiftUINavigation
 @main
 struct YourApp: App {
 
-    @StateObject private var rootModel = DefaultStackRootNavigationModel(
+    @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(
 	HomeNavigationModel()
     )
 
     var body: some Scene {
         WindowGroup {
-            RootNavigationView(rootModel: rootModel)
+            RootNavigationView(rootModel: rootNavigationModel)
         }
     }
 
@@ -98,7 +98,7 @@ struct YourApp: App {
 @NavigationModel
 final class HomeNavigationModel {
 
-    private lazy var model = HomeModel(navigationModel: self)
+    private lazy var model = HomeViewModel(navigationModel: self)
 
     var body: some View {
         HomeView(model: model)
@@ -119,7 +119,7 @@ final class HomeNavigationModel {
 
 }
 
-@MainActor class HomeModel: ObservableObject {
+@MainActor class HomeViewModel: ObservableObject {
 
     @Published var dismissalCount = 0
     private unowned let navigationModel: HomeNavigationModel
@@ -134,7 +134,7 @@ final class HomeNavigationModel {
 struct HomeView: View {
 
     @EnvironmentNavigationModel private var navigationModel: HomeNavigationModel
-    @ObservedObject var model: HomeModel
+    @ObservedObject var model: HomeViewModel
 
     var body: some View {
         VStack {
@@ -151,7 +151,7 @@ struct HomeView: View {
 @NavigationModel
 final class DetailNavigationModel {
 
-    private lazy var model = DetailModel(navigationModel: self)
+    private lazy var model = DetailViewModel(navigationModel: self)
 
     var body: some View {
         DetailView(model: model)
@@ -159,7 +159,7 @@ final class DetailNavigationModel {
 
 }
 
-@MainActor class DetailModel: ObservableObject {
+@MainActor class DetailViewModel: ObservableObject {
 
     private unowned let navigationModel: DetailNavigationModel
 
@@ -172,14 +172,97 @@ final class DetailNavigationModel {
 struct DetailView: View {
 
     @EnvironmentNavigationModel private var navigationModel: DetailNavigationModel
-    @ObservedObject var model: DetailModel
+    @ObservedObject var model: DetailViewModel
 
     var body: some View {
         Text("Hello world from Detail!")
     }
 
 }
+```
 
+#### MV
+
+```swift
+import SwiftUI
+import SwiftUINavigation
+
+@main
+struct YourApp: App {
+
+    @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(
+        HomeNavigationModel()
+    )
+
+    var body: some Scene {
+        WindowGroup {
+            RootNavigationView(rootModel: rootNavigationModel)
+        }
+    }
+
+}
+
+@NavigationModel
+final class HomeNavigationModel {
+
+    var body: some View {
+        HomeView()
+    }
+
+    func showDetail(onRemoval: @escaping () -> Void) {
+        let detailNavigationModel = DetailNavigationModel()
+            .onMessageReceived { message in
+                switch message {
+                case _ as RemovalNavigationMessage:
+                    onRemoval()
+                default:
+                    break
+                }
+            }
+        execute(.present(.sheet(.stacked(detailNavigationModel))))
+    }
+
+}
+
+struct HomeView: View {
+
+    @EnvironmentNavigationModel private var navigationModel: HomeNavigationModel
+    @State private var dismissalCount = 0
+
+    var body: some View {
+        VStack {
+            Text("Hello, World from Home!")
+            Text("Detail dismissal count: \(dismissalCount)")
+            Button(action: { showDetail() }) {
+                Text("Go to Detail")
+            }
+        }
+    }
+
+    func showDetail() {
+        navigationModel.showDetail(onRemoval: { dismissalCount += 1 })
+    }
+
+}
+
+@NavigationModel
+final class DetailNavigationModel {
+
+    var body: some View {
+        DetailView()
+    }
+
+}
+
+struct DetailView: View {
+
+    @EnvironmentNavigationModel private var navigationModel: DetailNavigationModel
+
+    var body: some View {
+        Text("Hello world from Detail!")
+    }
+
+}
 ```
 
 ## Documentation
@@ -188,7 +271,7 @@ To see the framework in action, check out the code in the [Examples App](#Explor
 
 ### RootNavigationView
 
-The `RootNavigationView` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root `Model`. Avoid nesting one `RootNavigationView` inside another—use it only at the top level.  
+The `RootNavigationView` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root `NavigationModel`. Avoid nesting one `RootNavigationView` inside another—use it only at the top level.  
 
 The only exception is when integrating `SwiftUINavigation` into an existing project that uses UIKit-based navigation. In this case, `RootNavigationView` allows you to bridge between SwiftUI and UIKit navigation patterns.
 
@@ -198,11 +281,11 @@ The root model should be created using the `@StateObject` property wrapper, for 
 @main
 struct YourApp: App {
 
-    @StateObject private var rootModel = DefaultStackRootNavigationModel(HomeNavigationModel())
+    @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(HomeNavigationModel())
 
     var body: some Scene {
         WindowGroup {
-            RootNavigationView(rootModel: rootModel)
+            RootNavigationView(rootModel: rootNavigationModel)
         }
     }
 
@@ -211,19 +294,19 @@ struct YourApp: App {
 
 ### NavigationModel
 
-A `NavigationModel` represents a single model in the navigation graph, similar to what you might know as a Coordinator or Router. The best practice is to have one `NavigationModel` for each module or screen.  
-
-A `NavigationModel` manages the navigation layer of your app alongside the class model from MV, referred to here as `Model`. Together, they form the navigation and presentation layer of your module.
+A `NavigationModel` represents a single model in the navigation graph, similar to what you might know as a Coordinator or Router. You typically have one `NavigationModel` for each module or screen. A `NavigationModel` manages the navigation state for the certain module.
 
 In `body`, you return the implementation of your module’s view.
 
 The minimal working example is shown below. If you support iOS 17+, `YourModel` can use the `@Observable` macro instead. In that case, you would assign it as an environment value in `body` rather than passing it in the initializer.
 
+**MVVM:**
+
 ```swift
 @NavigationModel
 final class YourNavigationModel {
 
-    private lazy var model = YourModel(navigationModel: self)
+    private lazy var model = YourViewModel(navigationModel: self)
 
     var body: some View {
         YourView(model: model)
@@ -231,7 +314,7 @@ final class YourNavigationModel {
 
 }
 
-@MainActor class YourModel: ObservableObject {
+@MainActor class YourViewModel: ObservableObject {
 
     private unowned let navigationModel: YourNavigationModel
 
@@ -244,7 +327,30 @@ final class YourNavigationModel {
 struct YourView: View {
 
     @EnvironmentNavigationModel private var navigationModel: YourNavigationModel
-    @ObservedObject var model: YourModel
+    @ObservedObject var model: YourViewModel
+
+    var body: some View {
+        Text("Hello, World from Your Module!")
+    }
+
+}
+```
+
+**MV:**
+
+```swift
+@NavigationModel
+final class YourNavigationModel {
+
+    var body: some View {
+        YourView()
+    }
+
+}
+
+struct YourView: View {
+
+    @EnvironmentNavigationModel private var navigationModel: YourNavigationModel
 
     var body: some View {
         Text("Hello, World from Your Module!")
@@ -361,11 +467,11 @@ final class AppNavigationModel {
   @main
   struct YourApp: App {
 
-      @StateObject private var rootModel = DefaultStackRootNavigationModel(HomeNavigationModel())
+      @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(HomeNavigationModel())
 
       var body: some Scene {
           WindowGroup {
-              RootNavigationView(rootModel: rootModel)
+              RootNavigationView(rootModel: rootNavigationModel)
           }
       }
 
