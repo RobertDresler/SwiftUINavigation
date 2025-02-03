@@ -69,12 +69,12 @@ I highly recommend starting by exploring the Examples app. The app features many
 
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.0.0`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.0.0")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.0.1`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.0.1")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
-#### MVVM
+**MVVM:**
 
 ```swift
 import SwiftUI
@@ -98,10 +98,10 @@ struct YourApp: App {
 @NavigationModel
 final class HomeNavigationModel {
 
-    private lazy var model = HomeViewModel(navigationModel: self)
+    private lazy var viewModel = HomeViewModel(navigationModel: self)
 
     var body: some View {
-        HomeView(model: model)
+        HomeView(viewModel: viewModel)
     }
 
     func showDetail() {
@@ -109,7 +109,7 @@ final class HomeNavigationModel {
             .onMessageReceived { [weak self] message in
                 switch message {
                 case _ as RemovalNavigationMessage:
-                    self?.model.dismissalCount += 1
+                    self?.viewModel.dismissalCount += 1
                 default:
                     break
                 }
@@ -134,12 +134,12 @@ final class HomeNavigationModel {
 struct HomeView: View {
 
     @EnvironmentNavigationModel private var navigationModel: HomeNavigationModel
-    @ObservedObject var model: HomeViewModel
+    @ObservedObject var viewModel: HomeViewModel
 
     var body: some View {
         VStack {
             Text("Hello, World from Home!")
-            Text("Detail dismissal count: \(model.dismissalCount)")
+            Text("Detail dismissal count: \(viewModel.dismissalCount)")
             Button(action: { navigationModel.showDetail() }) {
                 Text("Go to Detail")
             }
@@ -151,10 +151,10 @@ struct HomeView: View {
 @NavigationModel
 final class DetailNavigationModel {
 
-    private lazy var model = DetailViewModel(navigationModel: self)
+    private lazy var viewModel = DetailViewModel(navigationModel: self)
 
     var body: some View {
-        DetailView(model: model)
+        DetailView(viewModel: viewModel)
     }
 
 }
@@ -172,7 +172,7 @@ final class DetailNavigationModel {
 struct DetailView: View {
 
     @EnvironmentNavigationModel private var navigationModel: DetailNavigationModel
-    @ObservedObject var model: DetailViewModel
+    @ObservedObject var viewModel: DetailViewModel
 
     var body: some View {
         Text("Hello world from Detail!")
@@ -181,7 +181,7 @@ struct DetailView: View {
 }
 ```
 
-#### MV
+**MV:**
 
 ```swift
 import SwiftUI
@@ -306,10 +306,10 @@ The minimal working example is shown below. If you support iOS 17+, `YourModel` 
 @NavigationModel
 final class YourNavigationModel {
 
-    private lazy var model = YourViewModel(navigationModel: self)
+    private lazy var viewModel = YourViewModel(navigationModel: self)
 
     var body: some View {
-        YourView(model: model)
+        YourView(viewModel: viewModel)
     }
 
 }
@@ -327,7 +327,7 @@ final class YourNavigationModel {
 struct YourView: View {
 
     @EnvironmentNavigationModel private var navigationModel: YourNavigationModel
-    @ObservedObject var model: YourViewModel
+    @ObservedObject var viewModel: YourViewModel
 
     var body: some View {
         Text("Hello, World from Your Module!")

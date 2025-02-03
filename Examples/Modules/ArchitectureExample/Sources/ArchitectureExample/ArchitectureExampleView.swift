@@ -6,7 +6,7 @@ import Shared
 struct ArchitectureExampleView: View {
 
     @EnvironmentNavigationModel private var navigationModel: ArchitectureExampleNavigationModel
-    @ObservedObject var model: ArchitectureExampleModel
+    @ObservedObject var viewModel: ArchitectureExampleViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,12 +20,12 @@ struct ArchitectureExampleView: View {
 
     private var nameEditor: some View {
         CustomTextEditor(
-            text: $model.name
+            text: $viewModel.name
         )
     }
 
     private var saveButton: some View {
-        PrimaryButton(title: "Save", action: { model.save() })
+        PrimaryButton(title: "Save", action: { viewModel.save() })
     }
 
 }

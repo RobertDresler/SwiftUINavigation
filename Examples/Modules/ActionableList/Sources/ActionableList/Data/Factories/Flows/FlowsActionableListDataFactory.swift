@@ -97,7 +97,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 symbolName: "point.topleft.filled.down.to.point.bottomright.curvepath",
                 accentColor: .purple,
                 title: "Architecture",
-                subtitle: "Starting from SwiftUINavigation 2.0.0, the preferred architecture is MV (Model-View). However, you can still adapt it to fit your needs."
+                subtitle: "You can choose any architecture that fits your needs—MV, MVVM, or even TCA - this flow shows MVVM architecture (see code)"
             ),
             makeCommand: {
                 .stackAppend(

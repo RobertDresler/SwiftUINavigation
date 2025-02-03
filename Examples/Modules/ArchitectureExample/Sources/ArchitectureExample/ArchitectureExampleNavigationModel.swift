@@ -5,7 +5,7 @@ import SwiftUI
 @NavigationModel
 public final class ArchitectureExampleNavigationModel {
 
-    lazy var model = ArchitectureExampleModel(
+    lazy var viewModel = ArchitectureExampleViewModel(
         inputData: inputData,
         navigationModel: self
     )
@@ -17,7 +17,7 @@ public final class ArchitectureExampleNavigationModel {
     }
 
     public var body: some View {
-        ArchitectureExampleView(model: model)
+        ArchitectureExampleView(viewModel: viewModel)
     }
 
     func hide() {

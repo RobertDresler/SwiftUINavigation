@@ -29,9 +29,6 @@
 			membershipExceptions = (
 				Info.plist,
 				Modules/App,
-				Modules/ArchitectureComposable,
-				Modules/ArchitectureMVVM,
-				Modules/ArchitectureViewOnly,
 				Modules/CustomConfirmationDialog,
 				Modules/CustomNavigationBar,
 				Modules/LockedApp,

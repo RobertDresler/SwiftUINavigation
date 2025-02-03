@@ -2,7 +2,7 @@ import SwiftUINavigation
 import ExamplesNavigation
 import SwiftUI
 
-@MainActor final class ArchitectureExampleModel: ObservableObject {
+@MainActor final class ArchitectureExampleViewModel: ObservableObject {
 
     @Published var name: String
     private unowned let navigationModel: ArchitectureExampleNavigationModel
