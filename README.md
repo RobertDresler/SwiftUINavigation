@@ -732,7 +732,7 @@ If you want to customize the handler (e.g., sending a custom trigger), subclass 
 <details>
 <summary>Click here to see more 👈</summary>
 
-When creating a custom wrapper view, like in [`SegmentedTabsNavigationModel` in the Examples App](#Explore-Examples-App), use `NavigationModelResolvedView` to display the Model within the view hierarchy (this is e.g. how `DefaultStackRootNavigationModel` works internally).
+When creating a custom container view, like in [`SegmentedTabsNavigationModel` in the Examples App](#Explore-Examples-App), use `NavigationModelResolvedView` to display the Model within the view hierarchy (this is e.g. how `DefaultStackRootNavigationModel` works internally).
 
 </details>
 
