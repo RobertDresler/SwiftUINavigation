@@ -9,6 +9,11 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 
 If you find this repository helpful, feel free to give it a ⭐ or share it with your colleagues 👩‍💻👨‍💻 to help grow the community of developers using this framework!
 
+- [Features](#Features)
+- [Core Idea - `NavigationModel`](#core-idea---navigationmodel)
+- [Getting Started](#Getting-Started)
+- [Documentation](#Documentation)
+
 ---------
 
 ## Features
