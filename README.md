@@ -567,19 +567,31 @@ This approach also allows for custom implementations, such as a photo picker. To
 
 ```swift
 @NavigationModel
-final class HomeNavigationModel {
+final class ProfileNavigationModel {
 
     ...
 
-    func showDetail() {
-	// Present fullScreenCover
-        execute(.present(.fullScreenCover(.stacked(DetailNavigationModel()))))
+    func showEditor() {
+        // Present fullScreenCover
+        execute(.present(.fullScreenCover(.stacked(ProfileEditorNavigationModel()))))
         // Present sheet
-        execute(.present(.sheet(.stacked(DetailNavigationModel()))))
-        // Present sheet with detail and pushed detail editor
-        execute(.present(.sheet(.stacked([DetailNavigationModel(), DetailEditorNavigationModel()])))
+        execute(.present(.sheet(.stacked(ProfileEditorNavigationModel()))))
+        // Present sheet with editor and pushed connected services detail from the editor
+        execute(.present(.sheet(.stacked([ProfileEditorNavigationModel(), ConnectedServicesDetailNavigationModel()])))
         // Present not wrapped in stack
         execute(.present(.sheet(SFSafariNavigationModel(...))))
+    }
+
+}
+
+struct ProfileView: View {
+
+    @EnvironmentNavigationModel private var navigationModel: ProfileNavigationModel
+
+    var body: some View {
+        Button("Show editor") {
+            navigationModel.showEditor()
+        }
     }
 
 }
