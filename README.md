@@ -16,6 +16,7 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 - ✅ Handles both simple concepts, like presenting/stack navigation, and complex concepts, such as content-driven (deep linking) and step-by-step navigation ([See Examples app](#Explore-Examples-App))
 - ✅ Built on native SwiftUI components, leveraging state-driven architecture in the background
 - ✅ Clearly separates the navigation and presentation layers
+- ✅ Compatible with modular architecture
 - ✅ Perfect for everything from simple apps to large-scale projects
 - ✅ You can choose any architecture that fits your needs—MV, MVVM, or even TCA
 - ✅ Fully customizable to fit your specific needs
