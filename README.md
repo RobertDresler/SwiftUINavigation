@@ -24,7 +24,7 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 - ✅ Compatible with modular architecture
 - ✅ Perfect for everything from simple apps to large-scale projects
 - ✅ You can choose any architecture that fits your needs—MV, MVVM, or even TCA
-- ✅ Fully customizable to fit your specific needs
+- ✅ Fully customizable and extendable to fit your specific needs
 - ✅ Inspired by the well-known Coordinator pattern but without the hassle of manually managing parent-child relationships
 - ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
 - ✅ Supports iPad as well – optimized for multi-window experiences 
