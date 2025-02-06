@@ -82,7 +82,97 @@ To get started, first add the package to your project:
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
-**MVVM:**
+**MV**
+<details>
+<summary>Click to view the example code 👈</summary>
+
+```swift
+import SwiftUI
+import SwiftUINavigation
+
+@main
+struct YourApp: App {
+
+    @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(
+        HomeNavigationModel()
+    )
+
+    var body: some Scene {
+        WindowGroup {
+            RootNavigationView(rootModel: rootNavigationModel)
+        }
+    }
+
+}
+
+@NavigationModel
+final class HomeNavigationModel {
+
+    var body: some View {
+        HomeView()
+    }
+
+    func showDetail(onRemoval: @escaping () -> Void) {
+        let detailNavigationModel = DetailNavigationModel()
+            .onMessageReceived { message in
+                switch message {
+                case _ as RemovalNavigationMessage:
+                    onRemoval()
+                default:
+                    break
+                }
+            }
+        execute(.present(.sheet(.stacked(detailNavigationModel))))
+    }
+
+}
+
+struct HomeView: View {
+
+    @EnvironmentNavigationModel private var navigationModel: HomeNavigationModel
+    @State private var dismissalCount = 0
+
+    var body: some View {
+        VStack {
+            Text("Hello, World from Home!")
+            Text("Detail dismissal count: \(dismissalCount)")
+            Button(action: { showDetail() }) {
+                Text("Go to Detail")
+            }
+        }
+    }
+
+    func showDetail() {
+        navigationModel.showDetail(onRemoval: { dismissalCount += 1 })
+    }
+
+}
+
+@NavigationModel
+final class DetailNavigationModel {
+
+    var body: some View {
+        DetailView()
+    }
+
+}
+
+struct DetailView: View {
+
+    @EnvironmentNavigationModel private var navigationModel: DetailNavigationModel
+
+    var body: some View {
+        Text("Hello world from Detail!")
+    }
+
+}
+```
+
+</details>
+
+**MVVM**
+<details>
+<summary>Click to view the example code 👈</summary>
 
 ```swift
 import SwiftUI
@@ -189,96 +279,15 @@ struct DetailView: View {
 }
 ```
 
-**MV:**
-
-```swift
-import SwiftUI
-import SwiftUINavigation
-
-@main
-struct YourApp: App {
-
-    @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(
-        HomeNavigationModel()
-    )
-
-    var body: some Scene {
-        WindowGroup {
-            RootNavigationView(rootModel: rootNavigationModel)
-        }
-    }
-
-}
-
-@NavigationModel
-final class HomeNavigationModel {
-
-    var body: some View {
-        HomeView()
-    }
-
-    func showDetail(onRemoval: @escaping () -> Void) {
-        let detailNavigationModel = DetailNavigationModel()
-            .onMessageReceived { message in
-                switch message {
-                case _ as RemovalNavigationMessage:
-                    onRemoval()
-                default:
-                    break
-                }
-            }
-        execute(.present(.sheet(.stacked(detailNavigationModel))))
-    }
-
-}
-
-struct HomeView: View {
-
-    @EnvironmentNavigationModel private var navigationModel: HomeNavigationModel
-    @State private var dismissalCount = 0
-
-    var body: some View {
-        VStack {
-            Text("Hello, World from Home!")
-            Text("Detail dismissal count: \(dismissalCount)")
-            Button(action: { showDetail() }) {
-                Text("Go to Detail")
-            }
-        }
-    }
-
-    func showDetail() {
-        navigationModel.showDetail(onRemoval: { dismissalCount += 1 })
-    }
-
-}
-
-@NavigationModel
-final class DetailNavigationModel {
-
-    var body: some View {
-        DetailView()
-    }
-
-}
-
-struct DetailView: View {
-
-    @EnvironmentNavigationModel private var navigationModel: DetailNavigationModel
-
-    var body: some View {
-        Text("Hello world from Detail!")
-    }
-
-}
-```
+</details>
 
 ## Documentation
 
 To see the framework in action, check out the code in the [Examples App](#Explore-Examples-App). If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
 
 ### RootNavigationView
-
+<details>
+<summary>Click here to see more 👈</summary>
 The `RootNavigationView` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root `NavigationModel`. Avoid nesting one `RootNavigationView` inside another—use it only at the top level.  
 
 The only exception is when integrating `SwiftUINavigation` into an existing project that uses UIKit-based navigation. In this case, `RootNavigationView` allows you to bridge between SwiftUI and UIKit navigation patterns.
@@ -299,8 +308,11 @@ struct YourApp: App {
 
 }
 ```
+</details>
 
 ### NavigationModel
+<details>
+<summary>Click here to see more 👈</summary>
 
 A `NavigationModel` represents a single model in the navigation graph, similar to what you might know as a Coordinator or Router. You typically have one `NavigationModel` for each module or screen. A `NavigationModel` manages the navigation state for the certain module.
 
@@ -497,12 +509,20 @@ final class AppNavigationModel {
   
 - **`SFSafariNavigationModel`**  
   A Model that opens a URL in an in-app browser.
+
+</details>
   
 ### NavigationModel's State
+<details>
+<summary>Click here to see more 👈</summary>
 
 Each Model maintains its state as `@Published` properties inside `NavigationModel`. By using any of the navigation Model macros, all settable properties (`var`) that are not lazy are automatically marked with the `@Published` property wrapper, allowing you to observe these changes inside the `body`.
 
+</details>
+
 ### NavigationCommand
+<details>
+<summary>Click here to see more 👈</summary>
 
 To perform common navigation actions like append, present, or dismiss, you need to modify the navigation state. In the framework, this is handled using `NavigationCommand`s. These commands allow you to dynamically update the state to reflect the desired navigation flow. Many commands are already predefined within the framework (see [Examples App](#Explore-Examples-App)).
 
@@ -563,7 +583,11 @@ final class HomeNavigationModel {
 
 The framework is designed to allow you to easily create your own commands as well (see [Examples App](#Explore-Examples-App)).
 
+</details>
+
 ### PresentedNavigationModel
+<details>
+<summary>Click here to see more 👈</summary>
 
 Since presenting views using native mechanisms requires separate view modifiers, this could lead to unintended scenarios where `fullScreenCover`, `sheet`, and `alert` are presented simultaneously (or at least this is what your declaration looks like). To address this, I introduced the concept of `PresentedNavigationModel`. Each `NavigationModel` internally maintains a single `presentedNode` property.
 
@@ -638,7 +662,11 @@ Then, when presenting it, pass the
 
 You can also define your own custom presentable models, such as for handling a `PhotosPicker`. In this case, you need to register these models on the `NavigationWindow` using the `registerCustomPresentableNavigationModels(_:)` method (see [Examples App](#Explore-Examples-App)).
 
+</details>
+	
 ### NavigationMessage
+<details>
+<summary>Click here to see more 👈</summary>
 
 A `NavigationModel` can send a `NavigationMessage` through a message listener. You can add the listener using `onMessageReceived(_:)`/`addMessageListener(_:)`, and then send the message using `sendMessage(_:)`. The recipient can then check which type of message it is and handle it accordingly.
 
@@ -662,7 +690,11 @@ execute(
 
 The framework provides a predefined message, `RemovalNavigationMessage`, which is triggered whenever a `NavigationModel` is removed from its `parent`, so you know it is being deallocated, dismissed, or dropped from the stack.
 
+</details>
+
 ### Deep Linking
+<details>
+<summary>Click here to see more 👈</summary>
 
 Sometimes, you need content-driven navigation, such as when backend data or notifications direct users to specific screens. How you handle this data is entirely up to you.
 
@@ -674,7 +706,11 @@ The basic flow works as follows:
 
 An example approach is shown in the [Examples App](#Explore-Examples-App), where the `ExamplesNavigationDeepLinkHandler` service resolves the custom `HandleNavigationDeepLinkCommand`. This allows developers to handle deep links according to their needs. The exact implementation of this flow is entirely up to you.
 
+</details>
+	
 ### NavigationEnvironmentTrigger
+<details>
+<summary>Click here to see more 👈</summary>
 
 Sometimes, we need to use `View`'s API, which can only be triggered from the `View` itself via its `EnvironmentValues`. To do this, we can send a `NavigationEnvironmentTrigger` using `sendEnvironmentTrigger(_:)` on a `NavigationModel`. This will invoke the `DefaultNavigationEnvironmentTriggerHandler` which calls the value from `EnvironmentValues`.
 
@@ -690,15 +726,27 @@ Sometimes, we need to use `View`'s API, which can only be triggered from the `Vi
   
 If you want to customize the handler (e.g., sending a custom trigger), subclass `DefaultNavigationEnvironmentTriggerHandler` and set it on a `NavigationWindow` using `navigationEnvironmentTriggerHandler(_:)` (see [Examples App](#Explore-Examples-App)).
 
+</details>
+
 ### NavigationModelResolvedView
+<details>
+<summary>Click here to see more 👈</summary>
 
 When creating a custom wrapper view, like in [`SegmentedTabsNavigationModel` in the Examples App](#Explore-Examples-App), use `NavigationModelResolvedView` to display the Model within the view hierarchy (this is e.g. how `DefaultStackRootNavigationModel` works internally).
 
+</details>
+
 ### Custom transitions
+<details>
+<summary>Click here to see more 👈</summary>
 
 Custom transitions like zoom are supported since iOS 18+ for Stack (see [Examples App](#Explore-Examples-App)).
 
+</details>
+
 ### Debugging
+<details>
+<summary>Click here to see more 👈</summary>
 
 To enable debug printing, set the following:
 
@@ -717,15 +765,25 @@ You can also print the debug graph from a given `NavigationModel` and its succes
 
 ![](READMEAssets/debugging.png)
 
+</details>
+
 ### Relationships
+<details>
+<summary>Click here to see more 👈</summary>
 
 You can explore the graph using different relationships. It's important to know that the parent/child relationship is handled automatically, so you only need to call commands. This is true unless you're implementing a custom container, in which case you can simply override `children` (see [SegmentedTabsNavigationModel in Examples App](#Explore-Examples-App)).
 
+</details>
+
 ## FAQ
+<details>
+<summary>Click here to see more 👈</summary>
 
 **Q: Does using `AnyView` cause performance issues?**  
-
+	
 A: Based on my findings, it shouldn't. `AnyView` is used only at the top of the navigation layer, and it doesn't get redrawn unless there's a navigation operation. This behavior is the same whether or not you use `AnyView`.
+
+</details>
 
 ## Contribution, Issues, & Feature Requests
 
