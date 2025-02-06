@@ -580,6 +580,10 @@ final class ProfileNavigationModel {
         execute(.present(.sheet(.stacked([ProfileEditorNavigationModel(), ConnectedServicesDetailNavigationModel()])))
         // Present not wrapped in stack
         execute(.present(.sheet(SFSafariNavigationModel(...))))
+	// Present sheet and then immediately present another one
+	let presentedModel = ProfileEditorNavigationModel()
+        execute(.present(.sheet(.stacked(presentedModel))))
+        presentedModel.execute(.present(.sheet(.stacked(NameEditorNavigationModel()))))
     }
 
 }
