@@ -1,7 +1,6 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
-import FlagsRepository
+import Shared
 
 @NavigationModel
 public final class WaitingNavigationModel {

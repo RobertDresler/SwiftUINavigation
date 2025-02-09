@@ -1,8 +1,5 @@
 import SwiftUINavigation
-import ExamplesNavigation
-import DeepLinkForwarderService
-import NotificationsService
-import FlagsRepository
+import Shared
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {

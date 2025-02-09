@@ -1,12 +1,11 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
-import FlagsRepository
+import Shared
 
 @NavigationModel
 public final class LockedAppNavigationModel {
 
-    lazy var model = LockedAppModel(
+    lazy var viewModel = LockedAppViewModel(
         navigationModel: self,
         flagsRepository: flagsRepository
     )
@@ -18,7 +17,7 @@ public final class LockedAppNavigationModel {
     }
 
     public var body: some View {
-        LockedAppView(model: model)
+        LockedAppView(viewModel: viewModel)
     }
 
 }

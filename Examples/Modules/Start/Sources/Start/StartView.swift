@@ -1,12 +1,10 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 
 struct StartView: View {
 
     @EnvironmentNavigationModel private var navigationModel: StartNavigationModel
-    @ObservedObject var model: StartModel
+    @ObservedObject var viewModel: StartViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -35,7 +33,7 @@ struct StartView: View {
     }
 
     private var createAccountButton: some View {
-        Button(action: { model.createAccount() }) {
+        Button(action: { viewModel.createAccount() }) {
             Text("Create Account (Onboarding)")
                 .font(.title3)
                 .bold()
@@ -49,7 +47,7 @@ struct StartView: View {
     }
 
     private var loginButton: some View {
-        Button(action: { model.login() }) {
+        Button(action: { viewModel.login() }) {
             Text("Already have an account (Login)")
                 .multilineTextAlignment(.center)
                 .frame(height: 48)

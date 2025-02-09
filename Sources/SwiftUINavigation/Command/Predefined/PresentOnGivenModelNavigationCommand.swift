@@ -7,10 +7,6 @@ public struct PresentOnGivenModelNavigationCommand: NavigationCommand {
         )
     }
 
-    public func canExecute(on model: any NavigationModel) -> Bool {
-        true
-    }
-
     private let presentedModel: any PresentedNavigationModel
     private let animated: Bool
 

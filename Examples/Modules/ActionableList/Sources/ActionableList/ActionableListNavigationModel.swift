@@ -1,15 +1,12 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
 import CustomConfirmationDialog
-import DeepLinkForwarderService
-import NotificationsService
-import FlagsRepository
+import Shared
 
 @NavigationModel
 public final class ActionableListNavigationModel {
 
-    private lazy var model = ActionableListModel(
+    private lazy var viewModel = ActionableListViewModel(
         inputData: inputData,
         navigationModel: self,
         deepLinkForwarderService: deepLinkForwarderService,
@@ -34,8 +31,10 @@ public final class ActionableListNavigationModel {
     }
 
     public var body: some View {
-        ActionableListView(model: model)
+        ActionableListView(viewModel: viewModel)
     }
+
+    // MARK: Custom
 
     func confirmLogout(sourceID: String) async -> Bool {
         await withCheckedContinuation { continuation in
@@ -70,7 +69,7 @@ public final class ActionableListNavigationModel {
             .onMessageReceived { [weak self] message in
                 switch message {
                 case _ as CustomConfirmationDialogConfirmationNavigationMessage:
-                    self?.model.logout()
+                    self?.viewModel.logout()
                 default:
                     break
                 }

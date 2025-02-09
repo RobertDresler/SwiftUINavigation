@@ -1,13 +1,11 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
-import OnboardingService
-import FlagsRepository
+import Shared
 
 @NavigationModel
 public final class StartNavigationModel {
 
-    lazy var model = StartModel(
+    lazy var viewModel = StartViewModel(
         navigationModel: self,
         flagsRepository: flagsRepository
     )
@@ -20,7 +18,7 @@ public final class StartNavigationModel {
     }
 
     public var body: some View {
-        StartView(model: model)
+        StartView(viewModel: viewModel)
     }
 
     func startOnboarding() {

@@ -1,13 +1,11 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 import Shared
 
 struct SubscriptionFreemiumView: View {
 
     @EnvironmentNavigationModel private var navigationModel: SubscriptionFreemiumNavigationModel
-    @ObservedObject var model: SubscriptionFreemiumModel
+    @ObservedObject var viewModel: SubscriptionFreemiumViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -47,7 +45,7 @@ struct SubscriptionFreemiumView: View {
     }
 
     private var subscribeButton: some View {
-        PrimaryButton(title: "Simulate Purchase", action: { model.subscribe() })
+        PrimaryButton(title: "Simulate Purchase", action: { viewModel.subscribe() })
     }
 
 }

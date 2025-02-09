@@ -1,14 +1,11 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 import Shared
-import OnboardingService
 
 struct OnboardingQuestionView: View {
 
     @EnvironmentNavigationModel private var navigationModel: OnboardingQuestionNavigationModel
-    @ObservedObject var model: OnboardingQuestionModel
+    @ObservedObject var viewModel: OnboardingQuestionViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -33,7 +30,7 @@ struct OnboardingQuestionView: View {
     }
 
     private var titleText: String {
-        switch model.inputData.usage {
+        switch viewModel.inputData.usage {
         case .start:
             "Let's begin!"
         case .wrongAnswer:
@@ -59,11 +56,11 @@ struct OnboardingQuestionView: View {
     private func answerButton(
         for answer: OnboardingService.State.QuestionAnswer
     ) -> some View {
-        Button(action: { model.selectedAnswer = answer }) {
+        Button(action: { viewModel.selectedAnswer = answer }) {
             HStack(spacing: 12) {
-                Image(systemName: answer == model.selectedAnswer ? "checkmark.circle.fill" : "circle")
+                Image(systemName: answer == viewModel.selectedAnswer ? "checkmark.circle.fill" : "circle")
                     .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(answer == model.selectedAnswer ? .blue : .gray)
+                    .foregroundStyle(answer == viewModel.selectedAnswer ? .blue : .gray)
                     .font(.system(size: 24))
                     .frame(width: 24)
                 Text({
@@ -85,9 +82,9 @@ struct OnboardingQuestionView: View {
     }
 
     private var continueButton: some View {
-        PrimaryButton(title: "Continue", action: { model.continueInOnboarding() })
-            .opacity(model.selectedAnswer == nil ? 0.5 : 1)
-            .disabled(model.selectedAnswer == nil)
+        PrimaryButton(title: "Continue", action: { viewModel.continueInOnboarding() })
+            .opacity(viewModel.selectedAnswer == nil ? 0.5 : 1)
+            .disabled(viewModel.selectedAnswer == nil)
     }
 
 }

@@ -13,15 +13,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/Shared"),
+        .package(path: "../../Shared/Shared"),
         .package(path: "../../../../SwiftUINavigation")
     ],
     targets: [
         .target(
             name: "CustomConfirmationDialog",
             dependencies: [
-                .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "Shared", package: "Shared"),
                 .product(name: "SwiftUINavigation", package: "SwiftUINavigation")
             ]

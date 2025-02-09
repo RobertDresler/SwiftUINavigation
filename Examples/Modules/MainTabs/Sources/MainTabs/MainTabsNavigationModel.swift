@@ -1,10 +1,7 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
 import ActionableList
-import DeepLinkForwarderService
-import NotificationsService
-import FlagsRepository
+import Shared
 
 @TabsRootNavigationModel
 public final class MainTabsNavigationModel {

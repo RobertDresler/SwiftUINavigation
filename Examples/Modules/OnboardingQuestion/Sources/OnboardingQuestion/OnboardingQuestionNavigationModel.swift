@@ -1,12 +1,11 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
-import OnboardingService
+import Shared
 
 @NavigationModel
 public final class OnboardingQuestionNavigationModel {
 
-    lazy var model = OnboardingQuestionModel(
+    lazy var viewModel = OnboardingQuestionViewModel(
         inputData: inputData,
         navigationModel: self,
         onboardingService: onboardingService
@@ -20,7 +19,7 @@ public final class OnboardingQuestionNavigationModel {
     }
 
     public var body: some View {
-        OnboardingQuestionView(model: model)
+        OnboardingQuestionView(viewModel: viewModel)
     }
 
     func continueInOnboarding() {

@@ -1,12 +1,11 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
-import FlagsRepository
+import Shared
 
 @NavigationModel
 public final class SubscriptionFreemiumNavigationModel {
 
-    lazy var model = SubscriptionFreemiumModel(
+    lazy var viewModel = SubscriptionFreemiumViewModel(
         navigationModel: self,
         flagsRepository: flagsRepository
     )
@@ -17,7 +16,7 @@ public final class SubscriptionFreemiumNavigationModel {
     }
 
     public var body: some View {
-        SubscriptionFreemiumView(model: model)
+        SubscriptionFreemiumView(viewModel: viewModel)
     }
 
 }

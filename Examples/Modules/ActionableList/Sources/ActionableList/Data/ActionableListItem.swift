@@ -1,4 +1,3 @@
-import ExamplesNavigation
 import Shared
 import Foundation
 import SwiftUINavigation
@@ -20,7 +19,7 @@ struct ActionableListItem {
 
         case command(makeCommand: (any NavigationModel) -> NavigationCommand)
         case custom(CustomAction)
-        case deepLink(ExamplesNavigationDeepLink)
+        case deepLink(ExamplesAppNavigationDeepLink)
 
     }
 
@@ -59,7 +58,7 @@ extension ActionableListItem {
     static func new(
         id: String = UUID().uuidString,
         viewModel: ActionableListItemView.ViewModel,
-        deepLink: ExamplesNavigationDeepLink,
+        deepLink: ExamplesAppNavigationDeepLink,
         presentingNavigationSourceID: String? = nil
     ) -> ActionableListItem {
         ActionableListItem(

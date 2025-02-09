@@ -9,10 +9,10 @@ If anything is unclear, feel free to reach out! I'm happy to clarify or update t
 
 If you find this repository helpful, feel free to give it a ⭐ or share it with your colleagues 👩‍💻👨‍💻 to help grow the community of developers using this framework!
 
-- [Features](#Features)
-- [Core Idea - `NavigationModel`](#core-idea---navigationmodel)
-- [Getting Started](#Getting-Started)
-- [Documentation](#Documentation)
+- 🚀 [Features](#Features)
+- 💡 [Core Idea - `NavigationModel`](#core-idea---navigationmodel)
+- 🚦 [Getting Started](#Getting-Started)
+- 📚 [Documentation](#Documentation)
 
 ---------
 
@@ -54,9 +54,24 @@ To get started, I recommend exploring the [Examples app](#Explore-Examples-App) 
 
 ## Getting Started
 
+I highly recommend starting by exploring the [Examples app](#Explore-Examples-App). The app features many commands that you can use to handle navigation, as well as showcases common flows found in many apps. It includes everything from easy login/logout flows to custom navigation bars with multiple windows.
+
+If you prefer to explore the framework on your own, check out [Explore on Your Own](#Explore-on-Your-Own) and the [Documentation](#Documentation).
+
 ### Explore Examples App
 
-I highly recommend starting by exploring the Examples app. The app features many commands that you can use to handle navigation, as well as showcases common flows found in many apps. It includes everything from easy login/logout flows to custom navigation bars with multiple windows.
+<details>
+<summary>Click to see details 👈</summary>
+
+#### Read This First
+
+- The app is modularized using SPM to demonstrate its compatibility with a modular architecture. However, when integrating it into your app, you can keep everything in a single module if you prefer.  
+- Some modules follow the MV architecture, while others with a ViewModel use MVVM. The choice of architecture is entirely up to you—SwiftUINavigation solely provides a solution for the navigation layer.  
+- Dependencies for `NavigationModel`s are handled via initializers. To avoid passing them in every init, you can use a dependency manager like [swift-dependencies](https://github.com/pointfreeco/swift-dependencies). 
+- There is a `Shared` module that contains e.g. objects for deep linking, which can be used across any module. Implementations of certain services are located in the main app within the `Dependencies` folder.  
+- The `ActionableList` module serves as a generic module for list screens with items. To see what items each list contains, check the implementation of factories in the module’s `Data/Factories/...` folder.  
+
+#### Installation
 
 1. Get the repo
 
@@ -72,13 +87,17 @@ I highly recommend starting by exploring the Examples app. The app features many
 
 4. Explore the app
 
+</details>
 
 ### Explore on Your Own
 
+<details>
+<summary>Click to see details 👈</summary>
+
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.0.1`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.0.1")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.0.2`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.0.2")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
@@ -278,6 +297,8 @@ struct DetailView: View {
 
 }
 ```
+
+</details>
 
 </details>
 
@@ -704,7 +725,44 @@ The basic flow works as follows:
 2. Pass the deep link to a `NavigationModel`—for example, by creating a service that observes deep links in `AppNavigationModel` (as demonstrated in the [Examples App](#Explore-Examples-App)).
 3. Handle the deep link in a specific `NavigationModel`—you can access properties like `children`, `presentedModel`, or cast `NavigationModel` to `TabsRootNavigationModel` to retrieve `tabsModels`.
 
-An example approach is shown in the [Examples App](#Explore-Examples-App), where the `ExamplesNavigationDeepLinkHandler` service resolves the custom `HandleNavigationDeepLinkCommand`. This allows developers to handle deep links according to their needs. The exact implementation of this flow is entirely up to you.
+An example approach is shown in the [Examples App](#Explore-Examples-App), where the `HandleDeepLinkNavigationCommandFactory` service resolves the custom `HandleDeepLinkNavigationCommand`. This allows developers to handle deep links according to their needs. The exact implementation of this flow is entirely up to you.
+
+Here’s a simple example of how you can handle different deep links.
+
+```swift
+enum DeepLink {
+    case detail(DetailInputData)
+    case detailWithPushedEditor(DetailInputData, DetailEditorInputData)
+    case detailWithPresentedEditor(DetailInputData, DetailEditorInputData)
+}
+
+@NavigationModel
+final class AppNavigationModel {
+
+    ...
+
+    func handleDeepLink(_ deepLink: DeepLink) {
+        switch deepLink {
+        /// Present just detail as sheet
+        case let .detail(detailInputData):
+            let detailModel = DetailNavigationModel(inputData: detailInputData)
+            execute(.present(.sheet(.stacked(detailModel))))
+        /// Present detail as sheet with already pushed detail editor
+        case let .detailWithPushedEditor(detailInputData, detailEditorInputData):
+            let detailModel = DetailNavigationModel(inputData: detailInputData)
+            let detailEditorModel = DetailEditorNavigationModel(inputData: detailEditorInputData)
+            execute(.present(.sheet(.stacked([detailModel, detailEditorModel]))))
+        /// Present detail as sheet and after present detail editor as sheet over detail sheet
+        case let .detailWithPresentedEditor(detailInputData, detailEditorInputData):
+            let detailModel = DetailNavigationModel(inputData: detailInputData)
+            let detailEditorModel = DetailEditorNavigationModel(inputData: detailEditorInputData)
+            execute(.present(.sheet(.stacked(detailModel))))
+            detailModel.execute(.present(.sheet(.stacked(detailEditorModel))))
+        }
+    }
+
+}
+```
 
 </details>
 	

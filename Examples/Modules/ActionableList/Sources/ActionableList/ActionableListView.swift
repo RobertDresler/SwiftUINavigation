@@ -1,24 +1,20 @@
 import SwiftUI
-import ExamplesNavigation
 import SwiftUINavigation
 import Shared
-import FlagsRepository
-import NotificationsService
-import DeepLinkForwarderService
 
 struct ActionableListView: View {
 
     @EnvironmentNavigationModel private var navigationModel: ActionableListNavigationModel
     @Environment(\.stackNavigationNamespace) private var wrappedNavigationStackModelNamespace
-    @ObservedObject private var model: ActionableListModel
+    @ObservedObject private var viewModel: ActionableListViewModel
 
-    init(model: ActionableListModel) {
-        self.model = model
+    init(viewModel: ActionableListViewModel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
         scrollView
-            .navigationTitle(model.title)
+            .navigationTitle(viewModel.title)
             .toolbar {
                 if navigationModel.canDismiss {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -26,7 +22,7 @@ struct ActionableListView: View {
                     }
                 }
             }
-            .presentationDetents(model.inputData.addPresentationDetents ? [.medium, .large] : [])
+            .presentationDetents(viewModel.inputData.addPresentationDetents ? [.medium, .large] : [])
     }
 
     private var dismissButton: some View {
@@ -36,7 +32,7 @@ struct ActionableListView: View {
     private var scrollView: some View {
         ScrollView {
             VStack(spacing: 24) {
-                if let subtitle = model.subtitle {
+                if let subtitle = viewModel.subtitle {
                     self.subtitle(for: subtitle)
                 }
                 itemsView
@@ -54,7 +50,7 @@ struct ActionableListView: View {
 
     private var itemsView: some View {
         VStack(spacing: 8) {
-            ForEach(model.items, id: \.identifiableViewModel.id) { item in
+            ForEach(viewModel.items, id: \.identifiableViewModel.id) { item in
                 if #available(iOS 18.0, *), let wrappedNavigationStackModelNamespace {
                     configuredItemViewWithPresentingNavigationSource(for: item)
                         .matchedTransitionSource(
@@ -86,11 +82,9 @@ struct ActionableListView: View {
     ) -> some View {
         ActionableListItemView(
             viewModel: item.viewModel,
-            action: { model.handleAction(for: item.id) }
+            action: { viewModel.handleAction(for: item.id) }
         )
     }
-
-    // MARK: Actions
 
 }
 

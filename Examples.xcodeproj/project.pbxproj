@@ -8,15 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		D00BB9042D4009FA00ED9CD9 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D00BB9032D4009FA00ED9CD9 /* SwiftUINavigation */; };
-		D04319512CC8EB380077101C /* ExamplesNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D04319502CC8EB380077101C /* ExamplesNavigation */; };
-		D09DB4482D32BB4F0050E44C /* OnboardingService in Frameworks */ = {isa = PBXBuildFile; productRef = D09DB4472D32BB4F0050E44C /* OnboardingService */; };
-		D09DB44B2D32BB570050E44C /* OnboardingNavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D09DB44A2D32BB570050E44C /* OnboardingNavigation */; };
-		D09DB60D2D32F4FD0050E44C /* FlagsRepository in Frameworks */ = {isa = PBXBuildFile; productRef = D09DB60C2D32F4FD0050E44C /* FlagsRepository */; };
+		D05F77D42D5913420089CF14 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = D05F77D32D5913420089CF14 /* Shared */; };
+		D071124A2D59194900320732 /* Subscription in Frameworks */ = {isa = PBXBuildFile; productRef = D07112492D59194900320732 /* Subscription */; };
+		D071124D2D59195700320732 /* OnboardingQuestion in Frameworks */ = {isa = PBXBuildFile; productRef = D071124C2D59195700320732 /* OnboardingQuestion */; };
+		D07112502D59195E00320732 /* OnboardingResult in Frameworks */ = {isa = PBXBuildFile; productRef = D071124F2D59195E00320732 /* OnboardingResult */; };
+		D07112542D591A9000320732 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = D07112532D591A9000320732 /* Shared */; };
 		D09DB6102D32F5040050E44C /* Waiting in Frameworks */ = {isa = PBXBuildFile; productRef = D09DB60F2D32F5040050E44C /* Waiting */; };
 		D0EB4DC22CD6420D0052F1AC /* App in Frameworks */ = {isa = PBXBuildFile; productRef = D0EB4DC12CD6420D0052F1AC /* App */; };
-		D0EB4E3F2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler in Frameworks */ = {isa = PBXBuildFile; productRef = D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */; };
-		D0FC8E372D3162C60041253F /* NotificationsService in Frameworks */ = {isa = PBXBuildFile; productRef = D0FC8E362D3162C60041253F /* NotificationsService */; };
-		D0FC8E3B2D3167040041253F /* DeepLinkForwarderService in Frameworks */ = {isa = PBXBuildFile; productRef = D0FC8E3A2D3167040041253F /* DeepLinkForwarderService */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +25,6 @@
 		D04319402CC8E9A10077101C /* Exceptions for "Examples" folder in "Examples" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
 				Modules/App,
 				Modules/CustomConfirmationDialog,
 				Modules/CustomNavigationBar,
@@ -38,12 +35,8 @@
 				Modules/Subscription,
 				Modules/SubscriptionFreemium,
 				Modules/SubscriptionPremium,
-				Navigation/ExamplesNavigation,
-				Navigation/OnboardingNavigation,
-				Services/DeepLinkForwarderService,
-				Services/NotificationsService,
-				Services/OnboardingService,
-				Services/Shared,
+				Resources/Info.plist,
+				Shared/Shared,
 			);
 			target = D04318B12CC8D7430077101C /* Examples */;
 		};
@@ -65,16 +58,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D09DB60D2D32F4FD0050E44C /* FlagsRepository in Frameworks */,
 				D0EB4DC22CD6420D0052F1AC /* App in Frameworks */,
+				D071124D2D59195700320732 /* OnboardingQuestion in Frameworks */,
+				D07112502D59195E00320732 /* OnboardingResult in Frameworks */,
 				D09DB6102D32F5040050E44C /* Waiting in Frameworks */,
-				D04319512CC8EB380077101C /* ExamplesNavigation in Frameworks */,
-				D09DB44B2D32BB570050E44C /* OnboardingNavigation in Frameworks */,
-				D0FC8E372D3162C60041253F /* NotificationsService in Frameworks */,
-				D0EB4E3F2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler in Frameworks */,
-				D09DB4482D32BB4F0050E44C /* OnboardingService in Frameworks */,
 				D00BB9042D4009FA00ED9CD9 /* SwiftUINavigation in Frameworks */,
-				D0FC8E3B2D3167040041253F /* DeepLinkForwarderService in Frameworks */,
+				D07112542D591A9000320732 /* Shared in Frameworks */,
+				D071124A2D59194900320732 /* Subscription in Frameworks */,
+				D05F77D42D5913420089CF14 /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,16 +116,14 @@
 			);
 			name = Examples;
 			packageProductDependencies = (
-				D04319502CC8EB380077101C /* ExamplesNavigation */,
 				D0EB4DC12CD6420D0052F1AC /* App */,
-				D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */,
-				D0FC8E362D3162C60041253F /* NotificationsService */,
-				D0FC8E3A2D3167040041253F /* DeepLinkForwarderService */,
-				D09DB4472D32BB4F0050E44C /* OnboardingService */,
-				D09DB44A2D32BB570050E44C /* OnboardingNavigation */,
-				D09DB60C2D32F4FD0050E44C /* FlagsRepository */,
 				D09DB60F2D32F5040050E44C /* Waiting */,
 				D00BB9032D4009FA00ED9CD9 /* SwiftUINavigation */,
+				D05F77D32D5913420089CF14 /* Shared */,
+				D07112492D59194900320732 /* Subscription */,
+				D071124C2D59195700320732 /* OnboardingQuestion */,
+				D071124F2D59195E00320732 /* OnboardingResult */,
+				D07112532D591A9000320732 /* Shared */,
 			);
 			productName = Examples;
 			productReference = D04318B22CC8D7430077101C /* Examples.app */;
@@ -165,16 +154,13 @@
 			mainGroup = D04318A92CC8D7430077101C;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				D043194F2CC8EB380077101C /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigation" */,
 				D0EB4DC02CD6420D0052F1AC /* XCLocalSwiftPackageReference "Examples/Modules/App" */,
-				D0EB4E3D2CD783F50052F1AC /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigationDeepLinkHandler" */,
-				D0FC8E352D3162C60041253F /* XCLocalSwiftPackageReference "Examples/Services/NotificationsService" */,
-				D0FC8E392D3167040041253F /* XCLocalSwiftPackageReference "Examples/Services/DeepLinkForwarderService" */,
-				D09DB4462D32BB4F0050E44C /* XCLocalSwiftPackageReference "Examples/Services/OnboardingService" */,
-				D09DB4492D32BB570050E44C /* XCLocalSwiftPackageReference "Examples/Navigation/OnboardingNavigation" */,
-				D09DB60B2D32F4FD0050E44C /* XCLocalSwiftPackageReference "Examples/Services/FlagsRepository" */,
 				D09DB60E2D32F5040050E44C /* XCLocalSwiftPackageReference "Examples/Modules/Waiting" */,
 				D00BB9022D4009FA00ED9CD9 /* XCLocalSwiftPackageReference "../SwiftUINavigation" */,
+				D07112482D59194900320732 /* XCLocalSwiftPackageReference "Examples/Modules/Subscription" */,
+				D071124B2D59195700320732 /* XCLocalSwiftPackageReference "Examples/Modules/OnboardingQuestion" */,
+				D071124E2D59195E00320732 /* XCLocalSwiftPackageReference "Examples/Modules/OnboardingResult" */,
+				D07112522D591A9000320732 /* XCLocalSwiftPackageReference "Examples/Shared/Shared" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D04318B32CC8D7430077101C /* Products */;
@@ -337,7 +323,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Examples/Info.plist;
+				INFOPLIST_FILE = Examples/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -368,7 +354,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Examples/Info.plist;
+				INFOPLIST_FILE = Examples/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -416,21 +402,21 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../SwiftUINavigation;
 		};
-		D043194F2CC8EB380077101C /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigation" */ = {
+		D07112482D59194900320732 /* XCLocalSwiftPackageReference "Examples/Modules/Subscription" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Examples/Navigation/ExamplesNavigation;
+			relativePath = Examples/Modules/Subscription;
 		};
-		D09DB4462D32BB4F0050E44C /* XCLocalSwiftPackageReference "Examples/Services/OnboardingService" */ = {
+		D071124B2D59195700320732 /* XCLocalSwiftPackageReference "Examples/Modules/OnboardingQuestion" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Examples/Services/OnboardingService;
+			relativePath = Examples/Modules/OnboardingQuestion;
 		};
-		D09DB4492D32BB570050E44C /* XCLocalSwiftPackageReference "Examples/Navigation/OnboardingNavigation" */ = {
+		D071124E2D59195E00320732 /* XCLocalSwiftPackageReference "Examples/Modules/OnboardingResult" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Examples/Navigation/OnboardingNavigation;
+			relativePath = Examples/Modules/OnboardingResult;
 		};
-		D09DB60B2D32F4FD0050E44C /* XCLocalSwiftPackageReference "Examples/Services/FlagsRepository" */ = {
+		D07112522D591A9000320732 /* XCLocalSwiftPackageReference "Examples/Shared/Shared" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Examples/Services/FlagsRepository;
+			relativePath = Examples/Shared/Shared;
 		};
 		D09DB60E2D32F5040050E44C /* XCLocalSwiftPackageReference "Examples/Modules/Waiting" */ = {
 			isa = XCLocalSwiftPackageReference;
@@ -440,18 +426,6 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Examples/Modules/App;
 		};
-		D0EB4E3D2CD783F50052F1AC /* XCLocalSwiftPackageReference "Examples/Navigation/ExamplesNavigationDeepLinkHandler" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Examples/Navigation/ExamplesNavigationDeepLinkHandler;
-		};
-		D0FC8E352D3162C60041253F /* XCLocalSwiftPackageReference "Examples/Services/NotificationsService" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Examples/Services/NotificationsService;
-		};
-		D0FC8E392D3167040041253F /* XCLocalSwiftPackageReference "Examples/Services/DeepLinkForwarderService" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Examples/Services/DeepLinkForwarderService;
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -459,21 +433,25 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUINavigation;
 		};
-		D04319502CC8EB380077101C /* ExamplesNavigation */ = {
+		D05F77D32D5913420089CF14 /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = ExamplesNavigation;
+			productName = Shared;
 		};
-		D09DB4472D32BB4F0050E44C /* OnboardingService */ = {
+		D07112492D59194900320732 /* Subscription */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = OnboardingService;
+			productName = Subscription;
 		};
-		D09DB44A2D32BB570050E44C /* OnboardingNavigation */ = {
+		D071124C2D59195700320732 /* OnboardingQuestion */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = OnboardingNavigation;
+			productName = OnboardingQuestion;
 		};
-		D09DB60C2D32F4FD0050E44C /* FlagsRepository */ = {
+		D071124F2D59195E00320732 /* OnboardingResult */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = FlagsRepository;
+			productName = OnboardingResult;
+		};
+		D07112532D591A9000320732 /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
 		};
 		D09DB60F2D32F5040050E44C /* Waiting */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -482,18 +460,6 @@
 		D0EB4DC12CD6420D0052F1AC /* App */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = App;
-		};
-		D0EB4E3E2CD783F50052F1AC /* ExamplesNavigationDeepLinkHandler */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ExamplesNavigationDeepLinkHandler;
-		};
-		D0FC8E362D3162C60041253F /* NotificationsService */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = NotificationsService;
-		};
-		D0FC8E3A2D3167040041253F /* DeepLinkForwarderService */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DeepLinkForwarderService;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

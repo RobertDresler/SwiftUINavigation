@@ -13,8 +13,6 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/FlagsRepository"),
         .package(path: "../../Modules/SubscriptionPremium"),
         .package(path: "../../Modules/SubscriptionFreemium"),
         .package(path: "../../../../SwiftUINavigation")
@@ -23,8 +21,6 @@ let package = Package(
         .target(
             name: "Subscription",
             dependencies: [
-                .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "FlagsRepository", package: "FlagsRepository"),
                 .product(name: "SubscriptionPremium", package: "SubscriptionPremium"),
                 .product(name: "SubscriptionFreemium", package: "SubscriptionFreemium"),
                 .product(name: "SwiftUINavigation", package: "SwiftUINavigation")

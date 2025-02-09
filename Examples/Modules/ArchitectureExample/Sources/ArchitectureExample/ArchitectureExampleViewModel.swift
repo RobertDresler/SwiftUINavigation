@@ -1,6 +1,6 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
+import Shared
 
 @MainActor final class ArchitectureExampleViewModel: ObservableObject {
 

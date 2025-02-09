@@ -1,5 +1,4 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
 
 @NavigationModel

@@ -1,7 +1,6 @@
 import SwiftUI
 import Waiting
 import SwiftUINavigation
-import ExamplesNavigation
 
 struct WaitingWindow: View {
 
