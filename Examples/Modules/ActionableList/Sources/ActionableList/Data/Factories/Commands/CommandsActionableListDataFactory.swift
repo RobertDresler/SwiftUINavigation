@@ -1,9 +1,5 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import Shared
-import DeepLinkForwarderService
-import NotificationsService
-import FlagsRepository
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
 struct CommandsActionableListDataFactory: ActionableListDataFactory {
@@ -141,9 +137,9 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
                 symbolName: "arrow.up.and.down.and.arrow.left.and.right",
                 accentColor: .orange,
                 title: "Deep Link",
-                subtitle: "The Deep Link feature enables routing between modules without direct dependency. You can verify that this module doesn't depend on the Subscription module, as routing is handled by ExamplesNavigationDeepLinkHandler."
+                subtitle: "The Deep Link feature enables routing between modules without direct dependency. You can verify that this module doesn't depend on the Subscription module, as routing is handled by DeepLinkForwarderService and HandleDeepLinkNavigationCommandFactory."
             ),
-            deepLink: ExamplesNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
+            deepLink: ExamplesAppNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
         )
     }
 

@@ -1,10 +1,9 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 import Combine
 import SubscriptionPremium
 import SubscriptionFreemium
+import Shared
 
 @SwitchedNavigationModel
 public final class SubscriptionNavigationModel {

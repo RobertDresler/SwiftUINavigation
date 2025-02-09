@@ -13,11 +13,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/Shared"),
-        .package(path: "../../Services/FlagsRepository"),
-        .package(path: "../../Services/NotificationsService"),
-        .package(path: "../../Services/DeepLinkForwarderService"),
+        .package(path: "../../Shared/Shared"),
         .package(path: "../../Modules/CustomConfirmationDialog"),
         .package(path: "../../Modules/ArchitectureExample"),
         .package(path: "../../Modules/SegmentedTabs"),
@@ -27,11 +23,7 @@ let package = Package(
         .target(
             name: "ActionableList",
             dependencies: [
-                .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
                 .product(name: "Shared", package: "Shared"),
-                .product(name: "FlagsRepository", package: "FlagsRepository"),
-                .product(name: "NotificationsService", package: "NotificationsService"),
-                .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
                 .product(name: "CustomConfirmationDialog", package: "CustomConfirmationDialog"),
                 .product(name: "ArchitectureExample", package: "ArchitectureExample"),
                 .product(name: "SegmentedTabs", package: "SegmentedTabs"),

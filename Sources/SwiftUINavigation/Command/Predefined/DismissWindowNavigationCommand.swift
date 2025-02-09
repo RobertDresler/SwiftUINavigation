@@ -11,10 +11,6 @@ public struct DismissWindowNavigationCommand: NavigationCommand {
         }
     }
 
-    public func canExecute(on model: any NavigationModel) -> Bool {
-        true
-    }
-
     private let id: String
 
     public init(id: String) {

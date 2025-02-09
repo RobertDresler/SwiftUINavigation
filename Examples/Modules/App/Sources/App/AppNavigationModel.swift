@@ -1,15 +1,10 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 import Combine
 import Start
 import MainTabs
-import DeepLinkForwarderService
-import OnboardingService
 import LockedApp
-import ExamplesNavigationDeepLinkHandler
-import NotificationsService
+import Shared
 
 @SwitchedNavigationModel
 public final class AppNavigationModel {
@@ -20,17 +15,20 @@ public final class AppNavigationModel {
     private let deepLinkForwarderService: DeepLinkForwarderService
     private let onboardingService: OnboardingService
     private let notificationsService: NotificationsService
+    private let handleDeepLinkNavigationCommandFactory: HandleDeepLinkNavigationCommandFactory
 
     public init(
         flagsRepository: FlagsRepository,
         deepLinkForwarderService: DeepLinkForwarderService,
         onboardingService: OnboardingService,
-        notificationsService: NotificationsService
+        notificationsService: NotificationsService,
+        handleDeepLinkNavigationCommandFactory: HandleDeepLinkNavigationCommandFactory
     ) {
         self.flagsRepository = flagsRepository
         self.deepLinkForwarderService = deepLinkForwarderService
         self.onboardingService = onboardingService
         self.notificationsService = notificationsService
+        self.handleDeepLinkNavigationCommandFactory = handleDeepLinkNavigationCommandFactory
     }
 
     public func body(for content: SwitchedNavigationModelView<AppNavigationModel>) -> some View {
@@ -58,11 +56,8 @@ public final class AppNavigationModel {
         )
     }
 
-    private func handleDeepLink(_ deepLink: ExamplesNavigationDeepLink) {
-        execute(
-            ExamplesNavigationDeepLinkHandler(flagsRepository: flagsRepository)
-                .handleDeepLinkCommand(deepLink)
-        )
+    private func handleDeepLink(_ deepLink: ExamplesAppNavigationDeepLink) {
+        execute(handleDeepLinkNavigationCommandFactory.makeCommand(for: deepLink))
     }
 
     private func setLockedAppWindow(isAppLocked: Bool) {

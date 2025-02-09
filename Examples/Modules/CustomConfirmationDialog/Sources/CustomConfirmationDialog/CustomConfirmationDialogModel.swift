@@ -1,8 +1,8 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
+import Shared
 
-@MainActor final class CustomConfirmationDialogModel: ObservableObject {
+@MainActor final class CustomConfirmationDialogViewModel: ObservableObject {
 
     let inputData: CustomConfirmationDialogInputData
     private unowned let navigationModel: CustomConfirmationDialogNavigationModel
@@ -13,8 +13,7 @@ import SwiftUI
     }
 
     func confirm() {
-        navigationModel.sendMessage(CustomConfirmationDialogConfirmationNavigationMessage())
-        navigationModel.dismiss()
+        navigationModel.confirm()
     }
 
 }

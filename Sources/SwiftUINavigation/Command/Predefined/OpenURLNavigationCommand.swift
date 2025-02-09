@@ -6,10 +6,6 @@ public struct OpenURLNavigationCommand: NavigationCommand {
         model.sendEnvironmentTrigger(OpenURLNavigationEnvironmentTrigger(url: url))
     }
 
-    public func canExecute(on model: any NavigationModel) -> Bool {
-        true
-    }
-
     private let url: URL
 
     public init(url: URL) {

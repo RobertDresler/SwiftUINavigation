@@ -18,7 +18,8 @@ struct AppWindow: View {
                 flagsRepository: dependencies.flagsRepository,
                 deepLinkForwarderService: dependencies.deepLinkForwarderService,
                 onboardingService: dependencies.onboardingService,
-                notificationsService: dependencies.notificationsService
+                notificationsService: dependencies.notificationsService,
+                handleDeepLinkNavigationCommandFactory: dependencies.handleDeepLinkNavigationCommandFactory
             )
         )
     }
@@ -32,7 +33,6 @@ struct AppWindow: View {
             .environmentObject(dependencies.notificationsService)
             .environmentObject(dependencies.deepLinkForwarderService)
             .environmentObject(dependencies.onboardingService)
-            .environmentObject(dependencies.deepLinkHandler)
             .onShake { rootModel.printDebugGraph() }
     }
 

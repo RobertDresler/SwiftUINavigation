@@ -1,11 +1,11 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
+import Shared
 
 @NavigationModel
 public final class CustomConfirmationDialogNavigationModel {
 
-    lazy var model = CustomConfirmationDialogModel(
+    lazy var viewModel = CustomConfirmationDialogViewModel(
         inputData: inputData,
         navigationModel: self
     )
@@ -17,7 +17,12 @@ public final class CustomConfirmationDialogNavigationModel {
     }
 
     public var body: some View {
-        CustomConfirmationDialogView(model: model)
+        CustomConfirmationDialogView(viewModel: viewModel)
+    }
+
+    func confirm() {
+        sendMessage(CustomConfirmationDialogConfirmationNavigationMessage())
+        dismiss()
     }
 
     func dismiss() {

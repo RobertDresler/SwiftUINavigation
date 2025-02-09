@@ -1,12 +1,11 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
 import Shared
 
 struct CustomConfirmationDialogView: View {
 
     @EnvironmentNavigationModel private var navigationModel: CustomConfirmationDialogNavigationModel
-    @ObservedObject var model: CustomConfirmationDialogModel
+    @ObservedObject var viewModel: CustomConfirmationDialogViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,7 +30,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var title: some View {
-        Text(model.inputData.title)
+        Text(viewModel.inputData.title)
             .font(.largeTitle)
             .bold()
             .frame(maxWidth: .infinity, alignment: .center)
@@ -39,7 +38,7 @@ struct CustomConfirmationDialogView: View {
     }
 
     private var message: some View {
-        Text(model.inputData.message)
+        Text(viewModel.inputData.message)
             .font(.title2)
             .frame(maxWidth: .infinity, alignment: .center)
             .multilineTextAlignment(.center)
@@ -48,8 +47,8 @@ struct CustomConfirmationDialogView: View {
 
     private var confirmButton: some View {
         PrimaryButton(
-            title: model.inputData.confirmButtonTitle,
-            action: { model.confirm() }
+            title: viewModel.inputData.confirmButtonTitle,
+            action: { viewModel.confirm() }
         )
     }
 

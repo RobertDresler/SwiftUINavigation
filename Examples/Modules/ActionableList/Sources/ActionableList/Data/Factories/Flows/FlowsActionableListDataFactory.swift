@@ -1,11 +1,7 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import Shared
 import SegmentedTabs
 import CustomNavigationBar
-import DeepLinkForwarderService
-import NotificationsService
-import FlagsRepository
 import ArchitectureExample
 
 /// NOTE: Avoid placing commands directly in the `View`, like in `ActionableListView`. This is for simplified demonstration purposes. Instead, call `NavigationModel` methods from the `View` or pass events to the `NavigationModel`. Check examples in **Architectures** flow for the correct approach.
@@ -115,7 +111,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 title: "Subscription",
                 subtitle: "This flow shows a model based on a changing state—premium or freemium screen depending on the user's status"
             ),
-            deepLink: ExamplesNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
+            deepLink: ExamplesAppNavigationDeepLink(destination: .subscription(SubscriptionInputData()))
         )
     }
 

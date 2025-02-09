@@ -13,10 +13,6 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../../Navigation/ExamplesNavigation"),
-        .package(path: "../../Services/FlagsRepository"),
-        .package(path: "../../Services/DeepLinkForwarderService"),
-        .package(path: "../../Services/OnboardingService"),
         .package(path: "../../Modules/Start"),
         .package(path: "../../Modules/MainTabs"),
         .package(path: "../../Modules/LockedApp")
@@ -25,10 +21,6 @@ let package = Package(
         .target(
             name: "App",
             dependencies: [
-                .product(name: "ExamplesNavigation", package: "ExamplesNavigation"),
-                .product(name: "FlagsRepository", package: "FlagsRepository"),
-                .product(name: "DeepLinkForwarderService", package: "DeepLinkForwarderService"),
-                .product(name: "OnboardingService", package: "OnboardingService"),
                 .product(name: "Start", package: "Start"),
                 .product(name: "MainTabs", package: "MainTabs"),
                 .product(name: "LockedApp", package: "LockedApp")

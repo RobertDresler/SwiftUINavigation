@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
+import Shared
 
 @main
 struct ExamplesApp: App {

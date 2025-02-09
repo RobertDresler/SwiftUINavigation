@@ -1,12 +1,11 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
+import Shared
 
 struct SubscriptionPremiumView: View {
 
     @EnvironmentNavigationModel private var navigationModel: SubscriptionPremiumNavigationModel
-    @ObservedObject var model: SubscriptionPremiumModel
+    @ObservedObject var viewModel: SubscriptionPremiumViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -28,7 +27,7 @@ struct SubscriptionPremiumView: View {
     }
 
     private var unsubscribeButton: some View {
-        Button(action: { model.unsubscribe() }) {
+        Button(action: { viewModel.unsubscribe() }) {
             Text("Unsubscribe")
         }
     }
@@ -55,7 +54,7 @@ struct SubscriptionPremiumView: View {
     }
 
     private var buyMeCoffeeButton: some View {
-        Button(action: { model.buyMeCoffee() }) {
+        Button(action: { viewModel.buyMeCoffee() }) {
             Image(.buyMeCoffeeButton)
                 .resizable()
                 .renderingMode(.original)
@@ -69,9 +68,7 @@ struct SubscriptionPremiumView: View {
 }
 
 #Preview {
-    NavigationStack(root: {
+    DefaultStackRootNavigationModel(
         SubscriptionPremiumNavigationModel(flagsRepository: FlagsRepository())
-            .body
-            .environmentObject(FlagsRepository())
-    })
+    ).body
 }

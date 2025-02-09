@@ -1,7 +1,5 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 import Shared
 
 struct WaitingView: View {

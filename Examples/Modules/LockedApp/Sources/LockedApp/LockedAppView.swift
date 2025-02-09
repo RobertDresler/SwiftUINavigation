@@ -1,13 +1,11 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 import Shared
 
 struct LockedAppView: View {
 
     @EnvironmentNavigationModel private var navigationModel: LockedAppNavigationModel
-    @ObservedObject var model: LockedAppModel
+    @ObservedObject var viewModel: LockedAppViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -47,7 +45,7 @@ struct LockedAppView: View {
     }
 
     private var unlockButton: some View {
-        PrimaryButton(title: "Let me in!", action: { model.unlock() })
+        PrimaryButton(title: "Let me in!", action: { viewModel.unlock() })
     }
 
 }

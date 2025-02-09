@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
 import Shared
 
 struct ArchitectureExampleView: View {

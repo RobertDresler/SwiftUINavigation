@@ -1,7 +1,6 @@
 import SwiftUINavigation
-import ExamplesNavigation
 import SwiftUI
-import OnboardingService
+import Shared
 
 @NavigationModel
 public final class OnboardingResultNavigationModel {

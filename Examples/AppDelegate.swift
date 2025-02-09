@@ -1,5 +1,5 @@
 import SwiftUI
-import DeepLinkForwarderService
+import Shared
 
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 

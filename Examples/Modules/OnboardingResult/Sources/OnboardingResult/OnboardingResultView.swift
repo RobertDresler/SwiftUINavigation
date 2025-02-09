@@ -1,9 +1,6 @@
 import SwiftUI
 import SwiftUINavigation
-import ExamplesNavigation
-import FlagsRepository
 import Shared
-import OnboardingService
 
 struct OnboardingResultView: View {
 
