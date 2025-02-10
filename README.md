@@ -698,10 +698,13 @@ execute(
             .onMessageReceived { [weak self] in 
                 switch message {
                 case _ as RemovalNavigationMessage:
-                    // You can access `model` from you `NavigationModel`
-                    self?.model.handleDetailRemoval()
+                    // You can handle it how you want, these are just examples
+                    // When using MV you can call closure from method's argument
+                    onDetailRemoval()
+                    // When using MVVM you can access `viewModel` from your `NavigationModel`
+                    self?.viewModel.handleDetailRemoval()
                 default:
-	                // Or you can do nothing
+                    // Or you can do nothing
                     break
                 } 
             }
