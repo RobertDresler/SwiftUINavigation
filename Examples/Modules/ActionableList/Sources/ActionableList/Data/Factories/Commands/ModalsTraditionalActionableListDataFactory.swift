@@ -16,6 +16,7 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
         #if os(iOS)
         [
             presentFullScreenCoverItem,
+            presentFullScreenCoverWithoutAnimationItem,
             presentSheetItem,
             presentSheetWithoutAnimationItem,
             presentBottomSheetItem,
@@ -51,6 +52,32 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                             )
                         )
                     )
+                )
+            }
+        )
+    }
+
+    private var presentFullScreenCoverWithoutAnimationItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "rectangle.portrait.badge.plus",
+                accentColor: .blue,
+                title: "Present Full Screen Cover",
+                subtitle: "Without Animation"
+            ),
+            makeCommand: {
+                .present(
+                    .fullScreenCover(
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        )
+                    ),
+                    animated: false
                 )
             }
         )
