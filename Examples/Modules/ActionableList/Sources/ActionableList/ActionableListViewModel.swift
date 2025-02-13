@@ -60,8 +60,10 @@ import Shared
                 logout()
             case .printDebugGraph:
                 printDebugGraph()
+            #if os(iOS)
             case .lockApp:
                 lockApp()
+            #endif
             case .openWaitingWindow:
                 openWaitingWindow()
             }
@@ -129,9 +131,11 @@ extension ActionableListViewModel {
         navigationModel.printDebugGraph()
     }
 
+    #if os(iOS)
     private func lockApp() {
         flagsRepository.isAppLocked = true
     }
+    #endif
 
     private func openWaitingWindow() {
         flagsRepository.isWaitingWindowOpen = true

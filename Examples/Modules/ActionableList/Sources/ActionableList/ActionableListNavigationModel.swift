@@ -60,8 +60,23 @@ public final class ActionableListNavigationModel {
     }
 
     func openNotificationSettings() {
+        #if os(iOS)
         guard let url = URL(string: UIApplication.openNotificationSettingsURLString) else { return }
         execute(.openURL(url))
+        #else
+        execute(
+            .present(
+                .alert(
+                    AlertInputData(
+                        title: "Enable Notifications for this App",
+                        actions: [
+                            AlertInputData.Action(title: "")
+                        ]
+                    )
+                )
+            )
+        )
+        #endif
     }
 
     func presentLogoutWithCustomConfirmationDialog() {

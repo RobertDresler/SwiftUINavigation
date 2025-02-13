@@ -10,7 +10,9 @@ struct CustomNavigationBarView: View {
     var body: some View {
         scrollView
             .safeAreaInset(edge: .top) { customNavigationBar }
+            #if os(iOS)
             .navigationBarHidden(true)
+            #endif
     }
 
     private var scrollView: some View {

@@ -33,7 +33,9 @@ struct AppWindow: View {
             .environmentObject(dependencies.notificationsService)
             .environmentObject(dependencies.deepLinkForwarderService)
             .environmentObject(dependencies.onboardingService)
+            #if os(iOS)
             .onShake { rootModel.printDebugGraph() }
+            #endif
     }
 
 }

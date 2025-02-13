@@ -3,8 +3,10 @@ import SwiftUINavigation
 import Combine
 import Start
 import MainTabs
-import LockedApp
 import Shared
+#if os(iOS)
+import LockedApp
+#endif
 
 @SwitchedNavigationModel
 public final class AppNavigationModel {
@@ -34,7 +36,9 @@ public final class AppNavigationModel {
     public func body(for content: SwitchedNavigationModelView<AppNavigationModel>) -> some View {
         content
             .onReceive(flagsRepository.$isUserLogged) { [weak self] in self?.switchModel(isUserLogged: $0) }
+            #if os(iOS)
             .onReceive(flagsRepository.$isAppLocked) { [weak self] in self?.setLockedAppWindow(isAppLocked: $0) }
+            #endif
             .onReceive(flagsRepository.$isWaitingWindowOpen) { [weak self] in self?.handleIsWaitingWindowOpen($0) }
             .onReceive(deepLinkForwarderService.deepLinkPublisher) { [weak self] in self?.handleDeepLink($0) }
     }
@@ -61,6 +65,7 @@ public final class AppNavigationModel {
     }
 
     private func setLockedAppWindow(isAppLocked: Bool) {
+        #if os(iOS)
         if isAppLocked {
             execute(
                 .present(
@@ -71,6 +76,7 @@ public final class AppNavigationModel {
         } else {
             execute(.dismiss(animated: false))
         }
+        #endif
     }
 
     private func handleIsWaitingWindowOpen(_ isOpen: Bool) {

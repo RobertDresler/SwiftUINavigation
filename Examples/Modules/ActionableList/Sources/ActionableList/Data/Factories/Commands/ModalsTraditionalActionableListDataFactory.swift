@@ -13,15 +13,25 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
     }
     
     func makeItems() -> [ActionableListItem] {
+        #if os(iOS)
         [
             presentFullScreenCoverItem,
-            presentFullScreenCoverWithoutAnimationItem,
             presentSheetItem,
+            presentSheetWithoutAnimationItem,
             presentBottomSheetItem,
             dismissItem
         ]
+        #else
+        [
+            presentSheetItem,
+            presentSheetWithoutAnimationItem,
+            presentBottomSheetItem,
+            dismissItem
+        ]
+        #endif
     }
 
+    #if os(iOS)
     private var presentFullScreenCoverItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
@@ -45,32 +55,7 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
             }
         )
     }
-
-    private var presentFullScreenCoverWithoutAnimationItem: ActionableListItem {
-        .new(
-            viewModel: ActionableListItemView.ViewModel(
-                symbolName: "rectangle.portrait.badge.plus",
-                accentColor: .blue,
-                title: "Present Full Screen Cover",
-                subtitle: "Without Animation"
-            ),
-            makeCommand: {
-                .present(
-                    .fullScreenCover(
-                        .stacked(
-                            ActionableListNavigationModel(
-                                inputData: .default,
-                                deepLinkForwarderService: deepLinkForwarderService,
-                                notificationsService: notificationsService,
-                                flagsRepository: flagsRepository
-                            )
-                        )
-                    ),
-                    animated: false
-                )
-            }
-        )
-    }
+    #endif
 
     private var presentSheetItem: ActionableListItem {
         .new(
@@ -91,6 +76,32 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                             )
                         )
                     )
+                )
+            }
+        )
+    }
+
+    private var presentSheetWithoutAnimationItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "rectangle.stack.badge.plus",
+                accentColor: .blue,
+                title: "Present Sheet",
+                subtitle: "Without Animation"
+            ),
+            makeCommand: {
+                .present(
+                    .sheet(
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        )
+                    ),
+                    animated: false
                 )
             }
         )

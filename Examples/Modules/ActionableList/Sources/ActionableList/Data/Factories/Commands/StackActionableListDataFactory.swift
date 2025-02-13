@@ -88,7 +88,17 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
                             notificationsService: notificationsService,
                             flagsRepository: flagsRepository
                         ),
-                        transition: .zoom(sourceID: transitionID)
+                        transition: {
+                            #if os(iOS)
+                            if #available(iOS 18.0, *) {
+                                .zoom(sourceID: transitionID)
+                            } else {
+                                nil
+                            }
+                            #else
+                            nil
+                            #endif
+                        }()
                     )
                 )
             }

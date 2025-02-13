@@ -6,7 +6,7 @@ import CompilerPluginSupport
 
 let package = Package(
     name: "SwiftUINavigation",
-    platforms: [.iOS(.v16), .macOS(.v10_15)],
+    platforms: [.iOS(.v16), .macOS(.v13), .macCatalyst(.v16)],
     products: [
         .library(
             name: "SwiftUINavigation",

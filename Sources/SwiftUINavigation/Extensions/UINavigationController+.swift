@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if os(iOS)
 /// This is required to enable the back gesture when the navigation bar is hidden (`navigationBarHidden(true)`)
 extension UINavigationController: UIGestureRecognizerDelegate {
 
@@ -13,3 +14,4 @@ extension UINavigationController: UIGestureRecognizerDelegate {
     }
 
 }
+#endif

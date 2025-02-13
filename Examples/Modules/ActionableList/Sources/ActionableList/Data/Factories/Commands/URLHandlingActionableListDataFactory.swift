@@ -9,11 +9,17 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
     }
     
     func makeItems() -> [ActionableListItem] {
+        #if os(iOS)
         [
             openURLItem,
             sfSafariItem,
             appSettingsItem
         ]
+        #else
+        [
+            openURLItem
+        ]
+        #endif
     }
 
     private var openURLItem: ActionableListItem {
@@ -30,6 +36,7 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
         )
     }
 
+    #if os(iOS)
     private var sfSafariItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
@@ -49,7 +56,9 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
             }
         )
     }
+    #endif
 
+    #if os(iOS)
     private var appSettingsItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
@@ -62,5 +71,6 @@ struct URLHandlingActionableListDataFactory: ActionableListDataFactory {
             }
         )
     }
+    #endif
 
 }

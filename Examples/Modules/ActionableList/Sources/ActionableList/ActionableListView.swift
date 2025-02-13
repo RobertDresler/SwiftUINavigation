@@ -15,6 +15,7 @@ struct ActionableListView: View {
     var body: some View {
         scrollView
             .navigationTitle(viewModel.title)
+            #if os(iOS)
             .toolbar {
                 if navigationModel.canDismiss {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -22,6 +23,7 @@ struct ActionableListView: View {
                     }
                 }
             }
+            #endif
             .presentationDetents(viewModel.inputData.addPresentationDetents ? [.medium, .large] : [])
     }
 
@@ -51,7 +53,7 @@ struct ActionableListView: View {
     private var itemsView: some View {
         VStack(spacing: 8) {
             ForEach(viewModel.items, id: \.identifiableViewModel.id) { item in
-                if #available(iOS 18.0, *), let wrappedNavigationStackModelNamespace {
+                if #available(iOS 18.0, macOS 15.0, *), let wrappedNavigationStackModelNamespace {
                     configuredItemViewWithPresentingNavigationSource(for: item)
                         .matchedTransitionSource(
                             id: item.identifiableViewModel.id,

@@ -17,7 +17,8 @@ public extension StackRootNavigationModel {
         body(for: StackRootNavigationModelView())
     }
 
-    func setNewPath(_ newPath: NavigationPath) {
-        stackModels = Array(stackModels.prefix(newPath.count + 1))
+    func setNewPath(_ newPath: [StackNavigationDestination]) {
+        stackModels = stackModels.prefix(1)
+        + newPath.compactMap { element in stackModels.first(where: { $0.destination.id == element.modelID }) }
     }
 }

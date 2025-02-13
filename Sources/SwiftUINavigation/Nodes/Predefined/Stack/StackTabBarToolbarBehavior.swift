@@ -11,7 +11,9 @@ struct StackTabBarToolbarBehaviorViewModifier<InputNavigationModel: StackRootNav
 
     func body(content: Content) -> some View {
         content
+            #if os(iOS)
             .toolbar(tabBarVisibility, for: .tabBar)
+            #endif
             .animation(animated ? .default : nil, value: tabBarVisibility)
     }
 

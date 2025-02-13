@@ -1,6 +1,7 @@
 import SwiftUI
 import SafariServices
 
+#if os(iOS)
 struct SFSafariView: View {
 
     private struct SFSafariViewBridge: UIViewControllerRepresentable {
@@ -27,3 +28,4 @@ struct SFSafariView: View {
     }
 
 }
+#endif
