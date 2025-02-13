@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if os(iOS)
 struct ActivityView: UIViewControllerRepresentable {
 
     var inputData: ActivityInputData
@@ -19,3 +20,4 @@ struct ActivityView: UIViewControllerRepresentable {
     ) {}
 
 }
+#endif

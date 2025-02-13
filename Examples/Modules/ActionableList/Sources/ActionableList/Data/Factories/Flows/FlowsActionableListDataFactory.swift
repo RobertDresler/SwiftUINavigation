@@ -20,6 +20,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
     }
 
     func makeItems() -> [ActionableListItem] {
+        #if os(iOS)
         [
             logoutItem,
             onboardingItem,
@@ -34,6 +35,21 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             customWrapperItem,
             navigationModelRelationshipsItem
         ]
+        #else
+        [
+            logoutItem,
+            onboardingItem,
+            messagingBetweenModelsItem,
+            sendNotificationItem,
+            architecturesItem,
+            subscriptionItem,
+            windowsItem,
+            requestReviewItem,
+            navigationBarCustomizationItem,
+            customWrapperItem,
+            navigationModelRelationshipsItem
+        ]
+        #endif
     }
 
     private var logoutItem: ActionableListItem {
@@ -115,6 +131,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
         )
     }
 
+    #if os(iOS)
     private var lockAppItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
@@ -126,13 +143,14 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
             customAction: .lockApp
         )
     }
+    #endif
 
     private var windowsItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
                 symbolName: "macwindow.on.rectangle",
                 accentColor: .orange,
-                title: "Window (iPad only)",
+                title: "Window (iPadOS and macOS only)",
                 subtitle: "This flow presents a second separate window, managed by AppNavigationModel using NavigationEnvironmentTriggers"
             ),
             customAction: .openWaitingWindow

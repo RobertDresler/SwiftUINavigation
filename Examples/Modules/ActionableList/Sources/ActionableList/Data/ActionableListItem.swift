@@ -13,7 +13,9 @@ struct ActionableListItem {
             case logoutWithCustomConfirmationDialog
             case logoutWithConfirmation
             case printDebugGraph
+            #if os(iOS)
             case lockApp
+            #endif
             case openWaitingWindow
         }
 

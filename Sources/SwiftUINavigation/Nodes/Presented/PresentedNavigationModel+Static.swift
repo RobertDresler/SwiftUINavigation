@@ -1,8 +1,10 @@
+#if os(iOS)
 public extension PresentedNavigationModel where Self == FullScreenCoverPresentedNavigationModel {
     static func fullScreenCover(_ model: any NavigationModel) -> FullScreenCoverPresentedNavigationModel {
         FullScreenCoverPresentedNavigationModel(model: model)
     }
 }
+#endif
 
 public extension PresentedNavigationModel where Self == SheetPresentedNavigationModel {
     static func sheet(_ model: any NavigationModel, sourceID: String? = nil) -> SheetPresentedNavigationModel {

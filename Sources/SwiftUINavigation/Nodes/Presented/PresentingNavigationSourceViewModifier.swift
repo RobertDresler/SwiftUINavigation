@@ -28,6 +28,7 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
     }
 
     private var registeredPresentableNavigationModels: [any PresentedNavigationModel.Type] {
+        #if os(iOS)
         [
             FullScreenCoverPresentedNavigationModel.self,
             SheetPresentedNavigationModel.self,
@@ -35,6 +36,14 @@ public struct PresentingNavigationSourceViewModifier: ViewModifier {
             ConfirmationDialogPresentedNavigationModel.self
         ]
         + registeredCustomPresentableNavigationModels
+        #else
+        [
+            SheetPresentedNavigationModel.self,
+            AlertPresentedNavigationModel.self,
+            ConfirmationDialogPresentedNavigationModel.self
+        ]
+        + registeredCustomPresentableNavigationModels
+        #endif
     }
 
 }

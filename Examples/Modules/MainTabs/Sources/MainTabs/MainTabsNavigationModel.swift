@@ -25,8 +25,7 @@ public final class MainTabsNavigationModel {
                     deepLinkForwarderService: deepLinkForwarderService,
                     notificationsService: notificationsService,
                     flagsRepository: flagsRepository
-                ),
-                tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
+                )
             )
         )
         let flowsTab = DefaultTabModel(
@@ -39,8 +38,7 @@ public final class MainTabsNavigationModel {
                     deepLinkForwarderService: deepLinkForwarderService,
                     notificationsService: notificationsService,
                     flagsRepository: flagsRepository
-                ),
-                tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: true)
+                )
             )
         )
         selectedTabModelID = inputData.initialTab

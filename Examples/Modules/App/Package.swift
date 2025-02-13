@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "App",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v16), .macOS(.v13), .macCatalyst(.v16)],
     products: [
         .library(
             name: "App",
@@ -23,7 +23,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Start", package: "Start"),
                 .product(name: "MainTabs", package: "MainTabs"),
-                .product(name: "LockedApp", package: "LockedApp")
+                .product(name: "LockedApp", package: "LockedApp", condition: .when(platforms: [.iOS, .macCatalyst]))
             ]
         )
     ]

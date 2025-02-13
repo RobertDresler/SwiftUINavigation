@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "CustomConfirmationDialog",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v16), .macOS(.v13), .macCatalyst(.v16)],
     products: [
         .library(
             name: "CustomConfirmationDialog",

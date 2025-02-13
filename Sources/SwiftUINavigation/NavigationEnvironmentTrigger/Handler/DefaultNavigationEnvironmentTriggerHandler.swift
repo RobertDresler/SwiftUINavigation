@@ -8,7 +8,7 @@ open class DefaultNavigationEnvironmentTriggerHandler: @unchecked Sendable {
             environment.openURL(openURLTrigger.url)
         } else if let openWindowTrigger = trigger as? OpenWindowNavigationEnvironmentTrigger {
             environment.openWindow(id: openWindowTrigger.id)
-        } else if #available(iOS 17, *), let dismissWindowTrigger = trigger as? DismissWindowNavigationEnvironmentTrigger {
+        } else if #available(iOS 17.0, macOS 14.0, *), let dismissWindowTrigger = trigger as? DismissWindowNavigationEnvironmentTrigger {
             environment.dismissWindow(id: dismissWindowTrigger.id)
         } else if trigger is DismissNavigationEnvironmentTrigger {
             environment.dismiss()

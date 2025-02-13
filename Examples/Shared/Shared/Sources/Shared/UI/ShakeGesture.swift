@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if os(iOS)
 /// Thanks to https://www.hackingwithswift.com/quick-start/swiftui/how-to-detect-shake-gestures
 // The notification we'll send when a shake gesture happens.
 extension UIDevice {
@@ -36,3 +37,4 @@ public extension View {
         self.modifier(DeviceShakeViewModifier(action: action))
     }
 }
+#endif

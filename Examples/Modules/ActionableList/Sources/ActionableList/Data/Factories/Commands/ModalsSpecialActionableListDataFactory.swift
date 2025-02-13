@@ -9,12 +9,20 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
     }
     
     func makeItems() -> [ActionableListItem] {
+        #if os(iOS)
         [
             showAlertItem,
             showConfirmationDialogItem,
             showPhotosPickerItem,
             shareAppItem
         ]
+        #else
+        [
+            showAlertItem,
+            showConfirmationDialogItem,
+            showPhotosPickerItem
+        ]
+        #endif
     }
 
     private var showAlertItem: ActionableListItem {
@@ -114,6 +122,7 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
         )
     }
 
+    #if os(iOS)
     private var shareAppItem: ActionableListItem {
         .new(
             viewModel: ActionableListItemView.ViewModel(
@@ -135,5 +144,6 @@ struct ModalsSpecialActionableListDataFactory: ActionableListDataFactory {
             }
         )
     }
+    #endif
 
 }

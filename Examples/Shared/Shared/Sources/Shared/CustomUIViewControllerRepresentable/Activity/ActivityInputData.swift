@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if os(iOS)
 public struct ActivityInputData {
 
     let activityItems: [Any]
@@ -11,3 +12,4 @@ public struct ActivityInputData {
     }
 
 }
+#endif

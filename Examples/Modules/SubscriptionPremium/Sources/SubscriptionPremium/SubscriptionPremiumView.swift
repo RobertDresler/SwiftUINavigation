@@ -19,11 +19,13 @@ struct SubscriptionPremiumView: View {
             buyMeCoffeeButton
         }
             .padding()
+            #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     unsubscribeButton
                 }
             }
+            #endif
     }
 
     private var unsubscribeButton: some View {

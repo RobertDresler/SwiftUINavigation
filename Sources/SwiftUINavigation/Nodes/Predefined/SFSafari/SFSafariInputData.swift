@@ -1,5 +1,6 @@
 import Foundation
 
+#if os(iOS)
 public struct SFSafariInputData {
 
     let url: URL
@@ -9,3 +10,4 @@ public struct SFSafariInputData {
     }
 
 }
+#endif

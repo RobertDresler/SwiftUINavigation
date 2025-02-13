@@ -5,7 +5,11 @@ import Shared
 @main
 struct ExamplesApp: App {
 
+    #if os(iOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    #else
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    #endif
     private let dependencies: Dependencies
 
     init() {

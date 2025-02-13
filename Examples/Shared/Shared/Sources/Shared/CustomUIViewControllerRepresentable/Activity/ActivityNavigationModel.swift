@@ -1,6 +1,7 @@
 import SwiftUINavigation
 import SwiftUI
 
+#if os(iOS)
 @NavigationModel
 public final class ActivityNavigationModel {
 
@@ -16,3 +17,4 @@ public final class ActivityNavigationModel {
     }
 
 }
+#endif

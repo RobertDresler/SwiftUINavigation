@@ -27,7 +27,7 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 - ✅ Fully customizable and extendable to fit your specific needs
 - ✅ Inspired by the well-known Coordinator pattern but without the hassle of manually managing parent-child relationships
 - ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
-- ✅ Supports iPad as well – optimized for multi-window experiences 
+- ✅ Supports iPadOS 16, macOS 13, and Mac Catalyst 16 as well – optimized for multi-window experiences 
 - ✅ Enables calling environment actions, such as `requestReview`
 - ✅ Supports backward compatibility with UIKit via `UIViewControllerRepresentable` – easily present `SFSafariViewController` or `UIActivityViewController`
 - ✅ Supports Swift 6 and is concurrency safe
@@ -96,8 +96,8 @@ If you prefer to explore the framework on your own, check out [Explore on Your O
 
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.0.2`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.0.2")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.1.0`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.1.0")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 

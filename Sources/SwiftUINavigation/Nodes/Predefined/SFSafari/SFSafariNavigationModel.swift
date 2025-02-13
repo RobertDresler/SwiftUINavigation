@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if os(iOS)
 @NavigationModel
 public final class SFSafariNavigationModel {
 
@@ -14,3 +15,4 @@ public final class SFSafariNavigationModel {
     }
 
 }
+#endif

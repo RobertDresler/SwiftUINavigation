@@ -15,9 +15,13 @@ public struct StackRootNavigationModelView<InputNavigationModel: StackRootNaviga
         }
             .stackNavigationNamespace(namespace)
             .handlingStackTabBarToolbarBehavior(inputNavigationModelType: InputNavigationModel.self)
+            /// This is needed for macOS since there seems to bug in the OS
+            #if os(macOS)
+            .onChange(of: path.wrappedValue) { path.wrappedValue = $0 }
+            #endif
     }
 
-    private var path: Binding<NavigationPath> {
+    private var path: Binding<[StackNavigationDestination]> {
         Binding(
             get: { navigationPath },
             set: { setNewPath($0) }
@@ -42,18 +46,16 @@ public struct StackRootNavigationModelView<InputNavigationModel: StackRootNaviga
         })?.destination
     }
 
-    private var navigationPath: NavigationPath {
+    private var navigationPath: [StackNavigationDestination] {
         var stackModels = stackModels
-        guard !stackModels.isEmpty else { return NavigationPath() }
+        guard !stackModels.isEmpty else { return [] }
         stackModels.removeFirst() /// Because first is root
-        return NavigationPath(
-            stackModels.compactMap { model in
-                StackNavigationDestination(
-                    modelID: model.destination.id,
-                    transition: model.transition
-                )
-            }
-        )
+        return stackModels.map { model in
+            StackNavigationDestination(
+                modelID: model.destination.id,
+                transition: model.transition
+            )
+        }
     }
 
     private var stackModels: [StackNavigationModel] {
@@ -62,7 +64,7 @@ public struct StackRootNavigationModelView<InputNavigationModel: StackRootNaviga
 
     // MARK: Methods
 
-    private func setNewPath(_ newPath: NavigationPath) {
+    private func setNewPath(_ newPath: [StackNavigationDestination]) {
         navigationModel.setNewPath(newPath)
     }
 
@@ -85,21 +87,15 @@ fileprivate extension View {
         }
     }
 
+    @ViewBuilder
     func destinationWithNavigationTransition(
         transition: StackNavigationTransition?,
         namespace: Namespace.ID?
     ) -> some View {
-        Group {
-            if #available(iOS 18.0, *), let namespace {
-                switch transition {
-                case .zoom(let sourceID):
-                    navigationTransition(.zoom(sourceID: sourceID, in: namespace))
-                case nil:
-                    self
-                }
-            } else {
-                self
-            }
+        if #available(iOS 18.0, macOS 15.0, *), let namespace, let transition {
+            navigationTransition(AnyNavigationTransition(transition.toNavigationTransition(in: namespace)))
+        } else {
+            self
         }
     }
 }

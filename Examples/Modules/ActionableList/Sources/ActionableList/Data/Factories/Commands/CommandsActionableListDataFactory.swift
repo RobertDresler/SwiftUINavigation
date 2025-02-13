@@ -115,7 +115,7 @@ struct CommandsActionableListDataFactory: ActionableListDataFactory {
             ),
             makeCommand: {
                 ShowAndHideAfterDelayNavigationCommand(
-                    presentedModel: .fullScreenCover(
+                    presentedModel: .sheet(
                         .stacked(
                             ActionableListNavigationModel(
                                 inputData: .default,

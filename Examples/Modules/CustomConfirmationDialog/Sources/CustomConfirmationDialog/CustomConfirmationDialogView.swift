@@ -17,11 +17,13 @@ struct CustomConfirmationDialogView: View {
             confirmButton
         }
             .padding()
+            #if os(iOS)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     dismissButton
                 }
             }
+            #endif
             .presentationDetents([.medium])
     }
 

@@ -1,5 +1,6 @@
 import SwiftUI
 
+#if os(iOS)
 public struct FullScreenCoverPresentedNavigationModel: PresentedNavigationModel {
 
     public let model: any NavigationModel
@@ -26,3 +27,4 @@ public struct FullScreenCoverPresentedNavigationModel: PresentedNavigationModel 
     }
 
 }
+#endif
