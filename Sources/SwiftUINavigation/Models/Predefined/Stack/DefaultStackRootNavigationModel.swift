@@ -3,20 +3,20 @@ import SwiftUI
 @StackRootNavigationModel
 public final class DefaultStackRootNavigationModel {
 
-    public var stackModels: [StackNavigationModel]
+    public var path: [StackNavigationModel]
     public var tabBarToolbarBehavior: StackTabBarToolbarBehavior
 
-    public init(_ stackModels: [StackNavigationModel], tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic) {
-        self.stackModels = stackModels
+    public init(_ path: [StackNavigationModel], tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic) {
+        self.path = path
         self.tabBarToolbarBehavior = tabBarToolbarBehavior
     }
 
     public convenience init(
-        _ stackModels: [any NavigationModel],
+        _ path: [any NavigationModel],
         tabBarToolbarBehavior: StackTabBarToolbarBehavior = .automatic
     ) {
         self.init(
-            stackModels.map { StackNavigationModel(destination: $0) },
+            path.map { StackNavigationModel(model: $0) },
             tabBarToolbarBehavior: tabBarToolbarBehavior
         )
     }

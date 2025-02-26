@@ -34,7 +34,7 @@ public struct StackMapNavigationCommand: NavigationCommand {
         perform(
             animated: animated,
             action: {
-                model.stackModels = transform(model.stackModels)
+                model.path = transform(model.path)
             }
         )
     }

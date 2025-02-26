@@ -22,7 +22,7 @@ public struct StackSetRootNavigationCommand: NavigationCommand {
         .stackMap(
             { models in
                 let rootModelWithStackTransition = StackNavigationModel(
-                    destination: rootModel,
+                    model: rootModel,
                     transition: nil
                 )
                 if clear || models.isEmpty {

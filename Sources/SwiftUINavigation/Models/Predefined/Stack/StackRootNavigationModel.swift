@@ -3,14 +3,14 @@ import Combine
 
 public protocol StackRootNavigationModel: NavigationModel {
     associatedtype ModifiedView: View
-    var stackModels: [StackNavigationModel] { get set }
+    var path: [StackNavigationModel] { get set }
     var tabBarToolbarBehavior: StackTabBarToolbarBehavior { get set }
     @ViewBuilder func body(for content: StackRootNavigationModelView<Self>) -> ModifiedView
 }
 
 public extension StackRootNavigationModel {
     var children: [any NavigationModel] {
-        baseNavigationModelChildren + stackModels.map(\.destination)
+        baseNavigationModelChildren + path.map(\.model)
     }
 
     var body: ModifiedView {
@@ -18,7 +18,7 @@ public extension StackRootNavigationModel {
     }
 
     func setNewPath(_ newPath: [StackNavigationDestination]) {
-        stackModels = stackModels.prefix(1)
-        + newPath.compactMap { element in stackModels.first(where: { $0.destination.id == element.modelID }) }
+        path = path.prefix(1)
+        + newPath.compactMap { element in path.first(where: { $0.model.id == element.modelID }) }
     }
 }

@@ -30,7 +30,7 @@ public struct StackRootNavigationModelView<InputNavigationModel: StackRootNaviga
 
     private var navigationStackResolvedRoot: some View {
         Group {
-            if let rootModel = navigationModel.stackModels.first?.destination {
+            if let rootModel = navigationModel.path.first?.model {
                 NavigationModelResolvedView(model: rootModel)
                     .connectingNavigationDestinationLogic(
                         modelForModelID: { model(for: $0) },
@@ -41,25 +41,25 @@ public struct StackRootNavigationModelView<InputNavigationModel: StackRootNaviga
     }
 
     private func model(for modelID: String) -> (any NavigationModel)? {
-        stackModels.first(where: { model in
-            modelID == model.destination.id
-        })?.destination
+        navigationModelPath.first(where: { model in
+            modelID == model.model.id
+        })?.model
     }
 
     private var navigationPath: [StackNavigationDestination] {
-        var stackModels = stackModels
-        guard !stackModels.isEmpty else { return [] }
-        stackModels.removeFirst() /// Because first is root
-        return stackModels.map { model in
+        var navigationModelPath = navigationModelPath
+        guard !navigationModelPath.isEmpty else { return [] }
+        navigationModelPath.removeFirst() /// Because first is root
+        return navigationModelPath.map { model in
             StackNavigationDestination(
-                modelID: model.destination.id,
+                modelID: model.model.id,
                 transition: model.transition
             )
         }
     }
 
-    private var stackModels: [StackNavigationModel] {
-        navigationModel.stackModels
+    private var navigationModelPath: [StackNavigationModel] {
+        navigationModel.path
     }
 
     // MARK: Methods
