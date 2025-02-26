@@ -1,1 +1,0 @@
-public struct RemovalNavigationMessage: NavigationMessage {}

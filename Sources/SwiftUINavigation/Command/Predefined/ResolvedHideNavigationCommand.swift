@@ -15,7 +15,7 @@ public struct ResolvedHideNavigationCommand: NavigationCommand {
     }
 
     private func resolvedCommand(on model: any NavigationModel) -> NavigationCommand {
-        if (model.parent as? any StackRootNavigationModel)?.stackModels.first?.destination === model {
+        if (model.parent as? any StackRootNavigationModel)?.path.first?.model === model {
             .dismiss(animated: animated)
         } else {
             .stackDropLast(animated: animated)

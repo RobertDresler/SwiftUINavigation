@@ -85,7 +85,7 @@ struct FlowsActionableListDataFactory: ActionableListDataFactory {
                 symbolName: "bubble.left.and.bubble.right.fill",
                 accentColor: .teal,
                 title: "Messaging Between Models",
-                subtitle: "This flow demonstrates messaging between models. When you confirm logout, a message is sent to the list model, which handles the logout after the confirmation dialog model is destroyed (RemovalNavigationMessage received)."
+                subtitle: "This flow demonstrates messaging between models. When you confirm logout, a message is sent to the list model, which handles the logout after the confirmation dialog model is finished (FinishedNavigationMessage received)."
             ),
             customAction: .logoutWithCustomConfirmationDialog
         )

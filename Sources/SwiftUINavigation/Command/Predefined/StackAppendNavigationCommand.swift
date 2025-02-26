@@ -17,7 +17,7 @@ public struct StackAppendNavigationCommand: NavigationCommand {
     }
 
     public init(appendedModel: any NavigationModel, animated: Bool = true) {
-        self.appendedModel = StackNavigationModel(destination: appendedModel)
+        self.appendedModel = StackNavigationModel(model: appendedModel)
         self.animated = animated
     }
 

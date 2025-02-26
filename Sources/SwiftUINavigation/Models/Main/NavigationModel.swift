@@ -121,6 +121,6 @@ private extension NavigationModel {
     }
 
     func finish() {
-        sendMessage(RemovalNavigationMessage())
+        sendMessage(FinishedNavigationMessage())
     }
 }

@@ -17,6 +17,8 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
         [
             presentFullScreenCoverItem,
             presentFullScreenCoverWithoutAnimationItem,
+            presentFullScreenCoverWithScaleTransitionItem,
+            presentFullScreenCoverWithOpacityTransitionItem,
             presentSheetItem,
             presentSheetWithoutAnimationItem,
             presentBottomSheetItem,
@@ -78,6 +80,58 @@ struct ModalsTraditionalActionableListDataFactory: ActionableListDataFactory {
                         )
                     ),
                     animated: false
+                )
+            }
+        )
+    }
+
+    private var presentFullScreenCoverWithScaleTransitionItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "arrow.up.left.and.arrow.down.right",
+                accentColor: .blue,
+                title: "Present Full Screen Cover",
+                subtitle: "With Scale Transition"
+            ),
+            makeCommand: {
+                .present(
+                    .fullScreenCover(
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        ),
+                        transition: .scale.animation(.default)
+                    )
+                )
+            }
+        )
+    }
+
+    private var presentFullScreenCoverWithOpacityTransitionItem: ActionableListItem {
+        .new(
+            viewModel: ActionableListItemView.ViewModel(
+                symbolName: "sun.min.fill",
+                accentColor: .blue,
+                title: "Present Full Screen Cover",
+                subtitle: "With Opacity Transition"
+            ),
+            makeCommand: {
+                .present(
+                    .fullScreenCover(
+                        .stacked(
+                            ActionableListNavigationModel(
+                                inputData: .default,
+                                deepLinkForwarderService: deepLinkForwarderService,
+                                notificationsService: notificationsService,
+                                flagsRepository: flagsRepository
+                            )
+                        ),
+                        transition: .opacity.animation(.default)
+                    )
                 )
             }
         )

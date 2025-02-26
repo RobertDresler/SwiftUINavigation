@@ -26,7 +26,8 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 - ✅ You can choose any architecture that fits your needs—MV, MVVM, or even TCA
 - ✅ Fully customizable and extendable to fit your specific needs
 - ✅ Inspired by the well-known Coordinator pattern but without the hassle of manually managing parent-child relationships
-- ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
+- ✅ Supports iOS 16 and later
+- ✅ Supports custom `fullScreenCover` transitions (e.g., `scale`, `opacity`) from iOS 17 and stack transitions (e.g., `zoom`) from iOS 18
 - ✅ Supports iPadOS 16, macOS 13, and Mac Catalyst 16 as well – optimized for multi-window experiences 
 - ✅ Enables calling environment actions, such as `requestReview`
 - ✅ Supports backward compatibility with UIKit via `UIViewControllerRepresentable` – easily present `SFSafariViewController` or `UIActivityViewController`
@@ -40,7 +41,7 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 
 In SwiftUI, `State`/`Model`/`ViewModel` serves as the single source of truth for the view's content. This framework separates the state of navigation into a dedicated model called `NavigationModel`.
 
-Think of it as a screen/module or what you might recognize as a coordinator or router. These `NavigationModels` form a navigation graph, where each `NavigationNodel` maintains its own state using `@Published` properties. This state is rendered using native SwiftUI mechanisms, and when the state changes, navigation occurs. 
+Think of it as a screen/module or what you might recognize as a coordinator or router. These `NavigationModels` form a navigation graph, where each `NavigationModel` maintains its own state using `@Published` properties. This state is rendered using native SwiftUI mechanisms, and when the state changes, navigation occurs. 
 
 For example, when you update `presentedModel`, the corresponding view for the new `presentedModel` is presented. The `NavigationModel` is also responsible for providing the screen's content within its `body`, which is then integrated into the view hierarchy by the framework.
 
@@ -96,8 +97,8 @@ If you prefer to explore the framework on your own, check out [Explore on Your O
 
 To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.1.0`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.1.0")`
+- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.2.0`
+- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.2.0")`
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
@@ -135,7 +136,7 @@ final class HomeNavigationModel {
         let detailNavigationModel = DetailNavigationModel()
             .onMessageReceived { message in
                 switch message {
-                case _ as RemovalNavigationMessage:
+                case _ as FinishedNavigationMessage:
                     onRemoval()
                 default:
                     break
@@ -225,7 +226,7 @@ final class HomeNavigationModel {
         let detailNavigationModel = DetailNavigationModel()
             .onMessageReceived { [weak self] message in
                 switch message {
-                case _ as RemovalNavigationMessage:
+                case _ as FinishedNavigationMessage:
                     self?.viewModel.dismissalCount += 1
                 default:
                     break
@@ -610,7 +611,7 @@ The framework is designed to allow you to easily create your own commands as wel
 <details>
 <summary>Click here to see more 👈</summary>
 
-Since presenting views using native mechanisms requires separate view modifiers, this could lead to unintended scenarios where `fullScreenCover`, `sheet`, and `alert` are presented simultaneously (or at least this is what your declaration looks like). To address this, I introduced the concept of `PresentedNavigationModel`. Each `NavigationModel` internally maintains a single `presentedNode` property.
+Since presenting views using native mechanisms requires separate view modifiers, this could lead to unintended scenarios where `fullScreenCover`, `sheet`, and `alert` are presented simultaneously (or at least this is what your declaration looks like). To address this, I introduced the concept of `PresentedNavigationModel`. Each `NavigationModel` internally maintains a single `presentedModel` property.
 
 Instead of presenting a `NavigationModel` directly, you present only one `PresentedNavigationModel`, which holds your `NavigationModel` (e.g., `DetailNavigationModel`). The `PresentedNavigationModel` could be for example `FullScreenCoverPresentedNavigationModel` representing model which gets presented as `fullScreenCover`.
 
@@ -625,6 +626,8 @@ final class ProfileNavigationModel {
     func showEditor() {
         // Present fullScreenCover
         execute(.present(.fullScreenCover(.stacked(ProfileEditorNavigationModel()))))
+        // Present fullScreenCover with opacity transition
+        execute(.present(.fullScreenCover(.stacked(ProfileEditorNavigationModel()), transition: .opacity.animation(.default))))
         // Present sheet
         execute(.present(.sheet(.stacked(ProfileEditorNavigationModel()))))
         // Present sheet with editor and pushed connected services detail from the editor
@@ -654,7 +657,7 @@ struct ProfileView: View {
 
 #### Predefined PresentedNavigationModels
 - **`.fullScreenCover`/`FullScreenCoverPresentedNavigationModel`**  
-  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. If you want to wrap a newly presented Model into a stack Model, use `.stacked` or `DefaultStackRootNavigationModel`.
+  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. If you want to wrap a newly presented Model into a stack Model, use `.stacked` or `DefaultStackRootNavigationModel`. On iOS 17+ you can pass custom `transition`.
 - **`.sheet`/`SheetPresentedNavigationModel`**  
   Displays a sheet, similar to `sheet` in SwiftUI (you can adjust the detents to show it as a bottom sheet). If you want to wrap a newly presented `NavigationModel` into a stack Model, use `.stacked` or `DefaultStackRootNavigationModel`.
 - **`.alert`/`AlertPresentedNavigationModel`**  
@@ -697,7 +700,7 @@ execute(
         DetailNavigationModel()
             .onMessageReceived { [weak self] in 
                 switch message {
-                case _ as RemovalNavigationMessage:
+                case _ as FinishedNavigationMessage:
                     // You can handle it how you want, these are just examples
                     // When using MV you can call closure from method's argument
                     onDetailRemoval()
@@ -712,7 +715,7 @@ execute(
 )
 ```
 
-The framework provides a predefined message, `RemovalNavigationMessage`, which is triggered whenever a `NavigationModel` is removed from its `parent`, so you know it is being deallocated, dismissed, or dropped from the stack.
+The framework provides a predefined message, `FinishedNavigationMessage`, which is triggered whenever a `NavigationModel` is finished (removed from its `parent`), so you know it is being deallocated, dismissed, or dropped from the stack.
 
 </details>
 
@@ -801,7 +804,9 @@ When creating a custom container view, like in [`SegmentedTabsNavigationModel` i
 <details>
 <summary>Click here to see more 👈</summary>
 
-Custom transitions like zoom are supported since iOS 18+ for Stack (see [Examples App](#Explore-Examples-App)).
+Custom `fullScreenCover` transitions, such as `opacity`, `scale`, or custom transitions, are supported in iOS 17+ and can be passed to `fullScreenCover(_, transition:)`. Make sure to include an `animation` (e.g. `opacity.animation(.default)`). For in-app usage, check out the [Examples App](#Explore-Examples-App).
+
+Custom stack transitions like zoom are supported since iOS 18+ (see [Examples App](#Explore-Examples-App)).
 
 </details>
 

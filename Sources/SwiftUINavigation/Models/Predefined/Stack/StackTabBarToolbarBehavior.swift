@@ -31,7 +31,7 @@ struct StackTabBarToolbarBehaviorViewModifier<InputNavigationModel: StackRootNav
         case .automatic:
             .automatic
         case .hiddenWhenNotRoot:
-            navigationModel.stackModels.count > 1 ? .hidden : .automatic
+            navigationModel.path.count > 1 ? .hidden : .automatic
         }
     }
 

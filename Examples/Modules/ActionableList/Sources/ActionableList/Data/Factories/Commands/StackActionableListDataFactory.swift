@@ -82,7 +82,7 @@ struct StackActionableListDataFactory: ActionableListDataFactory {
             makeCommand: {
                 .stackAppend(
                     StackNavigationModel(
-                        destination: ActionableListNavigationModel(
+                        model: ActionableListNavigationModel(
                             inputData: .default,
                             deepLinkForwarderService: deepLinkForwarderService,
                             notificationsService: notificationsService,
