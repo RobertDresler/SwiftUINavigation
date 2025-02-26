@@ -135,7 +135,7 @@ final class HomeNavigationModel {
         let detailNavigationModel = DetailNavigationModel()
             .onMessageReceived { message in
                 switch message {
-                case _ as RemovalNavigationMessage:
+                case _ as FinishedNavigationMessage:
                     onRemoval()
                 default:
                     break
@@ -225,7 +225,7 @@ final class HomeNavigationModel {
         let detailNavigationModel = DetailNavigationModel()
             .onMessageReceived { [weak self] message in
                 switch message {
-                case _ as RemovalNavigationMessage:
+                case _ as FinishedNavigationMessage:
                     self?.viewModel.dismissalCount += 1
                 default:
                     break
@@ -697,7 +697,7 @@ execute(
         DetailNavigationModel()
             .onMessageReceived { [weak self] in 
                 switch message {
-                case _ as RemovalNavigationMessage:
+                case _ as FinishedNavigationMessage:
                     // You can handle it how you want, these are just examples
                     // When using MV you can call closure from method's argument
                     onDetailRemoval()
@@ -712,7 +712,7 @@ execute(
 )
 ```
 
-The framework provides a predefined message, `RemovalNavigationMessage`, which is triggered whenever a `NavigationModel` is removed from its `parent`, so you know it is being deallocated, dismissed, or dropped from the stack.
+The framework provides a predefined message, `FinishedNavigationMessage`, which is triggered whenever a `NavigationModel` is finished (removed from its `parent`), so you know it is being deallocated, dismissed, or dropped from the stack.
 
 </details>
 
