@@ -11,7 +11,11 @@ open class DefaultNavigationEnvironmentTriggerHandler: @unchecked Sendable {
         } else if #available(iOS 17.0, macOS 14.0, *), let dismissWindowTrigger = trigger as? DismissWindowNavigationEnvironmentTrigger {
             environment.dismissWindow(id: dismissWindowTrigger.id)
         } else if trigger is DismissNavigationEnvironmentTrigger {
-            environment.dismiss()
+            if let customDismiss = environment.customDismiss {
+                customDismiss()
+            } else {
+                environment.dismiss()
+            }
         } else {
             print("Unknown trigger: \(trigger)")
         }

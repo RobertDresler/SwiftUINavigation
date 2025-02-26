@@ -26,7 +26,8 @@ If you find this repository helpful, feel free to give it a ⭐ or share it with
 - ✅ You can choose any architecture that fits your needs—MV, MVVM, or even TCA
 - ✅ Fully customizable and extendable to fit your specific needs
 - ✅ Inspired by the well-known Coordinator pattern but without the hassle of manually managing parent-child relationships
-- ✅ Supports iOS 16 and later—with zoom transition on the stack available starting from iOS 18  
+- ✅ Supports iOS 16 and later
+- ✅ Supports custom `fullScreenCover` transitions (e.g., `scale`, `opacity`) from iOS 17 and stack transitions (e.g., `zoom`) from iOS 18
 - ✅ Supports iPadOS 16, macOS 13, and Mac Catalyst 16 as well – optimized for multi-window experiences 
 - ✅ Enables calling environment actions, such as `requestReview`
 - ✅ Supports backward compatibility with UIKit via `UIViewControllerRepresentable` – easily present `SFSafariViewController` or `UIActivityViewController`
@@ -625,6 +626,8 @@ final class ProfileNavigationModel {
     func showEditor() {
         // Present fullScreenCover
         execute(.present(.fullScreenCover(.stacked(ProfileEditorNavigationModel()))))
+        // Present fullScreenCover with opacity transition
+        execute(.present(.fullScreenCover(.stacked(ProfileEditorNavigationModel()), transition: .opacity.animation(.default))))
         // Present sheet
         execute(.present(.sheet(.stacked(ProfileEditorNavigationModel()))))
         // Present sheet with editor and pushed connected services detail from the editor
@@ -654,7 +657,7 @@ struct ProfileView: View {
 
 #### Predefined PresentedNavigationModels
 - **`.fullScreenCover`/`FullScreenCoverPresentedNavigationModel`**  
-  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. If you want to wrap a newly presented Model into a stack Model, use `.stacked` or `DefaultStackRootNavigationModel`.
+  Displays a full-screen modal, similar to `fullScreenCover` in SwiftUI. If you want to wrap a newly presented Model into a stack Model, use `.stacked` or `DefaultStackRootNavigationModel`. On iOS 17+ you can pass custom `transition`.
 - **`.sheet`/`SheetPresentedNavigationModel`**  
   Displays a sheet, similar to `sheet` in SwiftUI (you can adjust the detents to show it as a bottom sheet). If you want to wrap a newly presented `NavigationModel` into a stack Model, use `.stacked` or `DefaultStackRootNavigationModel`.
 - **`.alert`/`AlertPresentedNavigationModel`**  
@@ -801,7 +804,9 @@ When creating a custom container view, like in [`SegmentedTabsNavigationModel` i
 <details>
 <summary>Click here to see more 👈</summary>
 
-Custom transitions like zoom are supported since iOS 18+ for Stack (see [Examples App](#Explore-Examples-App)).
+Custom `fullScreenCover` transitions, such as `opacity`, `scale`, or custom transitions, are supported in iOS 17+ and can be passed to `fullScreenCover(_, transition:)`. Make sure to include an `animation` (e.g. `opacity.animation(.default)`). For in-app usage, check out the [Examples App](#Explore-Examples-App).
+
+Custom stack transitions like zoom are supported since iOS 18+ (see [Examples App](#Explore-Examples-App)).
 
 </details>
 

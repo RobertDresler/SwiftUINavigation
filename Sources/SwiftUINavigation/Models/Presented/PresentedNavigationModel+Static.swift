@@ -1,7 +1,12 @@
+import SwiftUI
+
 #if os(iOS)
 public extension PresentedNavigationModel where Self == FullScreenCoverPresentedNavigationModel {
-    static func fullScreenCover(_ model: any NavigationModel) -> FullScreenCoverPresentedNavigationModel {
-        FullScreenCoverPresentedNavigationModel(model: model)
+    static func fullScreenCover(
+        _ model: any NavigationModel,
+        transition: AnyTransition? = nil
+    ) -> FullScreenCoverPresentedNavigationModel {
+        FullScreenCoverPresentedNavigationModel(model: model, transition: transition)
     }
 }
 #endif

@@ -4,7 +4,7 @@ public struct DismissNavigationCommand: NavigationCommand {
         guard let nearestModelWhichCanPresent = model.nearestModelWhichCanPresent else { return }
         perform(
             animated: animated,
-            action: { nearestModelWhichCanPresent.parent?.presentedModel = nil }
+            action: { nearestModelWhichCanPresent.sendEnvironmentTrigger(DismissNavigationEnvironmentTrigger()) }
         )
     }
 
