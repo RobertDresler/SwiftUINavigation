@@ -312,7 +312,7 @@ To see the framework in action, check out the code in the [Examples App](#Explor
 <summary>Click here to see more 👈</summary>
 The `RootNavigationView` is the top-level hierarchy element. It is placed inside a `WindowGroup` and holds a reference to the root `NavigationModel`. Avoid nesting one `RootNavigationView` inside another—use it only at the top level.  
 
-The only exception is when integrating `SwiftUINavigation` into an existing project that uses UIKit-based navigation. In this case, `RootNavigationView` allows you to bridge between SwiftUI and UIKit navigation patterns.
+The only exception is when integrating `SwiftUINavigation` into an existing project that uses UIKit based (or other SwiftUI based) navigation. In this case, `RootNavigationView` allows you to bridge between SwiftUINavigation and your existing codebase - see [Migration from UIKit based navigation](#Migration-from-UIKit-based-navigation) and [Migration from other SwiftUI based navigation](#Migration-from-other-SwiftUI-based-navigation).
 
 The root model should be created using the `@StateObject` property wrapper, for example, in your `App`:
 
@@ -807,6 +807,54 @@ When creating a custom container view, like in [`SegmentedTabsNavigationModel` i
 Custom `fullScreenCover` transitions, such as `opacity`, `scale`, or custom transitions, are supported in iOS 17+ and can be passed to `fullScreenCover(_, transition:)`. Make sure to include an `animation` (e.g. `opacity.animation(.default)`). For in-app usage, check out the [Examples App](#Explore-Examples-App).
 
 Custom stack transitions like zoom are supported since iOS 18+ (see [Examples App](#Explore-Examples-App)).
+
+</details>
+
+### Migration from UIKit based navigation 
+<details>
+<summary>Click here to see more 👈</summary>
+
+To bridge SwiftUINavigation solution into your existing UIKit codebase, you use `RootNavigationView`. You are responsible for keeping state of the `rootModel`.
+
+```swift
+class SomeViewController: UIViewController {
+
+    ...
+    
+    func presentNewFlow() {
+        let rootModel = DefaultStackRootNavigationModel(NewFlowNavigationModel())
+        let hostingController = UIHostingController(rootView: RootNavigationView(rootModel: rootModel))
+        hostingController.modalPresentationStyle = .fullScreen
+        present(hostingController, animated: true)
+    }
+
+}
+```
+
+</details>
+
+### Migration from other SwiftUI based navigation
+<details>
+<summary>Click here to see more 👈</summary>
+
+To bridge SwiftUINavigation solution into your existing SwiftUI codebase, you use `RootNavigationView`. You are responsible for keeping state of the `rootModel`.
+
+```swift
+struct SomeView: View {
+
+    @StateObject var presentedNavigationModel = DefaultStackRootNavigationModel(NewFlowNavigationModel())
+    @State var isPresented = false
+
+    var body: some View {
+        Button("Present") {
+            isPresented = true
+        }.fullScreenCover(isPresented: $isPresented) {
+            RootNavigationView(rootModel: presentedNavigationModel)
+        }
+    }
+
+}
+```
 
 </details>
 
