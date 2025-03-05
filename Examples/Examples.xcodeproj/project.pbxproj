@@ -15,6 +15,7 @@
 		D07112542D591A9000320732 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = D07112532D591A9000320732 /* Shared */; };
 		D09DB6102D32F5040050E44C /* Waiting in Frameworks */ = {isa = PBXBuildFile; productRef = D09DB60F2D32F5040050E44C /* Waiting */; };
 		D0EB4DC22CD6420D0052F1AC /* App in Frameworks */ = {isa = PBXBuildFile; productRef = D0EB4DC12CD6420D0052F1AC /* App */; };
+		D0EC3A152D788B220008D11D /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = D0EC3A142D788B220008D11D /* SwiftUINavigation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 			files = (
 				D0EB4DC22CD6420D0052F1AC /* App in Frameworks */,
 				D071124D2D59195700320732 /* OnboardingQuestion in Frameworks */,
+				D0EC3A152D788B220008D11D /* SwiftUINavigation in Frameworks */,
 				D07112502D59195E00320732 /* OnboardingResult in Frameworks */,
 				D09DB6102D32F5040050E44C /* Waiting in Frameworks */,
 				D00BB9042D4009FA00ED9CD9 /* SwiftUINavigation in Frameworks */,
@@ -124,6 +126,7 @@
 				D071124C2D59195700320732 /* OnboardingQuestion */,
 				D071124F2D59195E00320732 /* OnboardingResult */,
 				D07112532D591A9000320732 /* Shared */,
+				D0EC3A142D788B220008D11D /* SwiftUINavigation */,
 			);
 			productName = Examples;
 			productReference = D04318B22CC8D7430077101C /* Examples.app */;
@@ -156,11 +159,11 @@
 			packageReferences = (
 				D0EB4DC02CD6420D0052F1AC /* XCLocalSwiftPackageReference "Examples/Modules/App" */,
 				D09DB60E2D32F5040050E44C /* XCLocalSwiftPackageReference "Examples/Modules/Waiting" */,
-				D00BB9022D4009FA00ED9CD9 /* XCLocalSwiftPackageReference "../SwiftUINavigation" */,
 				D07112482D59194900320732 /* XCLocalSwiftPackageReference "Examples/Modules/Subscription" */,
 				D071124B2D59195700320732 /* XCLocalSwiftPackageReference "Examples/Modules/OnboardingQuestion" */,
 				D071124E2D59195E00320732 /* XCLocalSwiftPackageReference "Examples/Modules/OnboardingResult" */,
 				D07112522D591A9000320732 /* XCLocalSwiftPackageReference "Examples/Shared/Shared" */,
+				D0EC3A132D788B220008D11D /* XCLocalSwiftPackageReference "../../SwiftUINavigation" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D04318B32CC8D7430077101C /* Products */;
@@ -412,10 +415,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		D00BB9022D4009FA00ED9CD9 /* XCLocalSwiftPackageReference "../SwiftUINavigation" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../SwiftUINavigation;
-		};
 		D07112482D59194900320732 /* XCLocalSwiftPackageReference "Examples/Modules/Subscription" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Examples/Modules/Subscription;
@@ -439,6 +438,10 @@
 		D0EB4DC02CD6420D0052F1AC /* XCLocalSwiftPackageReference "Examples/Modules/App" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Examples/Modules/App;
+		};
+		D0EC3A132D788B220008D11D /* XCLocalSwiftPackageReference "../../SwiftUINavigation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../SwiftUINavigation;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -474,6 +477,10 @@
 		D0EB4DC12CD6420D0052F1AC /* App */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = App;
+		};
+		D0EC3A142D788B220008D11D /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUINavigation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
