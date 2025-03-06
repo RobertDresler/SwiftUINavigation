@@ -597,6 +597,10 @@ final class MainTabsNavigationModel {
 
 ⚠️ When using tabs navigation, you typically want each tab to have its own navigation stack. To achieve this, wrap the `navigationModel` of `DefaultTabModel` in a `.stacked` model. However, avoid wrapping `TabsRootNavigationModel` in another stack (e.g., at the App level), as this may lead to unexpected behavior.
 
+-----
+
+The fundamental command for modifying the tabs navigation state is `tabsSelectItem(id:)` which selects the tab with given ID.
+
 </details>
 
 ### Switchable Navigation
@@ -642,6 +646,10 @@ final class AppNavigationModel {
 
 }
 ```
+
+-----
+
+The fundamental command for modifying the switchable navigation state is `switchModel(_:)` which switches the model to model from the command's argument.
 
 </details>
 
