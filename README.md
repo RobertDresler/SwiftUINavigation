@@ -409,131 +409,24 @@ Keep in mind that any property of a class marked with one of these macros, which
   The simplest Model you’ll use most of the time, especially if your screen doesn’t require any tabs or switch logic. You will also use this macro if you want to create your own container model.
   
 - **`@StackRootNavigationModel`**  
-  Represents what you would typically associate with a `NavigationStack` or `UINavigationController` container. Most of the time, you don't have to create your own implementation; you can use the predefined container model `.stacked` / `DefaultStackRootNavigationModel` like this:
-  
-  ```swift
-  .stacked(HomeNavigationModel())
-  ```
-  
-  If you want to create your own implementation, you can update the Model's body using `body(for:)`.
+  See [Stack Navigation](#Stack-Navigation)
 
 - **`@TabsRootNavigationModel`**  
-  Represents what you would typically associate with a `TabView` or `UITabBarController` container. You can create your own implementation of `TabsRootNavigationModel` like this (for more, see [Examples App](#Explore-Examples-App)):
-    
-```swift
-@TabsRootNavigationModel
-final class MainTabsNavigationModel {
-
-    enum Tab {
-        case home
-        case settings
-    }
-
-    var selectedTabModelID: AnyHashable
-    var tabsModels: [any TabModel]
-
-    init(initialTab: Tab) {
-        selectedTabModelID = initialTab
-        tabsModels = [
-            DefaultTabModel(
-                id: Tab.home,
-                image: Image(systemName: "house"),
-                title: "Home",
-                navigationModel: .stacked(HomeNavigationModel())
-            ),
-            DefaultTabModel(
-                id: Tab.settings,
-                image: Image(systemName: "gear"),
-                title: "Settings",
-                navigationModel: .stacked(SettingsNavigationModel())
-            )
-        ]
-    }
-
-    func body(for content: TabsRootNavigationModelView<MainTabsNavigationModel>) -> some View {
-        content // Modify default content if needed
-    }
-
-}
-```
-
-- **`@SwitchedNavigationModel`**    
-  Use this macro to create a `NavigationModel` container that can dynamically switch between different child Models.  
-
-  This `NavigationModel` is useful for scenarios like:  
-  - A root `NavigationModel` that displays either the tabs root `NavigationModel` or the login `NavigationModel` based on whether the user is logged in.  
-  - A subscription `NavigationModel` that shows different content depending on whether the user is subscribed.  
-  - And more...
-
-  See the example below, or for a practical implementation, check out the [Examples App](#Explore-Examples-App).
+  See [Tabs Navigation](#Tabs-Navigation)
   
-```swift
-final class UserService {
-    @Published var isUserLogged = false
-}
-
-@SwitchedNavigationModel
-final class AppNavigationModel {
-
-    var switchedModel: (any NavigationModel)?
-    let userService: UserService
-
-    init(userService: UserService) {
-        self.userService = userService
-    }
-
-    func body(for content: SwitchedNavigationModelView<AppNavigationModel>) -> some View {
-        content
-            .onReceive(userService.$isUserLogged) { [weak self] in self?.switchModel(isUserLogged: $0) }
-    }
-
-    private func switchModel(isUserLogged: Bool) {
-        execute(
-            .switchModel(
-                isUserLogged
-                    ? MainTabsNavigationModel(initialTab: .home)
-                    : LoginNavigationModel()
-            )
-        )
-    }
-
-}
-```
+- **`@SwitchedNavigationModel`**  
+  See [Switchable Navigation](#Switchable-Navigation)
 
 #### Predefined Models:
 
 - **`.stacked`/`DefaultStackRootNavigationModel`**  
-  A generic `@StackRootNavigationModel` container that you can use in most cases without needing to create your own. You can create it using either by using `DefaultStackRootNavigationModel` or with its static `.stacked` getters.
-
-  ```swift
-  @main
-  struct YourApp: App {
-
-      @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(HomeNavigationModel())
-
-      var body: some Scene {
-          WindowGroup {
-              RootNavigationView(rootModel: rootNavigationModel)
-          }
-      }
-
-  }
-
-  ... in the app
-  
-  execute(.present(.sheet(.stacked(DetailNavigationModel()))))
-  ```
-  
-  - You can also pass `StackTabBarToolbarBehavior` as an argument like this:  
-`.stacked(..., tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: false))`. This will hide the tab bar toolbar when the root view is not visible.
-  	 - `.automatic` - Preserves the default behavior.
-  	 - `.hiddenWhenNotRoot(animated:)` - Hides the tab bar when the root view is not visible - could be animated or not.
+  See [Stack Navigation](#Stack-Navigation)
   
 - **`SFSafariNavigationModel`**  
   A Model that opens a URL in an in-app browser.
 
 </details>
-  
+
 ### NavigationModel's State
 <details>
 <summary>Click here to see more 👈</summary>
@@ -547,6 +440,8 @@ Each Model maintains its state as `@Published` properties inside `NavigationMode
 <summary>Click here to see more 👈</summary>
 
 To perform common navigation actions like append, present, or dismiss, you need to modify the navigation state. In the framework, this is handled using `NavigationCommand`s. These commands allow you to dynamically update the state to reflect the desired navigation flow. Many commands are already predefined within the framework (see [Examples App](#Explore-Examples-App)).
+
+You can also define custom `NavigationCommand`s to encapsulate specific behavior, such as handling deep links or implementing step-by-step navigation.
 
 A command is executed on a `NavigationModel` using the `execute(_:)` method:
 
@@ -607,7 +502,150 @@ The framework is designed to allow you to easily create your own commands as wel
 
 </details>
 
-### PresentedNavigationModel
+### Stack Navigation
+<details>
+<summary>Click here to see more 👈</summary>
+
+Represents the concept typically associated with a `NavigationStack` or `UINavigationController` container. To implement stack navigation, you use an instance of `StackRootNavigationModel`, which maintains a path of `NavigationModel`s, including the root model. Each element in this path is a `StackNavigationModel`, which holds the `NavigationModel` itself and which can optionally include a `StackNavigationTransition`, such as zoom, available since iOS 18.
+
+Most of the time, you don't have to create your own implementation; you can use the predefined container model `.stacked` / `DefaultStackRootNavigationModel` like this:
+  
+```swift
+.stacked(HomeNavigationModel())
+```
+  
+If you want to create your own implementation using `@StackRootNavigationModel` macro, you can update the model's body using `body(for:)`.
+
+-----
+
+A `.stacked` / `DefaultStackRootNavigationModel` is generic `@StackRootNavigationModel` container that you can use in most cases without needing to create your own. You can create it using either by using `DefaultStackRootNavigationModel` or with its static `.stacked` getters.
+
+```swift
+@main
+struct YourApp: App {
+
+  @StateObject private var rootNavigationModel = DefaultStackRootNavigationModel(HomeNavigationModel())
+
+  var body: some Scene {
+    WindowGroup {
+      RootNavigationView(rootModel: rootNavigationModel)
+    }
+  }
+
+}
+
+... in the app
+  
+execute(.present(.sheet(.stacked(DetailNavigationModel()))))
+```
+  
+- You can also pass `StackTabBarToolbarBehavior` as an argument like this:  
+`.stacked(..., tabBarToolbarBehavior: .hiddenWhenNotRoot(animated: false))`. This will hide the tab bar toolbar when the root view is not visible.
+  	 - `.automatic` - Preserves the default behavior.
+  	 - `.hiddenWhenNotRoot(animated:)` - Hides the tab bar when the root view is not visible - could be animated or not.
+
+-----
+
+The fundamental commands for modifying the stack navigation state are `stackAppend` and `stackDropLast`. Additionally, there are [other predefined commands](#Predefined-Commands).
+
+</details>
+
+### Tabs Navigation
+<details>
+<summary>Click here to see more 👈</summary>
+
+Represents the concept typically associated with a `TabView` or `UITabBarController` container. To implement tabs navigation, use an instance of `TabsRootNavigationModel`, which manages a collection of `TabModel`s and tracks the `selectedTabModelID`. The TabModel is a protocol, and the framework provides a default implementation, `DefaultTabModel`, which holds the `NavigationModel` along with an image and title for the tab bar.
+
+To implement tabs container, you can create your own implementation of `TabsRootNavigationModel` like this (for more, see [Examples App](#Explore-Examples-App)):
+    
+```swift
+@TabsRootNavigationModel
+final class MainTabsNavigationModel {
+
+    enum Tab {
+        case home
+        case settings
+    }
+
+    var selectedTabModelID: AnyHashable
+    var tabsModels: [any TabModel]
+
+    init(initialTab: Tab) {
+        selectedTabModelID = initialTab
+        tabsModels = [
+            DefaultTabModel(
+                id: Tab.home,
+                image: Image(systemName: "house"),
+                title: "Home",
+                navigationModel: .stacked(HomeNavigationModel())
+            ),
+            DefaultTabModel(
+                id: Tab.settings,
+                image: Image(systemName: "gear"),
+                title: "Settings",
+                navigationModel: .stacked(SettingsNavigationModel())
+            )
+        ]
+    }
+
+    func body(for content: TabsRootNavigationModelView<MainTabsNavigationModel>) -> some View {
+        content // Modify default content if needed
+    }
+
+}
+```
+
+⚠️ When using tabs navigation, you typically want each tab to have its own navigation stack. To achieve this, wrap the `navigationModel` of `DefaultTabModel` in a `.stacked` model. However, avoid wrapping `TabsRootNavigationModel` in another stack (e.g., at the App level), as this may lead to unexpected behavior.
+
+</details>
+
+### Switchable Navigation
+<details>
+<summary>Click here to see more 👈</summary>
+
+Switchable navigation is a navigation pattern that allows dynamically changing the currently active `NavigationModel`, which is then displayed in the view hierarchy. This is useful for scenarios such as:
+  - A root `NavigationModel` that displays either the tabs root `NavigationModel` or the login `NavigationModel` based on whether the user is logged in.  
+  - A subscription `NavigationModel` that shows different content depending on whether the user is subscribed.  
+  - And more...
+
+See the example below, or for a practical implementation, check out the [Examples App](#Explore-Examples-App).
+  
+```swift
+final class UserService {
+    @Published var isUserLogged = false
+}
+
+@SwitchedNavigationModel
+final class AppNavigationModel {
+
+    var switchedModel: (any NavigationModel)?
+    let userService: UserService
+
+    init(userService: UserService) {
+        self.userService = userService
+    }
+
+    func body(for content: SwitchedNavigationModelView<AppNavigationModel>) -> some View {
+        content
+            .onReceive(userService.$isUserLogged) { [weak self] in self?.switchModel(isUserLogged: $0) }
+    }
+
+    private func switchModel(isUserLogged: Bool) {
+        execute(
+            .switchModel(
+                isUserLogged
+                    ? MainTabsNavigationModel(initialTab: .home)
+                    : LoginNavigationModel()
+            )
+        )
+    }
+
+}
+```
+
+</details>
+
+### Modals Navigation - PresentedNavigationModel
 <details>
 <summary>Click here to see more 👈</summary>
 
@@ -687,39 +725,8 @@ Then, when presenting it, pass the
 You can also define your own custom presentable models, such as for handling a `PhotosPicker`. In this case, you need to register these models on the `NavigationWindow` using the `registerCustomPresentableNavigationModels(_:)` method (see [Examples App](#Explore-Examples-App)).
 
 </details>
-	
-### NavigationMessage
-<details>
-<summary>Click here to see more 👈</summary>
 
-A `NavigationModel` can send a `NavigationMessage` through a message listener. You can add the listener using `onMessageReceived(_:)`/`addMessageListener(_:)`, and then send the message using `sendMessage(_:)`. The recipient can then check which type of message it is and handle it accordingly.
-
-```swift
-execute(
-    .stackAppend(
-        DetailNavigationModel()
-            .onMessageReceived { [weak self] in 
-                switch message {
-                case _ as FinishedNavigationMessage:
-                    // You can handle it how you want, these are just examples
-                    // When using MV you can call closure from method's argument
-                    onDetailRemoval()
-                    // When using MVVM you can access `viewModel` from your `NavigationModel`
-                    self?.viewModel.handleDetailRemoval()
-                default:
-                    // Or you can do nothing
-                    break
-                } 
-            }
-    )
-)
-```
-
-The framework provides a predefined message, `FinishedNavigationMessage`, which is triggered whenever a `NavigationModel` is finished (removed from its `parent`), so you know it is being deallocated, dismissed, or dropped from the stack.
-
-</details>
-
-### Deep Linking
+### In-app Deep Linking
 <details>
 <summary>Click here to see more 👈</summary>
 
@@ -771,6 +778,53 @@ final class AppNavigationModel {
 ```
 
 </details>
+
+### Inter-app Deep Linking
+<details>
+<summary>Click here to see more 👈</summary>
+
+For inter-app deep linking, you let the system to open a URL. With SwiftUINavigation, you can handle this cleanly by executing a `.openURL` or `OpenURLNavigationCommand` command from `NavigationModel` which internally sends `OpenURLNavigationEnvironmentTrigger` with the specified URL.
+	
+</details>
+
+### Custom Container - NavigationModelResolvedView
+<details>
+<summary>Click here to see more 👈</summary>
+
+When creating a custom container view, like in [`SegmentedTabsNavigationModel` in the Examples App](#Explore-Examples-App), use `NavigationModelResolvedView` to display the Model within the view hierarchy (this is e.g. how `DefaultStackRootNavigationModel` works internally).
+
+</details>
+
+### NavigationMessage
+<details>
+<summary>Click here to see more 👈</summary>
+
+A `NavigationModel` can send a `NavigationMessage` through a message listener. You can add the listener using `onMessageReceived(_:)`/`addMessageListener(_:)`, and then send the message using `sendMessage(_:)`. The recipient can then check which type of message it is and handle it accordingly.
+
+```swift
+execute(
+    .stackAppend(
+        DetailNavigationModel()
+            .onMessageReceived { [weak self] in 
+                switch message {
+                case _ as FinishedNavigationMessage:
+                    // You can handle it how you want, these are just examples
+                    // When using MV you can call closure from method's argument
+                    onDetailRemoval()
+                    // When using MVVM you can access `viewModel` from your `NavigationModel`
+                    self?.viewModel.handleDetailRemoval()
+                default:
+                    // Or you can do nothing
+                    break
+                } 
+            }
+    )
+)
+```
+
+The framework provides a predefined message, `FinishedNavigationMessage`, which is triggered whenever a `NavigationModel` is finished (removed from its `parent`), so you know it is being deallocated, dismissed, or dropped from the stack.
+
+</details>
 	
 ### NavigationEnvironmentTrigger
 <details>
@@ -789,14 +843,6 @@ Sometimes, we need to use `View`'s API, which can only be triggered from the `Vi
   By default, calls `EnvironmentValues.dismissWindow`
   
 If you want to customize the handler (e.g., sending a custom trigger), subclass `DefaultNavigationEnvironmentTriggerHandler` and set it on a `NavigationWindow` using `navigationEnvironmentTriggerHandler(_:)` (see [Examples App](#Explore-Examples-App)).
-
-</details>
-
-### NavigationModelResolvedView
-<details>
-<summary>Click here to see more 👈</summary>
-
-When creating a custom container view, like in [`SegmentedTabsNavigationModel` in the Examples App](#Explore-Examples-App), use `NavigationModelResolvedView` to display the Model within the view hierarchy (this is e.g. how `DefaultStackRootNavigationModel` works internally).
 
 </details>
 
