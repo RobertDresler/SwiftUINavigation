@@ -13,12 +13,16 @@ public struct PresentOnGivenModelNavigationCommand: NavigationCommand {
     public init(presentedModel: any PresentedNavigationModel, animated: Bool = true) {
         self.presentedModel = presentedModel
         self.animated = {
+            #if os(iOS)
             if let presentedModel = presentedModel as? FullScreenCoverPresentedNavigationModel,
             presentedModel.transition != nil {
                 false
             } else {
                 animated
             }
+            #else
+            animated
+            #endif
         }()
     }
 
