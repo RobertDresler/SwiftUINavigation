@@ -951,6 +951,10 @@ You can explore the graph using different relationships. It's important to know 
 	
 A: Based on my findings, it shouldn't. `AnyView` is used only at the top of the navigation layer, and it doesn't get redrawn unless there's a navigation operation. This behavior is the same whether or not you use `AnyView`.
 
+**Q: Does the SwiftUINavigation Approach Impact Performance Compared to Native SwiftUI Approach?**  
+	
+A: I conducted performance tests measuring hitches and hangs while navigating through a graph where each node represented a screen containing a long `List` with expensive animations in each row. It’s true that as the number of nodes in the navigation graph increases, performance with SwiftUINavigation gradually decreases. However, even with 80 nodes, the average hangs duration is only about 17% worse compared to the native SwiftUI approach, while hitch ratios remain very similar. In terms of absolute numbers, SwiftUINavigation produces about 30% more hitches and hangs than the native approach. However, in real-world apps, this difference is unlikely to be noticeable to the human eye and should not be a significant issue.
+
 </details>
 
 ## Contribution, Issues, & Feature Requests
