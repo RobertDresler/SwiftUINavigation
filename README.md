@@ -813,11 +813,65 @@ When creating a custom container view, like in [`SegmentedTabsNavigationModel` i
 
 </details>
 
-### NavigationMessage
+### Communication Between Modules - init
+<details>
+<summary>Click here to see more 👈</summary>
+
+If you want to pass data from one `NavigationModel` to another, you can do so via the `init` method. You’re free to pass any type—whether it’s a simple `String`, a struct like `DetailEditorInputData`, or even a callback closure.
+
+If you’d like to handle communication through abstraction, see [Communication Between Modules - NavigationMessage](#Communication-Between-Modules---NavigationMessage).
+These approaches can be combined—for example, use `init` to pass input data and `NavigationMessage` for callbacks.
+
+```swift
+@NavigationModel
+class DetailEditorNavigationModel {
+
+    private let id: String
+    private let onSave: () -> Void
+
+    init(id: String, onSave: @escaping () -> Void) {
+        self.id = id
+        self.onSave = onSave
+    }
+    
+    ...
+
+}
+
+...
+
+@NavigationModel
+class HomeNavigationModel {
+
+    ...
+
+    func showDetail(onSave: @escaping () -> Void) {
+        execute(
+            .present(
+                .fullScreenCover(
+                    DetailEditorNavigationModel(
+                        id: "123",
+                        onSave: onSave
+                    )
+                )
+            )
+        )
+    }
+
+}
+```
+
+⚠️ Keep in mind that if you need to capture a `NavigationModel` instance—typically `self`—inside a closure, you should capture it as `weak` or `unowned`. This prevents creating a strong reference to `NavigationModel` that could lead to a memory leak.
+
+</details>
+	
+### Communication Between Modules - NavigationMessage
 <details>
 <summary>Click here to see more 👈</summary>
 
 A `NavigationModel` can send a `NavigationMessage` through a message listener. You can add the listener using `onMessageReceived(_:)`/`addMessageListener(_:)`, and then send the message using `sendMessage(_:)`. The recipient can then check which type of message it is and handle it accordingly.
+
+If you prefer implementing communication via `init`, see [Communication Between Modules - NavigationMessage](#Communication-Between-Modules---init).
 
 ```swift
 execute(
@@ -841,6 +895,21 @@ execute(
 ```
 
 The framework provides a predefined message, `FinishedNavigationMessage`, which is triggered whenever a `NavigationModel` is finished (removed from its `parent`), so you know it is being deallocated, dismissed, or dropped from the stack.
+
+⚠️ Keep in mind that if you need to capture a `NavigationModel` instance—typically `self`—inside a closure, you should capture it as `weak` or `unowned`. This prevents creating a strong reference to `NavigationModel` that could lead to a memory leak.
+
+</details>
+
+### Dependencies
+
+<details>
+<summary>Click here to see more 👈</summary>
+
+Sometimes, you may need to access a service—such as `UserService`—within your `NavigationModel`. How you approach this is entirely up to you, and there are multiple valid options:
+
+- Inject dependencies through the initializer (`init`).
+- Use a dependency manager like [swift-dependencies](https://github.com/pointfreeco/swift-dependencies).
+- Or any other method that fits your architecture.
 
 </details>
 	
