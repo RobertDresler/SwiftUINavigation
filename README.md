@@ -516,6 +516,8 @@ The framework is designed to allow you to easily create your own commands as wel
 <details>
 <summary>Click here to see more 👈</summary>
 
+#### Stack Pattern
+
 Represents the concept typically associated with a `NavigationStack` or `UINavigationController` container. To implement stack navigation, you use an instance of `StackRootNavigationModel`, which maintains a path of `NavigationModel`s, including the root model. Each element in this path is a `StackNavigationModel`, which holds the `NavigationModel` itself and which can optionally include a `StackNavigationTransition`, such as zoom, available since iOS 18.
 
 Most of the time, you don't have to create your own implementation; you can use the predefined container model `.stacked` / `DefaultStackRootNavigationModel` like this:
@@ -526,7 +528,7 @@ Most of the time, you don't have to create your own implementation; you can use 
   
 If you want to create your own implementation using `@StackRootNavigationModel` macro, you can update the model's body using `body(for:)`.
 
------
+#### StackRootNavigationModel Container
 
 A `.stacked` / `DefaultStackRootNavigationModel` is generic `@StackRootNavigationModel` container that you can use in most cases without needing to create your own. You can create it using either by using `DefaultStackRootNavigationModel` or with its static `.stacked` getters.
 
@@ -554,15 +556,25 @@ execute(.present(.sheet(.stacked(DetailNavigationModel()))))
   	 - `.automatic` - Preserves the default behavior.
   	 - `.hiddenWhenNotRoot(animated:)` - Hides the tab bar when the root view is not visible - could be animated or not.
 
------
+#### Commands
 
 The fundamental commands for modifying the stack navigation state are `stackAppend` and `stackDropLast`. Additionally, there are [other predefined commands](#Predefined-Commands).
+
+```swift
+execute(.stackAppend(DetailNavigationModel()))
+execute(.stackAppend(StackNavigationModel(model: DetailNavigationModel(), transition: .zoom(sourceID: "item1"))))
+execute(.stackDropLast())
+execute(.stackDropToRoot())
+...
+```
 
 </details>
 
 ### Tabs Navigation
 <details>
 <summary>Click here to see more 👈</summary>
+
+#### TabsRootNavigationModel Container
 
 Represents the concept typically associated with a `TabView` or `UITabBarController` container. To implement tabs navigation, use an instance of `TabsRootNavigationModel`, which manages a collection of `TabModel`s and tracks the `selectedTabModelID`. The TabModel is a protocol, and the framework provides a default implementation, `DefaultTabModel`, which holds the `NavigationModel` along with an image and title for the tab bar.
 
@@ -607,15 +619,21 @@ final class MainTabsNavigationModel {
 
 ⚠️ When using tabs navigation, you typically want each tab to have its own navigation stack. To achieve this, wrap the `navigationModel` of `DefaultTabModel` in a `.stacked` model. However, avoid wrapping `TabsRootNavigationModel` in another stack (e.g., at the App level), as this may lead to unexpected behavior.
 
------
+#### Commands
 
 The fundamental command for modifying the tabs navigation state is `tabsSelectItem(id:)` which selects the tab with given ID.
+
+```swift
+execute(.tabsSelectItem(id: Tab.more))
+```
 
 </details>
 
 ### Switchable Navigation
 <details>
 <summary>Click here to see more 👈</summary>
+
+#### SwitchedNavigationModel Container
 
 Switchable navigation is a navigation pattern that allows dynamically changing the currently active `NavigationModel`, which is then displayed in the view hierarchy. This is useful for scenarios such as:
   - A root `NavigationModel` that displays either the tabs root `NavigationModel` or the login `NavigationModel` based on whether the user is logged in.  
@@ -657,9 +675,13 @@ final class AppNavigationModel {
 }
 ```
 
------
+#### Commands
 
 The fundamental command for modifying the switchable navigation state is `switchModel(_:)` which switches the model to model from the command's argument.
+
+```swift
+execute(.switchModel(LoginNavigationModel()))
+```
 
 </details>
 
@@ -671,7 +693,7 @@ Since presenting views using native mechanisms requires separate view modifiers,
 
 Instead of presenting a `NavigationModel` directly, you present only one `PresentedNavigationModel`, which holds your `NavigationModel` (e.g., `DetailNavigationModel`). The `PresentedNavigationModel` could be for example `FullScreenCoverPresentedNavigationModel` representing model which gets presented as `fullScreenCover`.
 
-This approach also allows for custom implementations, such as a photo picker. To present a model, execute `PresentNavigationCommand` with the `PresentedNavigationModel`.  
+This approach also allows for custom implementations, such as a photo picker. To present a model, execute `PresentNavigationCommand` with the `PresentedNavigationModel`. To dismiss modal you use `DismissNavigationCommand`/`.dismiss`. 
 
 ```swift
 @NavigationModel
