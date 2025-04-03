@@ -86,7 +86,9 @@ If you prefer to explore the framework on your own, check out [Explore on Your O
     - On simulator
     - On a real device (set your development team)
 
-4. Explore the app
+4. _(optional)_ The app might fail to build if SwiftUINavigation’s macros aren’t enabled. In some cases, you may need to explicitly enable them. In Xcode, simply click on the error message and choose **Trust & Enable** to resolve it.
+
+5. Explore the app
 
 </details>
 
@@ -95,10 +97,12 @@ If you prefer to explore the framework on your own, check out [Explore on Your O
 <details>
 <summary>Click to see details 👈</summary>
 
-To get started, first add the package to your project:
+1. To get started, first add the package to your project:
 
-- In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.2.2`
-- Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.2.2")`
+  - In Xcode, add the package by using this URL: `https://github.com/RobertDresler/SwiftUINavigation` and choose the dependency rule **up to next major version** from `2.2.2`
+  - Alternatively, add it to your `Package.swift` file: `.package(url: "https://github.com/RobertDresler/SwiftUINavigation", from: "2.2.2")`
+
+2. _(optional)_ The app or package might fail to build if SwiftUINavigation’s macros aren’t enabled. In some cases, you may need to explicitly enable them. In Xcode, simply click on the error message and choose **Trust & Enable** to resolve it.
 
 Once the package is added, you can copy this code and begin exploring the framework by yourself:
 
@@ -305,7 +309,13 @@ struct DetailView: View {
 
 ## Documentation
 
-To see the framework in action, check out the code in the [Examples App](#Explore-Examples-App). If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
+> [!IMPORTANT]
+> If you’re just getting started with SwiftUINavigation, I recommend reading the following sections of the README first:
+>
+> - 💡 [Core Idea - `NavigationModel`](#core-idea---navigationmodel) - Understand the core concepts behind SwiftUINavigation.
+> - 🚦 [Getting Started](#Getting-Started) - Explore minimal working examples or try out the examples app.
+
+If anything is unclear, feel free to reach out! I'm happy to clarify or update the documentation to make things more straightforward. 🚀
 
 ### RootNavigationView
 <details>
@@ -954,6 +964,10 @@ A: Based on my findings, it shouldn't. `AnyView` is used only at the top of the 
 **Q: Does the SwiftUINavigation Approach Impact Performance Compared to Native SwiftUI Approach?**  
 	
 A: I conducted performance tests measuring hitches and hangs while navigating through a graph where each node represented a screen containing a long `List` with expensive animations in each row. It’s true that as the number of nodes in the navigation graph increases, performance with SwiftUINavigation gradually decreases. However, even with 80 nodes, the average hangs duration is only about 17% worse compared to the native SwiftUI approach, while hitch ratios remain very similar. In terms of absolute numbers, SwiftUINavigation produces about 30% more hitches and hangs than the native approach. However, in real-world apps, this difference is unlikely to be noticeable to the human eye and should not be a significant issue.
+
+**Q: Does using a class for NavigationModel cause any issues?**  
+	
+A: SwiftUINavigation requires `NavigationModel` to be implemented as a class. This is in line with Apple’s own guidance for managing an [app’s data model](https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app). When using a class-based model, it’s important to capture `self` weakly in closures to avoid retain cycles. If you’re concerned about potential memory leaks, see the [Debugging](#Debugging) section for tips on how to verify your implementation.
 
 </details>
 
